@@ -4,7 +4,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/all-dressed/laravel-sdk.svg?style=flat-square)](https://packagist.org/packages/all-dressed/laravel-sdk)
 ![GitHub Actions](https://github.com/all-dressed/laravel-sdk/actions/workflows/main.yml/badge.svg)
 
-An opinionated Laravel wrapper for BeCool Couriers' API.
+Laravel SDK for All Dressed API.
 
 ## Installation
 
