@@ -3,7 +3,6 @@
 namespace AllDressed\Laravel\Builders;
 
 use AllDressed\Laravel\Client;
-use AllDressed\Laravel\Exceptions\MissingPostalCodeException;
 use AllDressed\Laravel\Exceptions\ZoneNotFoundException;
 use AllDressed\Laravel\Zone;
 use Illuminate\Http\Client\RequestException;
@@ -68,18 +67,7 @@ class ZoneBuilder extends Builder
         try {
             $client = resolve(Client::class);
 
-            $endpoint = 'zones';
-
-            if ($this->getOption('available')) {
-                throw_unless(
-                    $postcode = $this->getOption('postcode'),
-                    MissingPostalCodeException::class
-                );
-
-                $endpoint = "zones/{$postcode}/schedules/available";
-            }
-
-            $response = $client->get($endpoint);
+            $response = $client->get('zones');
 
             $data = $response->json();
         } catch (RequestException $exception) {
