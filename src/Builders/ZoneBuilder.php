@@ -98,13 +98,7 @@ class ZoneBuilder extends Builder
     protected function throw(Throwable $exception, string $postcode = null): void
     {
         if ($exception->getCode() == 404 && $postcode) {
-            throw new ZoneNotFoundException(
-                __('Zone for :postcode not found.', [
-                    'postcode' => $postcode,
-                ]),
-                404,
-                $exception
-            );
+            throw new ZoneNotFoundException($postcode, $exception);
         }
 
         throw $exception;
