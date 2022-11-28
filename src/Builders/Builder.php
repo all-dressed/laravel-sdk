@@ -14,6 +14,17 @@ abstract class Builder
     protected $options = [];
 
     /**
+     * Retrieve the value of the given option.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function getOption(string $key): mixed
+    {
+        return Arr::get($this->options, $key);
+    }
+
+    /**
      * Alias of the constructor.
      *
      * @param  mixed  $args
