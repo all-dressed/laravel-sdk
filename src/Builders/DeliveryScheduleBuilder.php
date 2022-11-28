@@ -42,7 +42,7 @@ class DeliveryScheduleBuilder extends Builder
      */
     public function find(string $id): ?DeliverySchedule
     {
-        return $this->withOption('id', $id);
+        return $this->withOption('id', $id)->first();
     }
 
     /**
