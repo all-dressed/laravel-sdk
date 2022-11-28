@@ -67,7 +67,13 @@ class ZoneBuilder extends Builder
         try {
             $client = resolve(Client::class);
 
-            $response = $client->get('zones');
+            $endpoint = 'zones';
+
+            if ($postcode = $this->getOption('postcode')) {
+                $endpoint = "{$endpoint}/{$postcode}";
+            }
+
+            $response = $client->get($endpoint);
 
             $data = $response->json();
         } catch (RequestException $exception) {
