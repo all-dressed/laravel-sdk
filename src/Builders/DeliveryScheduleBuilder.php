@@ -99,8 +99,13 @@ class DeliveryScheduleBuilder extends Builder
             );
         }
 
-        return collect($response->json('data'))
-            ->mapInto(DeliverySchedule::class);
+        $data = $response->json('data');
+
+        if (isset($id)) {
+            $data = [$data];
+        }
+
+        return collect($data)->mapInto(DeliverySchedule::class);
     }
 
     /**
