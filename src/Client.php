@@ -61,7 +61,7 @@ class Client
 
         return Http::withToken($this->key)
             ->withOptions([
-                'verify' => false,
+                'verify' => config('all-dressed.request.verify'),
             ])
             ->{$method}($url, $payload)
             ->throw();

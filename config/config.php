@@ -12,4 +12,8 @@ return [
     'debug' => [
         'log' => env('ALLDRESSED_DEBUG_LOG', false),
     ],
+
+    'request' => [
+        'verify' => env('ALLDRESSED_REQUEST_VERIFY_SSL', true),
+    ],
 ];
