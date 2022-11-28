@@ -88,7 +88,7 @@ class DeliveryScheduleBuilder extends Builder
             if ($this->getOption('available')) {
                 $endpoint = "{$endpoint}/available";
             } elseif ($id = $this->getOption('id')) {
-                $endpoint = "{$endpoint}/schedules/{$id}";
+                $endpoint = "{$endpoint}/{$id}";
             }
 
             $response = $client->get($endpoint);
