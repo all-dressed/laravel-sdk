@@ -5,19 +5,19 @@ namespace AllDressed\Laravel\Exceptions;
 use Exception;
 use Throwable;
 
-class ZoneNotFoundException extends Exception
+class DeliveryScheduleNotFoundException extends Exception
 {
     /**
      * Create a new exception.
      *
-     * @param  string  $postcode
+     * @param  string  $id
      * @param  \Throwable  $throwable
      */
-    public function __construct(string $postcode, Throwable $throwable)
+    public function __construct(string $id, Throwable $throwable)
     {
         parent::__construct(
-            __('Zone for :postcode not found.', [
-                'postcode' => $postcode,
+            __('Delivery schedule with id :id not found.', [
+                'id' => $id,
             ]),
             404,
             $throwable

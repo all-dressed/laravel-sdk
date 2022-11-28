@@ -4,6 +4,7 @@ namespace AllDressed\Laravel\Builders;
 
 use AllDressed\Laravel\Client;
 use AllDressed\Laravel\DeliverySchedule;
+use AllDressed\Laravel\Exceptions\DeliveryScheduleNotFoundException;
 use AllDressed\Laravel\Exceptions\MissingPostalCodeException;
 use AllDressed\Laravel\Exceptions\ZoneNotFoundException;
 use Illuminate\Http\Client\RequestException;
@@ -34,7 +35,18 @@ class DeliveryScheduleBuilder extends Builder
     }
 
     /**
-     * Retrieve the first zone from the response.
+     * Retrieve the delivery schedule that has the given id.
+     *
+     * @param  string  $id
+     * @return \AllDressed\Laravel\DeliverySchedule|null
+     */
+    public function find(string $id): ?DeliverySchedule
+    {
+        return $this->withOption('id', $id);
+    }
+
+    /**
+     * Retrieve the first delivery schedule from the response.
      *
      * @return \AllDressed\Laravel\DeliverySchedule|null
      */
@@ -73,8 +85,10 @@ class DeliveryScheduleBuilder extends Builder
 
             $endpoint = "zones/{$postcode}/schedules";
 
-            if (Arr::get($this->options, 'available')) {
+            if ($this->getOption('available')) {
                 $endpoint = "{$endpoint}/available";
+            } elseif ($id = $this->getOption('id')) {
+                $endpoint = "{$endpoint}/schedules/{$id}";
             }
 
             $response = $client->get($endpoint);
@@ -99,13 +113,11 @@ class DeliveryScheduleBuilder extends Builder
     protected function throw(Throwable $exception, string $postcode = null): void
     {
         if ($exception->getCode() == 404 && $postcode) {
-            throw new ZoneNotFoundException(
-                __('Zone for :postcode not found.', [
-                    'postcode' => $postcode,
-                ]),
-                404,
-                $exception
-            );
+            if ($id = $this->getOption('id')) {
+                throw new DeliveryScheduleNotFoundException($id, $exception);
+            }
+
+            throw new ZoneNotFoundException($postcode, $exception);
         }
 
         throw $exception;
