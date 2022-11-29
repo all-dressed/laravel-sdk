@@ -1,6 +1,6 @@
 <?php
 
-namespace AllDressed\Laravel;
+namespace AllDressed;
 
 use AllDressed\Exceptions\MissingApiKeyException;
 use Illuminate\Support\ServiceProvider;

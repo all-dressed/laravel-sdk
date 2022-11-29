@@ -1,6 +1,6 @@
 <?php
 
-namespace AllDressed\Laravel;
+namespace AllDressed;
 
 use AllDressed\Builders\ZoneBuilder;
 use Illuminate\Support\Collection;
