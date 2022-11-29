@@ -48,7 +48,7 @@ trait ForwardsToBuilder
     protected function forwardCallTo($object, $method, $parameters)
     {
         $class = Str::of(get_class($object))
-            ->replace('AllDressed\\\', 'AllDressed\\\Builders\\')
+            ->replace('AllDressed\\', 'AllDressed\\Builders\\')
             ->append('Builder')
             ->toString();
 
