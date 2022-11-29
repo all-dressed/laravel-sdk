@@ -13,16 +13,6 @@ use Throwable;
 class ZoneBuilder extends Builder
 {
     /**
-     * Alias of the get method.
-     *
-     * @return \Illuminate\Support\Collection<int, \AllDressed\Zone>
-     */
-    public function all(): Collection
-    {
-        return $this->get();
-    }
-
-    /**
      * Retrieve the available delivery schedules.
      *
      * @return static
@@ -30,16 +20,6 @@ class ZoneBuilder extends Builder
     public function available(): static
     {
         return $this->withOption('available', true);
-    }
-
-    /**
-     * Retrieve the first zone from the response.
-     *
-     * @return \AllDressed\Zone|null
-     */
-    public function first(): ?Zone
-    {
-        return $this->get()->first();
     }
 
     /**

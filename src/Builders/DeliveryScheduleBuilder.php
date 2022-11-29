@@ -15,16 +15,6 @@ use Throwable;
 class DeliveryScheduleBuilder extends Builder
 {
     /**
-     * Alias of the get method.
-     *
-     * @return \Illuminate\Support\Collection<int, \AllDressed\DeliverySchedule>
-     */
-    public function all(): Collection
-    {
-        return $this->get();
-    }
-
-    /**
      * Retrieve the available delivery schedules.
      *
      * @return static
@@ -32,27 +22,6 @@ class DeliveryScheduleBuilder extends Builder
     public function available(): static
     {
         return $this->withOption('available', true);
-    }
-
-    /**
-     * Retrieve the delivery schedule that has the given id.
-     *
-     * @param  string  $id
-     * @return \AllDressed\DeliverySchedule|null
-     */
-    public function find(string $id): ?DeliverySchedule
-    {
-        return $this->withOption('id', $id)->first();
-    }
-
-    /**
-     * Retrieve the first delivery schedule from the response.
-     *
-     * @return \AllDressed\DeliverySchedule|null
-     */
-    public function first(): ?DeliverySchedule
-    {
-        return $this->get()->first();
     }
 
     /**
