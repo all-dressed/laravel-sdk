@@ -4,7 +4,7 @@ return [
     'account' => env('ALLDRESSED_ACCOUNT_ID'),
 
     'api' => [
-        'base' => env('ALLDRESSED_API_BASE', 'https://api.all-dressed.io'),
+        'base' => env('ALLDRESSED_API_BASE', 'https://api.alldressed.io'),
 
         'key' => env('ALLDRESSED_API_KEY'),
     ],
