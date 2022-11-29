@@ -2,7 +2,7 @@
 
 namespace AllDressed\Laravel;
 
-use AllDressed\Laravel\Builders\ZoneBuilder;
+use AllDressed\Builders\ZoneBuilder;
 use Illuminate\Support\Collection;
 
 class Zone extends Base
@@ -20,7 +20,7 @@ class Zone extends Base
     /**
      * Create a new query builder.
      *
-     * @return \AllDressed\Laravel\Builders\ZoneBuilder
+     * @return \AllDressed\Builders\ZoneBuilder
      */
     public static function query(): ZoneBuilder
     {

@@ -1,12 +1,12 @@
 <?php
 
-namespace AllDressed\Laravel\Builders;
+namespace AllDressed\Builders;
 
-use AllDressed\Laravel\Client;
-use AllDressed\Laravel\DeliverySchedule;
-use AllDressed\Laravel\Exceptions\DeliveryScheduleNotFoundException;
-use AllDressed\Laravel\Exceptions\MissingPostalCodeException;
-use AllDressed\Laravel\Exceptions\ZoneNotFoundException;
+use AllDressed\Client;
+use AllDressed\DeliverySchedule;
+use AllDressed\Exceptions\DeliveryScheduleNotFoundException;
+use AllDressed\Exceptions\MissingPostalCodeException;
+use AllDressed\Exceptions\ZoneNotFoundException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -17,7 +17,7 @@ class DeliveryScheduleBuilder extends Builder
     /**
      * Alias of the get method.
      *
-     * @return \Illuminate\Support\Collection<int, \AllDressed\Laravel\DeliverySchedule>
+     * @return \Illuminate\Support\Collection<int, \AllDressed\DeliverySchedule>
      */
     public function all(): Collection
     {
@@ -38,7 +38,7 @@ class DeliveryScheduleBuilder extends Builder
      * Retrieve the delivery schedule that has the given id.
      *
      * @param  string  $id
-     * @return \AllDressed\Laravel\DeliverySchedule|null
+     * @return \AllDressed\DeliverySchedule|null
      */
     public function find(string $id): ?DeliverySchedule
     {
@@ -48,7 +48,7 @@ class DeliveryScheduleBuilder extends Builder
     /**
      * Retrieve the first delivery schedule from the response.
      *
-     * @return \AllDressed\Laravel\DeliverySchedule|null
+     * @return \AllDressed\DeliverySchedule|null
      */
     public function first(): ?DeliverySchedule
     {
@@ -69,10 +69,10 @@ class DeliveryScheduleBuilder extends Builder
     /**
      * Retrieve the list of zones.
      *
-     * @return \Illuminate\Support\Collection<int, \AllDressed\Laravel\DeliverySchedule>
+     * @return \Illuminate\Support\Collection<int, \AllDressed\DeliverySchedule>
      *
-     * @throws \AllDressed\Laravel\Exceptions\MissingPostalCodeNotFoundException
-     * @throws \AllDressed\Laravel\Exceptions\ZoneNotFoundException
+     * @throws \AllDressed\Exceptions\MissingPostalCodeNotFoundException
+     * @throws \AllDressed\Exceptions\ZoneNotFoundException
      */
     public function get(): Collection
     {

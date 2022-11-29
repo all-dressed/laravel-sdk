@@ -1,6 +1,6 @@
 <?php
 
-namespace AllDressed\Laravel\Exceptions;
+namespace AllDressed\Exceptions;
 
 use Exception;
 

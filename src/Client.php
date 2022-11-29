@@ -2,7 +2,7 @@
 
 namespace AllDressed\Laravel;
 
-use AllDressed\Laravel\Exceptions\MissingAccountException;
+use AllDressed\Exceptions\MissingAccountException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;

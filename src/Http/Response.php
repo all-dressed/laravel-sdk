@@ -1,6 +1,6 @@
 <?php
 
-namespace AllDressed\Laravel\Http;
+namespace AllDressed\Http;
 
 use Illuminate\Http\Client\Response as ClientResponse;
 

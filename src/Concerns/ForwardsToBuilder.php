@@ -1,6 +1,6 @@
 <?php
 
-namespace AllDressed\Laravel\Concerns;
+namespace AllDressed\Concerns;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\ForwardsCalls;
@@ -48,7 +48,7 @@ trait ForwardsToBuilder
     protected function forwardCallTo($object, $method, $parameters)
     {
         $class = Str::of(get_class($object))
-            ->replace('AllDressed\\Laravel\\', 'AllDressed\\Laravel\\Builders\\')
+            ->replace('AllDressed\\\', 'AllDressed\\\Builders\\')
             ->append('Builder')
             ->toString();
 

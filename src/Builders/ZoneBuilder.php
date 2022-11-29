@@ -1,10 +1,10 @@
 <?php
 
-namespace AllDressed\Laravel\Builders;
+namespace AllDressed\Builders;
 
-use AllDressed\Laravel\Client;
-use AllDressed\Laravel\Exceptions\ZoneNotFoundException;
-use AllDressed\Laravel\Zone;
+use AllDressed\Client;
+use AllDressed\Exceptions\ZoneNotFoundException;
+use AllDressed\Zone;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -15,7 +15,7 @@ class ZoneBuilder extends Builder
     /**
      * Alias of the get method.
      *
-     * @return \Illuminate\Support\Collection<int, \AllDressed\Laravel\Zone>
+     * @return \Illuminate\Support\Collection<int, \AllDressed\Zone>
      */
     public function all(): Collection
     {
@@ -35,7 +35,7 @@ class ZoneBuilder extends Builder
     /**
      * Retrieve the first zone from the response.
      *
-     * @return \AllDressed\Laravel\Zone|null
+     * @return \AllDressed\Zone|null
      */
     public function first(): ?Zone
     {
@@ -56,9 +56,9 @@ class ZoneBuilder extends Builder
     /**
      * Retrieve the list of zones.
      *
-     * @return \Illuminate\Support\Collection<int, \AllDressed\Laravel\Zone>
+     * @return \Illuminate\Support\Collection<int, \AllDressed\Zone>
      *
-     * @throws \AllDressed\Laravel\Exceptions\ZoneNotFoundException
+     * @throws \AllDressed\Exceptions\ZoneNotFoundException
      */
     public function get(): Collection
     {

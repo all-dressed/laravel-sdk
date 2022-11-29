@@ -1,6 +1,6 @@
 <?php
 
-namespace AllDressed\Laravel\Builders;
+namespace AllDressed\Builders;
 
 use Illuminate\Support\Arr;
 

@@ -2,7 +2,7 @@
 
 namespace AllDressed\Laravel;
 
-use AllDressed\Laravel\Builders\DeliveryScheduleBuilder;
+use AllDressed\Builders\DeliveryScheduleBuilder;
 use Illuminate\Support\Collection;
 
 class DeliverySchedule extends Base
@@ -20,7 +20,7 @@ class DeliverySchedule extends Base
     /**
      * Create a new query builder.
      *
-     * @return \AllDressed\Laravel\Builders\DeliveryScheduleBuilder
+     * @return \AllDressed\Builders\DeliveryScheduleBuilder
      */
     public static function query(): DeliveryScheduleBuilder
     {

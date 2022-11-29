@@ -2,7 +2,7 @@
 
 namespace AllDressed\Laravel;
 
-use AllDressed\Laravel\Exceptions\MissingApiKeyException;
+use AllDressed\Exceptions\MissingApiKeyException;
 use Illuminate\Support\ServiceProvider;
 
 class AllDressedServiceProvider extends ServiceProvider

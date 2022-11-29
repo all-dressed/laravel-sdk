@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "AllDressed\\Laravel\\": "src"
+            "AllDressed\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "AllDressed\\Laravel\\Tests\\": "tests"
+            "AllDressed\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -44,7 +44,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "AllDressed\\Laravel\\AllDressedServiceProvider"
+                "AllDressed\\AllDressedServiceProvider"
             ]
         }
     }
