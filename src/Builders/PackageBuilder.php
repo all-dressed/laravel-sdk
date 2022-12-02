@@ -3,6 +3,7 @@
 namespace AllDressed\Builders;
 
 use AllDressed\Client;
+use AllDressed\Package;
 use Illuminate\Support\Collection;
 
 class PackageBuilder extends Builder
