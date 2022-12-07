@@ -55,7 +55,7 @@ class ZoneBuilder extends Builder
 
             $response = $client->get($endpoint);
 
-            $data = $response->json();
+            $data = $response->json('data');
         } catch (RequestException $exception) {
             $this->throw(
                 exception: $exception,
@@ -64,14 +64,10 @@ class ZoneBuilder extends Builder
         }
 
         if ($postcode) {
-            $zones = collect([
-                new Zone($data),
-            ]);
-        } else {
-            $zones = collect($data)->mapInto(Zone::class);
+            $data = [$data];
         }
 
-        return $zones;
+        return collect($data)->mapInto(Zone::class);
     }
 
     /**
