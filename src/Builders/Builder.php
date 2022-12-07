@@ -26,9 +26,20 @@ abstract class Builder
     }
 
     /**
+     * Retrieve the instance by it's uuid.
+     *
+     * @param  string  $id
+     * @return \AllDressed\Base|null
+     */
+    public function find(string $id): ?Base
+    {
+        return $this->withOption('id', $id)->first();
+    }
+
+    /**
      * Retrieve the first instance from the response.
      *
-     * @return \AllDressed\Base
+     * @return \AllDressed\Base|null
      */
     public function first(): ?Base
     {

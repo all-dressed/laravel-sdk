@@ -22,17 +22,6 @@ abstract class Base extends Fluent
     }
 
     /**
-     * Retrieve the instance by it's id.
-     *
-     * @param  string  $id
-     * @return static
-     */
-    public static function find(string $id): static
-    {
-        return static::query()->withOption('id', $id)->first();
-    }
-
-    /**
      * Retrieve the builder for the instance.
      *
      * @return \AllDressed\Builders\Builder
