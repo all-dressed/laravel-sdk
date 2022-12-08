@@ -21,6 +21,20 @@ class Client
     }
 
     /**
+     * Fake the response of a given endpoint.
+     *
+     * @param  string  $path
+     * @param  string|null  $body
+     * @return void
+     */
+    public static function fake(string $path, string $body = null): void
+    {
+        Http::fake([
+            resolve(static::class)->getEndpoint($path) => Http::response($body),
+        ]);
+    }
+
+    /**
      * Send a GET request to the given API endpoint.
      *
      * @param  string  $endpoint
