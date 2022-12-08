@@ -23,7 +23,7 @@ class PackageBuilder extends Builder
         $endpoint = 'packages';
 
         if ($id = $this->getOption('id')) {
-            $endpoint = "{$endpoint}/packages";
+            $endpoint = "{$endpoint}/{$id}";
         }
 
         try {
