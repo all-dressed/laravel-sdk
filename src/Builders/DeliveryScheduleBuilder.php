@@ -44,6 +44,8 @@ class DeliveryScheduleBuilder extends Builder
      */
     public function get(): Collection
     {
+        $postcode = null;
+
         try {
             $client = resolve(Client::class);
 
