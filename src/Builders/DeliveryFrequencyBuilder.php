@@ -2,6 +2,7 @@
 
 namespace AllDressed\Builders;
 
+use AllDressed\Client;
 use AllDressed\DeliveryFrequency;
 use AllDressed\DeliverySchedule;
 use AllDressed\Exceptions\DeliveryScheduleNotFoundException;
