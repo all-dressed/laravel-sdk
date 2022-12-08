@@ -42,7 +42,7 @@ class Client
      */
     public static function fakes(array $fakes): void
     {
-        Http::fake(collect($fakes)->mapWithKeys(static fn ($path, $body) => [
+        Http::fake(collect($fakes)->mapWithKeys(static fn ($body, $path) => [
             resolve(static::class)->getEndpoint($path) => Http::response($body),
         ]));
     }
