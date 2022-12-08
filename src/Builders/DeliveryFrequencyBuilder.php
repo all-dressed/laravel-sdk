@@ -53,7 +53,9 @@ class DeliveryFrequencyBuilder extends Builder
         }
 
         return collect($response->json('data'))
-            ->mapInto(DeliveryFrequency::class);
+            ->map(static fn ($days) => new DeliveryFrequency([
+                'days' => $days,
+            ]));
     }
 
     /**
