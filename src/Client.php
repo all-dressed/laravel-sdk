@@ -29,9 +29,22 @@ class Client
      */
     public static function fake(string $path, string $body = null): void
     {
-        Http::fake([
-            resolve(static::class)->getEndpoint($path) => Http::response($body),
+        return static::fakes([
+            $path => $body,
         ]);
+    }
+
+    /**
+     * Fake the response of a given endpoints.
+     *
+     * @param  array  $fakes
+     * @return void
+     */
+    public static function fakes(array $fakes): void
+    {
+        Http::fake(collect($fakes)->mapWithKeys(static fn ($path, $body) => [
+            resolve(static::class)->getEndpoint($path) => Http::response($body),
+        ]));
     }
 
     /**
