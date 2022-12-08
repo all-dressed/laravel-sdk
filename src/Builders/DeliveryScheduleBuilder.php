@@ -44,6 +44,7 @@ class DeliveryScheduleBuilder extends Builder
      */
     public function get(): Collection
     {
+        $id = null;
         $postcode = null;
 
         try {
@@ -64,6 +65,7 @@ class DeliveryScheduleBuilder extends Builder
         } catch (RequestException $exception) {
             $this->throw(
                 exception: $exception,
+                id: $id,
                 postcode: $postcode
             );
         }
@@ -81,17 +83,20 @@ class DeliveryScheduleBuilder extends Builder
      * Throw a new friendly exception based on the existing exception.
      *
      * @param  \Throwable  $exception
+     * @param  string|null  $id
      * @param  string|null  $postcode
      * @return void
      */
-    protected function throw(Throwable $exception, string $postcode = null): void
+    protected function throw(Throwable $exception, string $id = null, string $postcode = null): void
     {
-        if ($exception->getCode() == 404 && $postcode) {
-            if ($id = $this->getOption('id')) {
+        if ($exception->getCode() == 404) {
+            if ($id) {
                 throw new DeliveryScheduleNotFoundException($id, $exception);
             }
 
-            throw new ZoneNotFoundException($postcode, $exception);
+            if ($postcode) {
+                throw new ZoneNotFoundException($postcode, $exception);
+            }
         }
 
         throw $exception;
