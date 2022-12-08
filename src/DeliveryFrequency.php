@@ -2,17 +2,17 @@
 
 namespace AllDressed;
 
-use AllDressed\Builders\DeliveryScheduleBuilder;
+use AllDressed\Builders\DeliveryFrequencyBuilder;
 
 class DeliveryFrequency extends Base
 {
     /**
      * Create a new query builder.
      *
-     * @return \AllDressed\Builders\DeliveryScheduleBuilder
+     * @return \AllDressed\Builders\DeliveryFrequencyBuilder
      */
-    public static function query(): DeliveryScheduleBuilder
+    public static function query(): DeliveryFrequencyBuilder
     {
-        return DeliveryScheduleBuilder::make();
+        return DeliveryFrequencyBuilder::make();
     }
 }
