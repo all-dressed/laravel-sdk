@@ -29,7 +29,7 @@ class Client
      */
     public static function fake(string $path, string $body = null): void
     {
-        return static::fakes([
+        static::fakes([
             $path => $body,
         ]);
     }
