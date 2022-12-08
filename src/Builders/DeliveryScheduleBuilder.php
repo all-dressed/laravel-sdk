@@ -8,7 +8,6 @@ use AllDressed\Exceptions\DeliveryScheduleNotFoundException;
 use AllDressed\Exceptions\MissingPostalCodeException;
 use AllDressed\Exceptions\ZoneNotFoundException;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Throwable;
 
@@ -25,7 +24,7 @@ class DeliveryScheduleBuilder extends Builder
     }
 
     /**
-     * Filter the zones that contains the given postcode.
+     * Filter the delivery schedules that belongs to the given postcode.
      *
      * @param  string  $postcode
      * @return static
@@ -45,19 +44,18 @@ class DeliveryScheduleBuilder extends Builder
      */
     public function get(): Collection
     {
-        $postcode = Arr::get($this->options, 'postcode');
-
-        throw_unless($postcode, MissingPostalCodeException::class);
-
         try {
             $client = resolve(Client::class);
 
-            $endpoint = "zones/{$postcode}/schedules";
+            if ($id = $this->getOption('id')) {
+                $endpoint = "schedules/{$id}";
+            } elseif ($this->getOption('available')) {
+                throw_unless(
+                    $postcode = $this->getOption('postcode'),
+                    MissingPostalCodeException::class
+                );
 
-            if ($this->getOption('available')) {
-                $endpoint = "{$endpoint}/available";
-            } elseif ($id = $this->getOption('id')) {
-                $endpoint = "{$endpoint}/{$id}";
+                $endpoint = "zones/{$postcode}/schedules/available";
             }
 
             $response = $client->get($endpoint);
