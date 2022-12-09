@@ -27,12 +27,22 @@ class Package extends Base
     }
 
     /**
+     * Check if the package has a parent package.
+     *
+     * @return bool
+     */
+    public function hasParent(): bool
+    {
+        return (bool) $this->has_parent;
+    }
+
+    /**
      * Check if it is a root package.
      *
      * @return bool
      */
     public function isRoot(): bool
     {
-        return ! $this->hasPackages();
+        return ! $this->hasParent();
     }
 }
