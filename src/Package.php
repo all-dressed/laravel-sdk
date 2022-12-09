@@ -45,4 +45,20 @@ class Package extends Base
     {
         return ! $this->hasParent();
     }
+
+    /**
+     * Set the value at the given offset.
+     *
+     * @param  TKey  $offset
+     * @param  TValue  $value
+     * @return void
+     */
+    public function offsetSet($offset, $value): void
+    {
+        if ($offset == 'packages' && is_array($value)) {
+            $value = collect($value)->mapInto(static::class);
+        }
+
+        parent::offsetSet($offset, $value);
+    }
 }
