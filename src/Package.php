@@ -3,9 +3,25 @@
 namespace AllDressed;
 
 use AllDressed\Builders\PackageBuilder;
+use Illuminate\Support\Arr;
 
 class Package extends Base
 {
+    /**
+     * Create a new package instance.
+     *
+     * @param  iterable<TKey, TValue>  $attributes
+     * @return void
+     */
+    public function __construct($attributes = [])
+    {
+        if ($packages = Arr::get($attributes, 'packages')) {
+            $attributes['packages'] = collect($packages);
+        }
+
+        parent::__construct($attributes);
+    }
+
     /**
      * Create a new query builder.
      *
@@ -44,21 +60,5 @@ class Package extends Base
     public function isRoot(): bool
     {
         return ! $this->hasParent();
-    }
-
-    /**
-     * Set the value at the given offset.
-     *
-     * @param  TKey  $offset
-     * @param  TValue  $value
-     * @return void
-     */
-    public function offsetSet($offset, $value): void
-    {
-        if ($offset == 'packages' && is_array($value)) {
-            $value = collect($value)->mapInto(static::class);
-        }
-
-        parent::offsetSet($offset, $value);
     }
 }
