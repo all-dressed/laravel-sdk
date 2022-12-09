@@ -15,4 +15,24 @@ class Package extends Base
     {
         return PackageBuilder::make();
     }
+
+    /**
+     * Check if the package has children packages.
+     *
+     * @return bool
+     */
+    public function hasPackages(): bool
+    {
+        return (bool) $this->has_packages;
+    }
+
+    /**
+     * Check if it is a root package.
+     *
+     * @return bool
+     */
+    public function isRoot(): bool
+    {
+        return ! $this->hasPackages();
+    }
 }
