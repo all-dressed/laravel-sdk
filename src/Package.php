@@ -16,7 +16,7 @@ class Package extends Base
     public function __construct($attributes = [])
     {
         if ($packages = Arr::get($attributes, 'packages')) {
-            $attributes['packages'] = collect($packages);
+            $attributes['packages'] = collect($packages)->mapInto(static::class);
         }
 
         parent::__construct($attributes);
