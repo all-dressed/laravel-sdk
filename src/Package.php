@@ -15,13 +15,11 @@ class Package extends Base
      */
     public function __construct($attributes = [])
     {
-        if ($packages = Arr::get($attributes, 'packages')) {
-            $attributes['packages'] = collect($packages)->mapInto(static::class);
-        }
+        $attributes['packages'] = collect(Arr::get($attributes, 'packages'))
+            ->mapInto(static::class);
 
-        if ($prices = Arr::get($attributes, 'prices')) {
-            $attributes['prices'] = collect($prices)->mapInto(Price::class);
-        }
+        $attributes['prices'] = collect(Arr::get($attributes, 'prices', []))
+            ->mapInto(Price::class);
 
         parent::__construct($attributes);
     }
