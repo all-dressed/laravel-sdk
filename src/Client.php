@@ -91,6 +91,7 @@ class Client
         $url = $this->getEndpoint($endpoint);
 
         return Http::withToken($this->key)
+            ->acceptJson()
             ->withOptions([
                 'verify' => config('all-dressed.request.verify'),
             ])
