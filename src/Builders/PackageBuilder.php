@@ -12,7 +12,7 @@ use Throwable;
 class PackageBuilder extends Builder
 {
     /**
-     * Retrieve the list of zones.
+     * Retrieve the packages.
      *
      * @return \Illuminate\Support\Collection<int, \AllDressed\Package>
      */
