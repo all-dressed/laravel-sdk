@@ -12,6 +12,17 @@ use Throwable;
 class PackageBuilder extends Builder
 {
     /**
+     * Filter out the packages that belongs to the given menu.
+     *
+     * @param  string  $menu
+     * @return static
+     */
+    public function forMenu(string $menu): static
+    {
+        return $this->withOption('menu', $menu);
+    }
+
+    /**
      * Retrieve the packages.
      *
      * @return \Illuminate\Support\Collection<int, \AllDressed\Package>
@@ -24,6 +35,8 @@ class PackageBuilder extends Builder
 
         if ($id = $this->getOption('id')) {
             $endpoint = "{$endpoint}/{$id}";
+        } elseif ($menu = $this->getOption('menu')) {
+            $endpoint = "menus/{$menu}/{$endpoint}";
         }
 
         try {
