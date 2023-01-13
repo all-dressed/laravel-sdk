@@ -33,10 +33,12 @@ class PackageBuilder extends Builder
 
         $endpoint = 'packages';
 
+        if ($menu = $this->getOption('menu')) {
+            $endpoint = "menus/{$menu}/{$endpoint}";
+        }
+
         if ($id = $this->getOption('id')) {
             $endpoint = "{$endpoint}/{$id}";
-        } elseif ($menu = $this->getOption('menu')) {
-            $endpoint = "menus/{$menu}/{$endpoint}";
         }
 
         try {
