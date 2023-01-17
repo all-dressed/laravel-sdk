@@ -18,7 +18,7 @@ abstract class Builder
     /**
      * Alias of the get method.
      *
-     * @return \Illuminate\Support\Collection<int, \AllDressed\Zone>
+     * @return \Illuminate\Support\Collection<int, \AllDressed\Base>
      */
     public function all(): Collection
     {
