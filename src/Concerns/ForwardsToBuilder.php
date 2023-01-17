@@ -2,7 +2,6 @@
 
 namespace AllDressed\Concerns;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Traits\ForwardsCalls;
 
 trait ForwardsToBuilder
@@ -47,12 +46,7 @@ trait ForwardsToBuilder
      */
     protected function forwardCallTo($object, $method, $parameters)
     {
-        $class = Str::of(get_class($object))
-            ->replace('AllDressed\\', 'AllDressed\\Builders\\')
-            ->append('Builder')
-            ->toString();
-
-        $builder = new $class;
+        $builder = $object::query();
 
         if (method_exists($builder, $method)) {
             return $builder->{$method}(...$parameters);
