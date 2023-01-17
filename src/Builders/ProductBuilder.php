@@ -13,6 +13,17 @@ use Throwable;
 class ProductBuilder extends Builder
 {
     /**
+     * Filter out the products that belongs to the given menu.
+     *
+     * @param  string  $menu
+     * @return static
+     */
+    public function forMenu(string $menu): static
+    {
+        return $this->withOption('menu', $menu);
+    }
+
+    /**
      * Filter out the products that belongs to the given package.
      *
      * @param  string  $package
@@ -36,6 +47,10 @@ class ProductBuilder extends Builder
 
         if ($package = $this->getOption('package')) {
             $endpoint = "packages/{$package}/{$endpoint}";
+        }
+
+        if ($menu = $this->getOption('menu')) {
+            $endpoint = "menus/{$menu}/{$endpoint}";
         }
 
         if ($id = $this->getOption('id')) {
