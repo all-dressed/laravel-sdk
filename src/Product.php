@@ -18,6 +18,10 @@ class Product extends Base
         $attributes['prices'] = collect(Arr::get($attributes, 'prices', []))
             ->mapInto(Price::class);
 
+        if ($category = Arr::get($attributes, 'category')) {
+            $attributes['category'] = Category::make($category);
+        }
+
         parent::__construct($attributes);
     }
 
