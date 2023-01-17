@@ -4,6 +4,7 @@ namespace AllDressed;
 
 use AllDressed\Builders\PackageBuilder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class Package extends Base
 {
@@ -25,13 +26,17 @@ class Package extends Base
     }
 
     /**
-     * Create a new query builder.
+     * Retrieve the products of the package.
      *
-     * @return \AllDressed\Builders\PackageBuilder
+     * @return \Illuminate\Support\Collection<int, \AllDressed\Product>
      */
-    public static function query(): PackageBuilder
+    public function getProducts(): Collection
     {
-        return PackageBuilder::make();
+        if ($this->missingAttribute('products')) {
+            $this->products = Product::query()->forPackage($this->id)->get();
+        }
+
+        return $this->products;
     }
 
     /**
@@ -62,5 +67,15 @@ class Package extends Base
     public function isRoot(): bool
     {
         return ! $this->hasParent();
+    }
+
+    /**
+     * Create a new query builder.
+     *
+     * @return \AllDressed\Builders\PackageBuilder
+     */
+    public static function query(): PackageBuilder
+    {
+        return PackageBuilder::make();
     }
 }
