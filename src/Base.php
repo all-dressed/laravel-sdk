@@ -34,6 +34,17 @@ abstract class Base extends Fluent
     }
 
     /**
+     * Create a new instance.
+     *
+     * @param  mixed  $args
+     * @return static
+     */
+    public static function make(...$args): static
+    {
+        return new static(...$args);
+    }
+
+    /**
      * Check if the instance is missing the given attribute.
      *
      * @param  string  $name
