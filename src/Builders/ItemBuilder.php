@@ -76,7 +76,7 @@ class ItemBuilder extends Builder
         return $this->withOption('types', array_merge(
             Arr::wrap($this->getOption('types')),
             [
-                'package' => true,
+                'product' => true,
             ]
         ));
     }
