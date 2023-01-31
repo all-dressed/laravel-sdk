@@ -76,6 +76,21 @@ class ItemBuilder extends Builder
         return $this->withOption('types', array_merge(
             Arr::wrap($this->getOption('types')),
             [
+                'package' => true,
+            ]
+        ));
+    }
+
+    /**
+     * Filter the items that are products.
+     *
+     * @return static
+     */
+    public function products(): static
+    {
+        return $this->withOption('types', array_merge(
+            Arr::wrap($this->getOption('types')),
+            [
                 'product' => true,
             ]
         ));
