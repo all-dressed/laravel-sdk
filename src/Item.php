@@ -3,6 +3,7 @@
 namespace AllDressed;
 
 use AllDressed\Builders\ItemBuilder;
+use Illuminate\Support\Arr;
 
 class Item extends Base
 {
@@ -14,6 +15,18 @@ class Item extends Base
      */
     public function __construct($attributes = [])
     {
+        $sellable = Arr::get($attributes, 'sellable', []);
+        $type = Arr::get($sellable, 'type');
+        $cast = null;
+
+        if ($type == 'product') {
+            $cast = Product::class;
+        }
+
+        if ($cast !== null) {
+            $attributes['sellable'] = new $cast($sellable);
+        }
+
         parent::__construct($attributes);
     }
 
