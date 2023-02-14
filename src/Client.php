@@ -5,6 +5,7 @@ namespace AllDressed;
 use AllDressed\Exceptions\MissingAccountException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class Client
@@ -77,6 +78,18 @@ class Client
     }
 
     /**
+     * Send a POST request to the given API endpoint.
+     *
+     * @param  string  $endpoint
+     * @param  array  $payload
+     * @return \Illuminate\Http\Client\Response
+     */
+    public function post(string $endpoint, array $payload = []): Response
+    {
+        return $this->send('post', $endpoint, $payload);
+    }
+
+    /**
      * Send a request to the given API endpoint.
      *
      * @param  string  $method
@@ -89,6 +102,8 @@ class Client
         throw_unless($this->account, MissingAccountException::class);
 
         $url = $this->getEndpoint($endpoint);
+
+        Log::debug("Endpoint :: {$url}");
 
         return Http::withToken($this->key)
             ->acceptJson()
