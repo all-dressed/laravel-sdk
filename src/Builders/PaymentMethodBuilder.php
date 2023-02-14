@@ -8,6 +8,7 @@ use AllDressed\Client;
 use AllDressed\Customer;
 use AllDressed\Exceptions\MissingCustomerException;
 use AllDressed\Exceptions\MissingPaymentGatewayException;
+use AllDressed\Exceptions\NotImplementedException;
 use AllDressed\PaymentGateway;
 use AllDressed\PaymentMethod;
 use Illuminate\Http\Client\RequestException;
@@ -83,35 +84,13 @@ class PaymentMethodBuilder extends Builder
     }
 
     /**
-     * Retrieve the customers.
+     * Retrieve the payment methods.
      *
      * @return \Illuminate\Support\Collection<int, \AllDressed\PaymentMethod>
      */
     public function get(): Collection
     {
-        $client = resolve(Client::class);
-
-        $endpoint = 'customers';
-
-        if ($id = $this->getOption('id')) {
-            $endpoint = "customers/{$id}";
-        }
-
-        try {
-            $response = $client->get($endpoint);
-        } catch (RequestException $exception) {
-            $this->throw(
-                exception: $exception,
-            );
-        }
-
-        $data = $response->json('data');
-
-        if ($id) {
-            $data = [$data];
-        }
-
-        return collect($data)->mapInto(PaymentMethod::class);
+        throw new NotImplementedException;
     }
 
     /**
