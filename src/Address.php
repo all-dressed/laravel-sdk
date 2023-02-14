@@ -113,4 +113,22 @@ class Address extends Fluent
 
         return $this;
     }
+
+    /**
+     * Convert the address to a payload for a request.
+     *
+     * @param  string|null  $prefix
+     * @return array
+     */
+    public function toPayload(string $prefix = null): array
+    {
+        return [
+            "{$prefix}address_line_1" => $this->line_1,
+            "{$prefix}address_line_2" => $this->line_2,
+            "{$prefix}city" => $this->city,
+            "{$prefix}state" => $this->state,
+            "{$prefix}postcode" => $this->postcode,
+            "{$prefix}country" => $this->country,
+        ];
+    }
 }
