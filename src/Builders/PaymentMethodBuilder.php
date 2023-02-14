@@ -25,7 +25,7 @@ class PaymentMethodBuilder extends Builder
      */
     public function forCustomer(Customer $customer): static
     {
-        return $this->withOption('customer', $customer->id);
+        return $this->withOption('customer', $customer);
     }
 
     /**
@@ -36,7 +36,7 @@ class PaymentMethodBuilder extends Builder
      */
     public function forGateway(PaymentGateway $gateway): static
     {
-        return $this->withOption('gateway', $gateway->id);
+        return $this->withOption('gateway', $gateway);
     }
 
     /**
@@ -62,20 +62,27 @@ class PaymentMethodBuilder extends Builder
         );
 
         try {
-            $response = $client->post("customers/{$customer}/billing/methods", [
-                'gateway' => $gateway,
-                'number' => $card->getNumber(),
-                'month' => $card->getMonth(),
-                'year' => $card->getYear(),
-                'cvc' => $card->getVerificationCode(),
-                'primary' => (bool) $this->getOption('primary'),
-                'billing_address_line_1' => $this->getOption('billing_address_line_1'),
-                'billing_address_line_2' => $this->getOption('billing_address_line_2'),
-                'billing_city' => $this->getOption('billing_city'),
-                'billing_state' => $this->getOption('billing_state'),
-                'billing_postcode' => $this->getOption('billing_postcode'),
-                'billing_country' => $this->getOption('billing_country'),
-            ]);
+            $response = $client->post(
+                "customers/{$customer->id}/billing/methods",
+                array_filter([
+                    'gateway' => $gateway->id,
+                    'number' => $card->getNumber(),
+                    'month' => $card->getMonth(),
+                    'year' => $card->getYear(),
+                    'cvc' => $card->getVerificationCode(),
+                    'primary' => (bool) $this->getOption('primary'),
+                    'billing_address_line_1' => $this->getOption(
+                        'billing_address_line_1'
+                    ),
+                    'billing_address_line_2' => $this->getOption(
+                        'billing_address_line_2'
+                    ),
+                    'billing_city' => $this->getOption('billing_city'),
+                    'billing_state' => $this->getOption('billing_state'),
+                    'billing_postcode' => $this->getOption('billing_postcode'),
+                    'billing_country' => $this->getOption('billing_country'),
+                ], static fn ($value) => $value !== null)
+            );
 
             return PaymentMethod::make($response->json('data'));
         } catch (RequestException $exception) {
