@@ -3,6 +3,7 @@
 namespace AllDressed\Builders;
 
 use AllDressed\Address;
+use AllDressed\Choice;
 use AllDressed\Client;
 use AllDressed\Currency;
 use AllDressed\Customer;
@@ -20,36 +21,13 @@ use Throwable;
 class SubscriptionBuilder extends Builder
 {
     /**
-     * Indicates the customer of the subscription.
+     * Indicates that the subscription should be billed right away.
      *
-     * @param  \AllDressed\Customer  $customer
      * @return static
      */
-    public function forCustomer(Customer $customer): static
+    public function bill(): static
     {
-        return $this->withOption('customer', $customer);
-    }
-
-    /**
-     * Indicates the currency of the subscription.
-     *
-     * @param  \AllDressed\Currency  $currency
-     * @return static
-     */
-    public function forCurrency(Currency $currency): static
-    {
-        return $this->withOption('currency', $currency);
-    }
-
-    /**
-     * Indicates the delivery schedule of the subscription.
-     *
-     * @param  \AllDressed\DeliverySchedule  $schedule
-     * @return static
-     */
-    public function forDeliverySchedule(DeliverySchedule $schedule): static
-    {
-        return $this->withOption('schedule', $schedule);
+        return $this->withOption('bill', true);
     }
 
     /**
@@ -86,6 +64,8 @@ class SubscriptionBuilder extends Builder
 
         try {
             $response = $client->post('subscriptions', array_filter([
+                'bill' => $this->getOption('bill'),
+                'choices' => $this->getOption('choices'),
                 'customer' => $customer->id,
                 'currency' => $currency->id,
                 'delivery_schedule' => $schedule->id,
@@ -110,6 +90,39 @@ class SubscriptionBuilder extends Builder
     }
 
     /**
+     * Indicates the customer of the subscription.
+     *
+     * @param  \AllDressed\Customer  $customer
+     * @return static
+     */
+    public function forCustomer(Customer $customer): static
+    {
+        return $this->withOption('customer', $customer);
+    }
+
+    /**
+     * Indicates the currency of the subscription.
+     *
+     * @param  \AllDressed\Currency  $currency
+     * @return static
+     */
+    public function forCurrency(Currency $currency): static
+    {
+        return $this->withOption('currency', $currency);
+    }
+
+    /**
+     * Indicates the delivery schedule of the subscription.
+     *
+     * @param  \AllDressed\DeliverySchedule  $schedule
+     * @return static
+     */
+    public function forDeliverySchedule(DeliverySchedule $schedule): static
+    {
+        return $this->withOption('schedule', $schedule);
+    }
+
+    /**
      * Retrieve the subscriptions.
      *
      * @return \Illuminate\Support\Collection<int, \AllDressed\Subscription>
@@ -117,6 +130,28 @@ class SubscriptionBuilder extends Builder
     public function get(): Collection
     {
         throw new NotImplementedException;
+    }
+
+    /**
+     * Set the choices of the request.
+     *
+     * @param  \Illuminate\Support\Collection<int, \AllDressed\Choice>  $choices
+     * @return static
+     */
+    public function setChoices(Collection $choices): static
+    {
+        return $this->withOption(
+            'choices',
+            $choices
+                ->map(static function ($choice) {
+                    if ($choice instanceof Choice) {
+                        return $choice->toPayload();
+                    }
+
+                    return $choice;
+                })
+                ->toArray()
+        );
     }
 
     /**
