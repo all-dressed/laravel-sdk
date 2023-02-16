@@ -4,6 +4,7 @@ namespace AllDressed;
 
 use AllDressed\Builders\CustomerBuilder;
 use AllDressed\Exceptions\MissingBillingAddressException;
+use Illuminate\Support\Collection;
 
 class Customer extends Base
 {
@@ -27,6 +28,16 @@ class Customer extends Base
             ->forCustomer($this)
             ->setBillingAddress($address)
             ->create($card);
+    }
+
+    /**
+     * Retrieve the paymnet methods of the customer.
+     *
+     * @return \Illuminate\Support\Collection<int, \AllDressed\PaymentMethod>
+     */
+    public function getPaymentMethods(): Collection
+    {
+        return PaymentMethod::query()->forCustomer($this)->get();
     }
 
     /**

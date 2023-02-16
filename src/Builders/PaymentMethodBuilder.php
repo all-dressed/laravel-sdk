@@ -8,7 +8,6 @@ use AllDressed\Client;
 use AllDressed\Customer;
 use AllDressed\Exceptions\MissingCustomerException;
 use AllDressed\Exceptions\MissingPaymentGatewayException;
-use AllDressed\Exceptions\NotImplementedException;
 use AllDressed\PaymentGateway;
 use AllDressed\PaymentMethod;
 use Exception;
@@ -98,7 +97,21 @@ class PaymentMethodBuilder extends RequestBuilder
      */
     public function get(): Collection
     {
-        throw new NotImplementedException;
+        throw_unless(
+            $customer ??= $this->getOption('customer'),
+            MissingCustomerException::class
+        );
+
+        try {
+            $response = resolve(Client::class)->get(
+                "customers/{$customer->id}/billing/methods"
+            );
+
+            return collect($response->json('data'))
+                ->mapInto(PaymentMethod::class);
+        } catch (RequestException $exception) {
+            $this->throw($exception);
+        }
     }
 
     /**
