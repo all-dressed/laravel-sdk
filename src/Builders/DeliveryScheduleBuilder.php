@@ -11,7 +11,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
 use Throwable;
 
-class DeliveryScheduleBuilder extends Builder
+class DeliveryScheduleBuilder extends RequestBuilder
 {
     /**
      * Retrieve the available delivery schedules.

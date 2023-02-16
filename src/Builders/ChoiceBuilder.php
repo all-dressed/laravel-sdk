@@ -6,7 +6,7 @@ use AllDressed\Exceptions\NotImplementedException;
 use Illuminate\Support\Collection;
 use Throwable;
 
-class ChoiceBuilder extends Builder
+class ChoiceBuilder extends RequestBuilder
 {
     /**
      * Retrieve the items.

@@ -5,7 +5,7 @@ namespace AllDressed\Builders;
 use Exception;
 use Illuminate\Support\Collection;
 
-class NullBuilder extends Builder
+class NullBuilder extends RequestBuilder
 {
     /**
      * Retrieve the list of zones.

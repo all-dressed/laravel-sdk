@@ -9,10 +9,11 @@ use AllDressed\Item;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Throwable;
 
-class ItemBuilder extends Builder
+class ItemBuilder extends RequestBuilder
 {
     /**
      * Set the menu of the query.
@@ -55,6 +56,8 @@ class ItemBuilder extends Builder
                     array_keys(Arr::wrap($this->getOption('types')))
                 ),
             ]));
+
+            Log::debug($response->body());
         } catch (RequestException $exception) {
             $this->throw(
                 exception: $exception,

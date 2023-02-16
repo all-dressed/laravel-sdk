@@ -11,7 +11,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
 use Throwable;
 
-class DeliveryFrequencyBuilder extends Builder
+class DeliveryFrequencyBuilder extends RequestBuilder
 {
     /**
      * Filter the delivery frequencies that belongs to the given delivery

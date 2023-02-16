@@ -8,7 +8,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
 use Throwable;
 
-class CustomerBuilder extends Builder
+class CustomerBuilder extends RequestBuilder
 {
     /**
      * Send the request to create a customer.

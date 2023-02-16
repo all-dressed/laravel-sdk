@@ -11,14 +11,17 @@ use AllDressed\DeliverySchedule;
 use AllDressed\Exceptions\MissingCurrencyException;
 use AllDressed\Exceptions\MissingCustomerException;
 use AllDressed\Exceptions\MissingDeliveryScheduleException;
+use AllDressed\Exceptions\MissingPaymentMethodException;
 use AllDressed\Exceptions\NotImplementedException;
+use AllDressed\PaymentMethod;
 use AllDressed\Subscription;
+use Exception;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Throwable;
 
-class SubscriptionBuilder extends Builder
+class SubscriptionBuilder extends RequestBuilder
 {
     /**
      * Indicates that the subscription should be billed right away.
@@ -37,13 +40,14 @@ class SubscriptionBuilder extends Builder
      * @param  int  $frequency
      * @param  \AllDressed\Customer|null  $customer
      * @param  \AllDressed\Currency|null  $currency
+     * @param  \AllDressed\PaymentMethod|null  $method
      * @param  \AllDressed\DeliverySchedule|null  $schedule
      * @return \AllDressed\Subscription
      *
      * @throws \AllDressed\Exceptions\MissingCurrencyException
      * @throws \AllDressed\Exceptions\MissingCustomerException
      */
-    public function create(Carbon $date, int $frequency, Customer $customer = null, Currency $currency = null, DeliverySchedule $schedule = null): Subscription
+    public function create(Carbon $date, int $frequency, Customer $customer = null, Currency $currency = null, PaymentMethod $method = null, DeliverySchedule $schedule = null): Subscription
     {
         $client = resolve(Client::class);
 
@@ -55,6 +59,11 @@ class SubscriptionBuilder extends Builder
         throw_unless(
             $currency ??= $this->getOption('currency'),
             MissingCurrencyException::class
+        );
+
+        throw_unless(
+            $method ??= $this->getOption('payment_method'),
+            MissingPaymentMethodException::class
         );
 
         throw_unless(
@@ -71,6 +80,7 @@ class SubscriptionBuilder extends Builder
                 'delivery_schedule' => $schedule->id,
                 'frequency' => $frequency,
                 'menu' => $date,
+                'payment_method' => $method->id,
                 'shipping_address_line_1' => $this->getOption(
                     'shipping_address_line_1'
                 ),
@@ -152,6 +162,17 @@ class SubscriptionBuilder extends Builder
                 })
                 ->toArray()
         );
+    }
+
+    /**
+     * Set the payment method of the request.
+     *
+     * @param  \AllDressed\PaymentMethod  $method
+     * @return static
+     */
+    public function setPaymentMethod(PaymentMethod $method): static
+    {
+        return $this->withOption('payment_method', $method);
     }
 
     /**

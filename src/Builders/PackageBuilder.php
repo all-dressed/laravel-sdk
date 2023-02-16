@@ -9,7 +9,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
 use Throwable;
 
-class PackageBuilder extends Builder
+class PackageBuilder extends RequestBuilder
 {
     /**
      * Filter out the packages that belongs to the given menu.

@@ -2,11 +2,14 @@
 
 namespace AllDressed;
 
+use AllDressed\Exceptions\CardException;
 use AllDressed\Exceptions\MissingAccountException;
+use AllDressed\Exceptions\ValidationException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Throwable;
 
 class Client
 {
@@ -25,10 +28,10 @@ class Client
      * Fake the response of a given endpoint.
      *
      * @param  string  $path
-     * @param  string|null  $body
+     * @param  \Illuminate\Http\Client\Response|string|null  $body
      * @return void
      */
-    public static function fake(string $path, string $body = null): void
+    public static function fake(string $path, $body = null): void
     {
         static::fakes([
             $path => $body,
@@ -43,10 +46,14 @@ class Client
      */
     public static function fakes(array $fakes): void
     {
+        $client = resolve(static::class);
+
         Http::fake(
             collect($fakes)
                 ->mapWithKeys(static fn ($body, $path) => [
-                    resolve(static::class)->getEndpoint($path) => Http::response($body),
+                    $client->getEndpoint($path) => is_string($body)
+                        ? Http::response($body)
+                        : $body,
                 ])
                 ->toArray()
         );
@@ -78,6 +85,32 @@ class Client
     }
 
     /**
+     * Parse the exception to have a more user friendly exception.
+     *
+     * @param  \Throwable  $exception
+     * @return void
+     */
+    protected function parseException(Throwable $exception): void
+    {
+        Log::debug($exception->getMessage());
+
+        if ($exception->getCode() === 422) {
+            $exception = new ValidationException($exception->response);
+
+            if ($exception->hasError('number')) {
+                throw new CardException(
+                    'number',
+                    $exception->getErrorMessage('number')
+                );
+            }
+
+            throw $exception;
+        }
+
+        throw $exception;
+    }
+
+    /**
      * Send a POST request to the given API endpoint.
      *
      * @param  string  $endpoint
@@ -103,15 +136,19 @@ class Client
 
         $url = $this->getEndpoint($endpoint);
 
-        Log::debug("Endpoint :: {$url}");
+        Log::debug("Endpoint :: {$url}", $payload);
 
-        return Http::withToken($this->key)
-            ->acceptJson()
-            ->withOptions([
-                'verify' => config('all-dressed.request.verify'),
-            ])
-            ->{$method}($url, $payload)
-            ->throw();
+        try {
+            return Http::withToken($this->key)
+                ->acceptJson()
+                ->withOptions([
+                    'verify' => config('all-dressed.request.verify'),
+                ])
+                ->{$method}($url, $payload)
+                ->throw();
+        } catch (Throwable $exception) {
+            $this->parseException($exception);
+        }
     }
 
     /**

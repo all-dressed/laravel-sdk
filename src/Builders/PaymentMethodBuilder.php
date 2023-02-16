@@ -11,11 +11,12 @@ use AllDressed\Exceptions\MissingPaymentGatewayException;
 use AllDressed\Exceptions\NotImplementedException;
 use AllDressed\PaymentGateway;
 use AllDressed\PaymentMethod;
+use Exception;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
 use Throwable;
 
-class PaymentMethodBuilder extends Builder
+class PaymentMethodBuilder extends RequestBuilder
 {
     /**
      * Indicates the customer of the payment method.

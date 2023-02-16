@@ -10,7 +10,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Throwable;
 
-class ZoneBuilder extends Builder
+class ZoneBuilder extends RequestBuilder
 {
     /**
      * Retrieve the available delivery schedules.

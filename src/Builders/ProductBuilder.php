@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class ProductBuilder extends Builder
+class ProductBuilder extends RequestBuilder
 {
     /**
      * Filter out the products that belongs to the given menu.

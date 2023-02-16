@@ -23,10 +23,10 @@ class Choice extends Base
      */
     public function toPayload(): array
     {
-        return [
+        return array_filter([
             'id' => $this->choosable->id,
             'quantity' => $this->quantity,
             'package' => optional($this->package)->id,
-        ];
+        ], static fn ($value) => $value !== null);
     }
 }

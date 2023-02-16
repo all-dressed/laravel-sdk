@@ -2,7 +2,7 @@
 
 namespace AllDressed;
 
-use AllDressed\Builders\Builder;
+use AllDressed\Builders\RequestBuilder;
 use AllDressed\Concerns\ForwardsToBuilder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -60,5 +60,5 @@ abstract class Base extends Fluent
      *
      * @return \AllDressed\Builders\Builder
      */
-    abstract public static function query(): Builder;
+    abstract public static function query(): RequestBuilder;
 }

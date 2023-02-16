@@ -2,6 +2,7 @@
 
 namespace AllDressed;
 
+use AllDressed\Builders\FakeCardBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Fluent;
 
@@ -35,6 +36,16 @@ class Card extends Fluent
         $this->year = $year;
         $this->cvc = $cvc;
         $this->address = $address;
+    }
+
+    /**
+     * Fake a card for tests.
+     *
+     * @return \AllDressed\Builders\FakeCardBuilder
+     */
+    public static function fake(): FakeCardBuilder
+    {
+        return FakeCardBuilder::make();
     }
 
     /**
