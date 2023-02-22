@@ -41,6 +41,16 @@ class ValidationException extends RequestException
     }
 
     /**
+     * Retrieve the errors of the exception.
+     *
+     * @return array
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
+
+    /**
      * Check if the given key has an error.
      *
      * @param  string  $key
