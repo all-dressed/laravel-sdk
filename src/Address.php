@@ -2,10 +2,13 @@
 
 namespace AllDressed;
 
+use AllDressed\Concerns\Makeable;
 use Illuminate\Support\Fluent;
 
 class Address extends Fluent
 {
+    use Makeable;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -28,16 +31,6 @@ class Address extends Fluent
     public function hasLine2(): bool
     {
         return $this->line_2 !== null;
-    }
-
-    /**
-     * Create a new instance.
-     *
-     * @return static
-     */
-    public static function make(...$args): static
-    {
-        return new static(...$args);
     }
 
     /**

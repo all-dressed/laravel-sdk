@@ -4,13 +4,14 @@ namespace AllDressed;
 
 use AllDressed\Builders\RequestBuilder;
 use AllDressed\Concerns\ForwardsToBuilder;
+use AllDressed\Concerns\Makeable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Fluent;
 
 abstract class Base extends Fluent
 {
-    use ForwardsToBuilder;
+    use ForwardsToBuilder, Makeable;
 
     /**
      * Retrieve all the instances.
@@ -31,17 +32,6 @@ abstract class Base extends Fluent
     public function hasAttribute(string $name): bool
     {
         return Arr::has($this->attributes, $name);
-    }
-
-    /**
-     * Create a new instance.
-     *
-     * @param  mixed  $args
-     * @return static
-     */
-    public static function make(...$args): static
-    {
-        return new static(...$args);
     }
 
     /**

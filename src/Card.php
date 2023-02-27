@@ -3,11 +3,14 @@
 namespace AllDressed;
 
 use AllDressed\Builders\FakeCardBuilder;
+use AllDressed\Concerns\Makeable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Fluent;
 
 class Card extends Fluent
 {
+    use Makeable;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -96,20 +99,6 @@ class Card extends Fluent
     public function getYear(): int
     {
         return $this->year;
-    }
-
-    /**
-     * Create a new card instance.
-     *
-     * @param  string  $number
-     * @param  int  $year
-     * @param  int  $month
-     * @param  string  $cvc
-     * @return static
-     */
-    public static function make(...$args): static
-    {
-        return new static(...$args);
     }
 
     /**

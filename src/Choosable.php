@@ -2,10 +2,13 @@
 
 namespace AllDressed;
 
+use AllDressed\Concerns\Makeable;
 use Illuminate\Support\Fluent;
 
 class Choosable extends Fluent
 {
+    use Makeable;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -14,14 +17,4 @@ class Choosable extends Fluent
     protected $fillable = [
         'id',
     ];
-
-    /**
-     * Create a new instance.
-     *
-     * @return static
-     */
-    public static function make(...$args): static
-    {
-        return new static(...$args);
-    }
 }
