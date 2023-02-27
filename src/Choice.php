@@ -17,7 +17,7 @@ class Choice extends Base
     {
         $choosable = Arr::get($attributes, 'choosable', []);
 
-        if ($choosable) {
+        if (is_array($choosable)) {
             $attributes['choosable'] = new Choosable($choosable);
         }
 
