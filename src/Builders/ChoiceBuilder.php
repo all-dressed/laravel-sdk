@@ -62,7 +62,7 @@ class ChoiceBuilder extends RequestBuilder
     }
 
     /**
-     * Indicates the currency of the subscription.
+     * Set the subscription of the request.
      *
      * @param  \AllDressed\Subscription  $subscription
      * @return static
