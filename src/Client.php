@@ -123,6 +123,18 @@ class Client
     }
 
     /**
+     * Send a PUT request to the given API endpoint.
+     *
+     * @param  string  $endpoint
+     * @param  array  $payload
+     * @return \Illuminate\Http\Client\Response
+     */
+    public function put(string $endpoint, array $payload = []): Response
+    {
+        return $this->send('put', $endpoint, $payload);
+    }
+
+    /**
      * Send a request to the given API endpoint.
      *
      * @param  string  $method

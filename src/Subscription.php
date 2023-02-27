@@ -74,4 +74,15 @@ class Subscription extends Base
             ->forMenu($date)
             ->create();
     }
+
+    /**
+     * Update the choices of the subscription.
+     *
+     * @param  \Illuminate\Support\Collection<int, \AllDressed\Choice>  $choices
+     * @return \Illuminate\Support\Collection<int, \AllDressed\Choice>
+     */
+    public function updateChoices(Collection $choices): Collection
+    {
+        return Choice::query()->ofSubscription($this)->update($choices);
+    }
 }

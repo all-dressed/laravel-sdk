@@ -32,7 +32,60 @@ class ChoiceBuilder extends RequestBuilder
     }
 
     /**
-     * Retrieve the items.
+     * Retrieve the choices.
+     *
+     * @param  \Illuminate\Support\Collection<int, \AllDressed\Choice>  $choices
+     * @return \Illuminate\Support\Collection<int, \AllDressed\Choice>
+     */
+    public function update(Collection $choices): Collection
+    {
+        throw_unless(
+            $menu = $this->getOption('menu'),
+            MissingMenuException::class
+        );
+
+        throw_unless(
+            $subscription = $this->getOption('subscription'),
+            MissingSubscriptionException::class
+        );
+
+        try {
+            $endpoint = "subscriptions/{$subscription->id}/{$menu}/choices";
+
+            resolve(Client::class)->put($endpoint, $choices->map->toPayload());
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+
+        return $choices;
+    }
+
+    /**
+     * Set the subscription of the request.
+     *
+     * @param  \AllDressed\Subscription  $subscription
+     * @return static
+     */
+    public function ofSubscription(Subscription $subscription): static
+    {
+        return $this->withOption('subscription', $subscription);
+    }
+
+    /**
+     * Throw a new friendly exception based on the existing exception.
+     *
+     * @param  \Throwable  $exception
+     * @return void
+     */
+    protected function throw(Throwable $exception): void
+    {
+        throw $exception;
+    }
+
+    /**
+     * Update the choices.
      *
      * @return \Illuminate\Support\Collection<int, \AllDressed\Choice>
      */
@@ -59,27 +112,5 @@ class ChoiceBuilder extends RequestBuilder
         }
 
         return collect($response->json('data'))->mapInto(Choice::class);
-    }
-
-    /**
-     * Set the subscription of the request.
-     *
-     * @param  \AllDressed\Subscription  $subscription
-     * @return static
-     */
-    public function ofSubscription(Subscription $subscription): static
-    {
-        return $this->withOption('subscription', $subscription);
-    }
-
-    /**
-     * Throw a new friendly exception based on the existing exception.
-     *
-     * @param  \Throwable  $exception
-     * @return void
-     */
-    protected function throw(Throwable $exception): void
-    {
-        throw $exception;
     }
 }
