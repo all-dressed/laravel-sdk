@@ -31,7 +31,7 @@ class Address extends Fluent
     }
 
     /**
-     * Create a new card instance.
+     * Create a new instance.
      *
      * @return static
      */
