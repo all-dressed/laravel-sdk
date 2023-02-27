@@ -14,4 +14,14 @@ class Choosable extends Fluent
     protected $fillable = [
         'id',
     ];
+
+    /**
+     * Create a new instance.
+     *
+     * @return static
+     */
+    public static function make(...$args): static
+    {
+        return new static(...$args);
+    }
 }
