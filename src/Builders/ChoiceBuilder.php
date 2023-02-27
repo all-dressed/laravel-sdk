@@ -2,12 +2,35 @@
 
 namespace AllDressed\Builders;
 
-use AllDressed\Exceptions\NotImplementedException;
+use AllDressed\Choice;
+use AllDressed\Client;
+use AllDressed\Exceptions\MissingSubscriptionException;
+use AllDressed\Subscription;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Throwable;
 
 class ChoiceBuilder extends RequestBuilder
 {
+    /**
+     * Set the menu of the query.
+     *
+     * @param  string  $menu
+     * @return static
+     */
+    public function forMenu(string $menu): static
+    {
+        $menu = Str::of($menu)->when(
+            Str::isUuid($menu) === false,
+            static fn ($string) => $string->match('/^\d{4}-\d{2}-\d{2}$/')
+        );
+
+        throw_if($menu->isEmpty(), InvalidMenuIdentifierException::class);
+
+        return $this->withOption('menu', $menu->toString());
+    }
+
     /**
      * Retrieve the items.
      *
@@ -15,7 +38,38 @@ class ChoiceBuilder extends RequestBuilder
      */
     public function get(): Collection
     {
-        throw new NotImplementedException;
+        throw_unless(
+            $menu = $this->getOption('menu'),
+            MissingMenuException::class
+        );
+
+        throw_unless(
+            $subscription = $this->getOption('subscription'),
+            MissingSubscriptionException::class
+        );
+
+        try {
+            $endpoint = "subscriptions/{$subscription->id}/{$menu}/choices";
+
+            $response = resolve(Client::class)->get($endpoint);
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+
+        return collect($response->json('data'))->mapInto(Choice::class);
+    }
+
+    /**
+     * Indicates the currency of the subscription.
+     *
+     * @param  \AllDressed\Subscription  $subscription
+     * @return static
+     */
+    public function ofSubscription(Subscription $subscription): static
+    {
+        return $this->withOption('subscription', $subscription);
     }
 
     /**

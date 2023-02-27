@@ -3,9 +3,27 @@
 namespace AllDressed;
 
 use AllDressed\Builders\ChoiceBuilder;
+use Illuminate\Support\Arr;
 
 class Choice extends Base
 {
+    /**
+     * Create a new package instance.
+     *
+     * @param  iterable<TKey, TValue>  $attributes
+     * @return void
+     */
+    public function __construct($attributes = [])
+    {
+        $choosable = Arr::get($attributes, 'choosable', []);
+
+        if ($choosable) {
+            $attributes['choosable'] = new Choosable($choosable);
+        }
+
+        parent::__construct($attributes);
+    }
+
     /**
      * Create a new query builder.
      *

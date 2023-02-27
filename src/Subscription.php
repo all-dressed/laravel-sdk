@@ -4,6 +4,7 @@ namespace AllDressed;
 
 use AllDressed\Builders\SubscriptionBuilder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class Subscription extends Base
 {
@@ -24,6 +25,20 @@ class Subscription extends Base
         }
 
         parent::__construct($attributes);
+    }
+
+    /**
+     * Retrieve the choices of the subscription for the given menu.
+     *
+     * @param  \AllDressed\Menu  $menu
+     * @return \Illuminate\Support\Collection
+     */
+    public function getChoices(Menu $menu): Collection
+    {
+        return Choice::query()
+            ->ofSubscription($this)
+            ->forMenu($menu->id)
+            ->get();
     }
 
     /**
