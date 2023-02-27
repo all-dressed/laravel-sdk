@@ -42,6 +42,16 @@ class Subscription extends Base
     }
 
     /**
+     * Retrieve the menus of the subscription.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getMenus(): Collection
+    {
+        return Menu::query()->forSubscription($this)->get();
+    }
+
+    /**
      * Create a new query builder.
      *
      * @return \AllDressed\Builders\SubscriptionBuilder

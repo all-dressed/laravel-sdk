@@ -2,17 +2,17 @@
 
 namespace AllDressed;
 
-use AllDressed\Builders\NullBuilder;
+use AllDressed\Builders\MenuBuilder;
 
 class Menu extends Base
 {
     /**
      * Create a new query builder.
      *
-     * @return \AllDressed\Builders\NullBuilder
+     * @return \AllDressed\Builders\MenuBuilder
      */
-    public static function query(): NullBuilder
+    public static function query(): MenuBuilder
     {
-        return NullBuilder::make();
+        return MenuBuilder::make();
     }
 }
