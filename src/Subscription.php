@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 class Subscription extends Base
 {
     /**
-     * Create a new package instance.
+     * Create a new subscription instance.
      *
      * @param  iterable<TKey, TValue>  $attributes
      * @return void
@@ -39,6 +39,16 @@ class Subscription extends Base
             ->ofSubscription($this)
             ->forMenu($menu->id)
             ->get();
+    }
+
+    /**
+     * Retrieve the initial menu of the subscription.
+     *
+     * @return \AllDressed\Menu
+     */
+    public function getMenu(): Menu
+    {
+        return Menu::query()->find($this->menu_id);
     }
 
     /**
