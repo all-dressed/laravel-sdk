@@ -8,7 +8,7 @@ use Illuminate\Support\Arr;
 class Item extends Base
 {
     /**
-     * Create a new package instance.
+     * Create a new item instance.
      *
      * @param  iterable<TKey, TValue>  $attributes
      * @return void

@@ -8,7 +8,7 @@ use Illuminate\Support\Arr;
 class Choice extends Base
 {
     /**
-     * Create a new package instance.
+     * Create a new choice instance.
      *
      * @param  iterable<TKey, TValue>  $attributes
      * @return void
