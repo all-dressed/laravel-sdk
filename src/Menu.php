@@ -20,6 +20,14 @@ class Menu extends Base
             Arr::set($attributes, 'from', Carbon::parse($from));
         }
 
+        if ($cutOff = Arr::get($attributes, 'cut_off')) {
+            Arr::set($attributes, 'cut_off', Carbon::parse($cutOff));
+        }
+
+        if ($delivery = Arr::get($attributes, 'delivery')) {
+            Arr::set($attributes, 'delivery', Carbon::parse($delivery));
+        }
+
         if ($to = Arr::get($attributes, 'to')) {
             Arr::set($attributes, 'to', Carbon::parse($to));
         }
