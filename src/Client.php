@@ -151,13 +151,17 @@ class Client
         Log::debug("Endpoint :: {$url}", $payload);
 
         try {
-            return Http::withToken($this->key)
+            $response = Http::withToken($this->key)
                 ->acceptJson()
                 ->withOptions([
                     'verify' => config('all-dressed.request.verify'),
                 ])
                 ->{$method}($url, $payload)
                 ->throw();
+
+            Log::debug("{$url} :: {$response->body()}");
+
+            return $response;
         } catch (Throwable $exception) {
             $this->parseException($exception);
         }
