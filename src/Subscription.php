@@ -24,6 +24,18 @@ class Subscription extends Base
             );
         }
 
+        if ($shipping = Arr::get($attributes, 'shipping')) {
+            Arr::set($attributes, 'shipping', new Address($shipping));
+        }
+
+        if ($choices = Arr::get($attributes, 'choices')) {
+            Arr::set(
+                $attributes,
+                'choices',
+                Collection::make($choices)->mapInto(Choice::class),
+            );
+        }
+
         parent::__construct($attributes);
     }
 

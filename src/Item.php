@@ -21,6 +21,8 @@ class Item extends Base
 
         if ($type == 'product') {
             $cast = Product::class;
+        } elseif ($type == 'package') {
+            $cast = Package::class;
         }
 
         if ($cast !== null) {

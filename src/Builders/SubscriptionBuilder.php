@@ -12,7 +12,7 @@ use AllDressed\Exceptions\MissingCurrencyException;
 use AllDressed\Exceptions\MissingCustomerException;
 use AllDressed\Exceptions\MissingDeliveryScheduleException;
 use AllDressed\Exceptions\MissingPaymentMethodException;
-use AllDressed\Exceptions\NotImplementedException;
+use AllDressed\Menu;
 use AllDressed\PaymentMethod;
 use AllDressed\Subscription;
 use Exception;
@@ -133,13 +133,44 @@ class SubscriptionBuilder extends RequestBuilder
     }
 
     /**
+     * Indicates the menu of the subscription.
+     *
+     * @param  \AllDressed\Menu  $menu
+     * @return static
+     */
+    public function forMenu(Menu $menu): static
+    {
+        return $this->withOption('menu', $menu);
+    }
+
+    /**
      * Retrieve the subscriptions.
      *
      * @return \Illuminate\Support\Collection<int, \AllDressed\Subscription>
      */
     public function get(): Collection
     {
-        throw new NotImplementedException;
+        try {
+            $endpoint = 'subscriptions';
+
+            if ($id = $this->getOption('id')) {
+                $endpoint = "{$endpoint}/{$id}";
+            }
+
+            $response = resolve(Client::class)->get($endpoint, array_filter([
+                'choices' => optional($this->getOption('menu'))->id,
+            ]));
+        } catch (RequestException $exception) {
+            $this->throw($exception);
+        }
+
+        $data = $response->json('data');
+
+        if ($id) {
+            $data = [$data];
+        }
+
+        return collect($data)->mapInto(Subscription::class);
     }
 
     /**
