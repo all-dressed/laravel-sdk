@@ -52,7 +52,9 @@ class ChoiceBuilder extends RequestBuilder
         try {
             $endpoint = "subscriptions/{$subscription->id}/{$menu}/choices";
 
-            resolve(Client::class)->put($endpoint, $choices->map->toPayload());
+            resolve(Client::class)->put($endpoint, [
+                'choices' => $choices->map->toPayload()->toArray(),
+            ]);
         } catch (RequestException $exception) {
             $this->throw(
                 exception: $exception,

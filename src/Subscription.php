@@ -88,11 +88,15 @@ class Subscription extends Base
     /**
      * Update the choices of the subscription.
      *
+     * @param  \AllDressed\Menu  $menu
      * @param  \Illuminate\Support\Collection<int, \AllDressed\Choice>  $choices
      * @return \Illuminate\Support\Collection<int, \AllDressed\Choice>
      */
-    public function updateChoices(Collection $choices): Collection
+    public function updateChoices(Menu $menu, Collection $choices): Collection
     {
-        return Choice::query()->ofSubscription($this)->update($choices);
+        return Choice::query()
+            ->forMenu($menu->id)
+            ->ofSubscription($this)
+            ->update($choices);
     }
 }
