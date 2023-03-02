@@ -36,6 +36,19 @@ class Menu extends Base
     }
 
     /**
+     * Create a instance of the menu for the given date.
+     *
+     * @param  \Illuminate\Support\Carbon|string  $date
+     * @return static
+     */
+    public static function for(Carbon|string $date): static
+    {
+        return static::make([
+            'id' => Carbon::parse($date)->format('Y-m-d'),
+        ]);
+    }
+
+    /**
      * Create a new query builder.
      *
      * @return \AllDressed\Builders\MenuBuilder
