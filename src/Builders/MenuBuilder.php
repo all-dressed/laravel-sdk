@@ -3,6 +3,7 @@
 namespace AllDressed\Builders;
 
 use AllDressed\Client;
+use AllDressed\Exceptions\MissingMenuException;
 use AllDressed\Exceptions\MissingSubscriptionException;
 use AllDressed\Menu;
 use AllDressed\Subscription;
@@ -12,6 +13,17 @@ use Throwable;
 
 class MenuBuilder extends RequestBuilder
 {
+    /**
+     * Indicates the menu of the request.
+     *
+     * @param  \AllDressed\Menu  $menu
+     * @return static
+     */
+    public function for(Menu $menu): static
+    {
+        return $this->withOption('menu', $menu);
+    }
+
     /**
      * Indicates the subscription of the request.
      *
@@ -46,6 +58,35 @@ class MenuBuilder extends RequestBuilder
         }
 
         return collect($response->json('data'))->mapInto(Menu::class);
+    }
+
+    /**
+     * Skip a menu.
+     *
+     * @return bool
+     */
+    public function skip(): bool
+    {
+        throw_unless(
+            $subscription = $this->getOption('subscription'),
+            MissingSubscriptionException::class
+        );
+
+        throw_unless(
+            $menu = $this->getOption('menu'),
+            MissingMenuException::class
+        );
+
+        try {
+            resolve(Client::class)
+                ->post("subscriptions/{$subscription->id}/{$menu->id}/skip");
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+
+        return true;
     }
 
     /**
