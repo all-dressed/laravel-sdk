@@ -49,6 +49,16 @@ class Menu extends Base
     }
 
     /**
+     * Create a instance of the menu for the current date.
+     *
+     * @return static
+     */
+    public static function now(): static
+    {
+        return static::for(now());
+    }
+
+    /**
      * Create a new query builder.
      *
      * @return \AllDressed\Builders\MenuBuilder
