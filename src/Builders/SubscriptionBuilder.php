@@ -100,6 +100,17 @@ class SubscriptionBuilder extends RequestBuilder
     }
 
     /**
+     * Indicates the subscription of the request.
+     *
+     * @param  \AllDressed\Subscription  $subscription
+     * @return static
+     */
+    public function for(Subscription $subscription): static
+    {
+        return $this->withOption('subscription', $subscription);
+    }
+
+    /**
      * Indicates the customer of the subscription.
      *
      * @param  \AllDressed\Customer  $customer
@@ -171,6 +182,57 @@ class SubscriptionBuilder extends RequestBuilder
         }
 
         return collect($data)->mapInto(Subscription::class);
+    }
+
+    /**
+     * Pause a subscription.
+     *
+     * @param  \Illuminate\Support\Carbon  $until
+     * @return bool
+     */
+    public function pause(Carbon $until): bool
+    {
+        throw_unless(
+            $subscription = $this->getOption('subscription'),
+            MissingSubscriptionException::class
+        );
+
+        try {
+            resolve(Client::class)
+                ->post("subscriptions/{$subscription->id}/pause", [
+                    'until' => $until,
+                ]);
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * Resume a subscription.
+     *
+     * @return bool
+     */
+    public function resume(): bool
+    {
+        throw_unless(
+            $subscription = $this->getOption('subscription'),
+            MissingSubscriptionException::class
+        );
+
+        try {
+            resolve(Client::class)
+                ->post("subscriptions/{$subscription->id}/resume");
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+
+        return true;
     }
 
     /**

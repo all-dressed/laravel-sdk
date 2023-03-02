@@ -4,6 +4,7 @@ namespace AllDressed;
 
 use AllDressed\Builders\SubscriptionBuilder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class Subscription extends Base
@@ -84,6 +85,19 @@ class Subscription extends Base
     }
 
     /**
+     * Pause the subscription.
+     *
+     * @param  \Illuminate\Support\Carbon  $until
+     * @return static
+     */
+    public function pause(Carbon $until): static
+    {
+        static::query()->for($this)->pause($until);
+
+        return $this;
+    }
+
+    /**
      * Pay for the given menu.
      *
      * @param  string  $date
@@ -95,6 +109,18 @@ class Subscription extends Base
             ->forSubscription($this)
             ->forMenu($date)
             ->create();
+    }
+
+    /**
+     * Resume the subscription.
+     *
+     * @return static
+     */
+    public function resume(): static
+    {
+        static::query()->for($this)->resume();
+
+        return $this;
     }
 
     /**
