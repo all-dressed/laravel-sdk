@@ -15,6 +15,7 @@ class Address extends Fluent
      * * @var array<int, string>
      */
     protected $fillable = [
+        'type',
         'line_1',
         'line_2',
         'city',
@@ -34,7 +35,7 @@ class Address extends Fluent
     }
 
     /**
-     * Set the city of the address
+     * Set the city of the address.
      *
      * @return static
      */
@@ -46,7 +47,7 @@ class Address extends Fluent
     }
 
     /**
-     * Set the country of the address
+     * Set the country of the address.
      *
      * @return static
      */
@@ -84,7 +85,7 @@ class Address extends Fluent
     }
 
     /**
-     * Set the postcode of the address
+     * Set the postcode of the address.
      *
      * @return static
      */
@@ -96,13 +97,26 @@ class Address extends Fluent
     }
 
     /**
-     * Set the state of the address
+     * Set the state of the address.
      *
      * @return static
      */
     public function setState(string $state): static
     {
         $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Set the type of the address.
+     *
+     * @param  string  $type
+     * @return static
+     */
+    public function setType(string $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }
