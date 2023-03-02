@@ -99,4 +99,33 @@ class MenuBuilder extends RequestBuilder
     {
         throw $exception;
     }
+
+    /**
+     * Unskip a menu.
+     *
+     * @return bool
+     */
+    public function unskip(): bool
+    {
+        throw_unless(
+            $subscription = $this->getOption('subscription'),
+            MissingSubscriptionException::class
+        );
+
+        throw_unless(
+            $menu = $this->getOption('menu'),
+            MissingMenuException::class
+        );
+
+        try {
+            resolve(Client::class)
+                ->post("subscriptions/{$subscription->id}/{$menu->id}/unskip");
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+
+        return true;
+    }
 }

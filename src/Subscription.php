@@ -111,6 +111,19 @@ class Subscription extends Base
     }
 
     /**
+     * Unskip the given menu.
+     *
+     * @param  \AllDressed\Menu  $menu
+     * @return static
+     */
+    public function unskip(Menu $menu): static
+    {
+        Menu::query()->forSubscription($this)->for($menu)->unskip();
+
+        return $this;
+    }
+
+    /**
      * Update the choices of the subscription.
      *
      * @param  \AllDressed\Menu  $menu
