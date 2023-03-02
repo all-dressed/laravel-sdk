@@ -164,6 +164,10 @@ class SubscriptionBuilder extends RequestBuilder
         try {
             $endpoint = 'subscriptions';
 
+            if ($customer = $this->getOption('customer')) {
+                $endpoint = "customers/{$customer->id}/{$endpoint}";
+            }
+
             if ($id = $this->getOption('id')) {
                 $endpoint = "{$endpoint}/{$id}";
             }

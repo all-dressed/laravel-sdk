@@ -41,6 +41,16 @@ class Customer extends Base
     }
 
     /**
+     * Retrieve the subscriptions of the customer.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getSubscriptions(): Collection
+    {
+        return Subscription::query()->forCustomer($this)->get();
+    }
+
+    /**
      * Create a new query builder.
      *
      * @return \AllDressed\Builders\CustomerBuilder
