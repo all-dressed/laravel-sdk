@@ -81,6 +81,9 @@ class SubscriptionBuilder extends RequestBuilder
                 'frequency' => $frequency,
                 'menu' => $date,
                 'payment_method' => $method->id,
+                'shipping_address_type' => $this->getOption(
+                    'shipping_address_type'
+                ),
                 'shipping_address_line_1' => $this->getOption(
                     'shipping_address_line_1'
                 ),
