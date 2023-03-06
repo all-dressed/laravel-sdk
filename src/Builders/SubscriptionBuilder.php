@@ -284,7 +284,9 @@ class SubscriptionBuilder extends RequestBuilder
             $this->setShippingAddressLine2($address->line_2);
         }
 
-        return $this->setShippingAddressLine1($address->line_1)
+        return $this
+            ->setShippingAddressType($address->type)
+            ->setShippingAddressLine1($address->line_1)
             ->setShippingCity($address->city)
             ->setShippingState($address->state)
             ->setShippingPostcode($address->postcode)
@@ -311,6 +313,17 @@ class SubscriptionBuilder extends RequestBuilder
     public function setShippingAddressLine2(string $suite): static
     {
         return $this->withOption('shipping_address_line_2', $suite);
+    }
+
+    /**
+     * Set the shipping address type of the request.
+     *
+     * @param  string  $type
+     * @return static
+     */
+    public function setShippingAddressType(string $type): static
+    {
+        return $this->withOption('shipping_address_type', $type);
     }
 
     /**

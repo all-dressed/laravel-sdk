@@ -130,6 +130,7 @@ class Address extends Fluent
     public function toPayload(string $prefix = null): array
     {
         return [
+            "{$prefix}address_type" => $this->type,
             "{$prefix}address_line_1" => $this->line_1,
             "{$prefix}address_line_2" => $this->line_2,
             "{$prefix}city" => $this->city,
