@@ -37,6 +37,18 @@ class Subscription extends Base
             );
         }
 
+        if ($order = Arr::get($attributes, 'order')) {
+            Arr::set($attributes, 'order', Order::make($order));
+        }
+
+        if ($orders = Arr::get($attributes, 'orders')) {
+            Arr::set(
+                $attributes,
+                'orders',
+                Collection::make($orders)->mapInto(Order::class)
+            );
+        }
+
         parent::__construct($attributes);
     }
 
