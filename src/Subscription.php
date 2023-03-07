@@ -53,6 +53,18 @@ class Subscription extends Base
     }
 
     /**
+     * Cancel the subscription.
+     *
+     * @return static
+     */
+    public function cancel(): static
+    {
+        static::query()->for($this)->cancel();
+
+        return $this;
+    }
+
+    /**
      * Retrieve the choices of the subscription for the given menu.
      *
      * @param  \AllDressed\Menu  $menu

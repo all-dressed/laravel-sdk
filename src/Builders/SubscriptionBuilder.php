@@ -34,6 +34,30 @@ class SubscriptionBuilder extends RequestBuilder
     }
 
     /**
+     * Cancel a subscription.
+     *
+     * @return bool
+     */
+    public function cancel(): bool
+    {
+        throw_unless(
+            $subscription = $this->getOption('subscription'),
+            MissingSubscriptionException::class
+        );
+
+        try {
+            resolve(Client::class)
+                ->post("subscriptions/{$subscription->id}/cancel");
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+
+        return true;
+    }
+
+    /**
      * Send the request to create a customer.
      *
      * @param  \Illuminate\Support\Carbon  $date
