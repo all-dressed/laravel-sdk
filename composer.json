@@ -16,6 +16,7 @@
         }
     ],
     "require": {
+        "all-dressed/constants": "dev-main",
         "php": "^8.0",
         "illuminate/support": "^9.0"
     },

@@ -3,6 +3,7 @@
 namespace AllDressed;
 
 use AllDressed\Concerns\Makeable;
+use AllDressed\Constants\AddressType;
 use Illuminate\Support\Fluent;
 
 class Address extends Fluent
@@ -111,10 +112,10 @@ class Address extends Fluent
     /**
      * Set the type of the address.
      *
-     * @param  string  $type
+     * @param  \AllDressed\Constants\AddressType  $type
      * @return static
      */
-    public function setType(string $type): static
+    public function setType(AddressType $type): static
     {
         $this->type = $type;
 
