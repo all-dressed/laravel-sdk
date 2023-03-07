@@ -5,6 +5,7 @@ namespace AllDressed\Builders;
 use AllDressed\Address;
 use AllDressed\Choice;
 use AllDressed\Client;
+use AllDressed\Constants\AddressType;
 use AllDressed\Currency;
 use AllDressed\Customer;
 use AllDressed\DeliverySchedule;
@@ -345,10 +346,10 @@ class SubscriptionBuilder extends RequestBuilder
     /**
      * Set the shipping address type of the request.
      *
-     * @param  string  $type
+     * @param  \AllDressed\Constants\AddressType  $type
      * @return static
      */
-    public function setShippingAddressType(string $type): static
+    public function setShippingAddressType(AddressType $type): static
     {
         return $this->withOption('shipping_address_type', $type);
     }
