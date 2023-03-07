@@ -119,6 +119,7 @@ class SubscriptionBuilder extends RequestBuilder
                 'shipping_state' => $this->getOption('shipping_state'),
                 'shipping_postcode' => $this->getOption('shipping_postcode'),
                 'shipping_country' => $this->getOption('shipping_country'),
+                'delivery_notes' => $this->getOption('delivery_notes'),
             ], static fn ($value) => $value !== null));
 
             return Subscription::make($response->json('data'));
@@ -287,6 +288,17 @@ class SubscriptionBuilder extends RequestBuilder
                 })
                 ->toArray()
         );
+    }
+
+    /**
+     * Set the delivery notes of the request.
+     *
+     * @param  string  $notes
+     * @return static
+     */
+    public function setDeliveryNotes(string $notes): static
+    {
+        return $this->withOption('delivery_notes', $notes);
     }
 
     /**
