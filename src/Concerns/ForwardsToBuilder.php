@@ -46,12 +46,6 @@ trait ForwardsToBuilder
      */
     protected function forwardCallTo($object, $method, $parameters)
     {
-        $builder = $object::query();
-
-        if (method_exists($builder, $method)) {
-            return $builder->{$method}(...$parameters);
-        }
-
-        return $this->baseForward($object, $method, $parameters);
+        return $this->baseForward($object::query(), $method, $parameters);
     }
 }
