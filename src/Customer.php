@@ -31,7 +31,17 @@ class Customer extends Base
     }
 
     /**
-     * Retrieve the paymnet methods of the customer.
+     * Retrieve the invoices of the customer.
+     *
+     * @return \Illuminate\Support\Collection<int, \AllDressed\Invoice>
+     */
+    public function getInvoices(): Collection
+    {
+        return Invoice::query()->forCustomer($this)->get();
+    }
+
+    /**
+     * Retrieve the payment methods of the customer.
      *
      * @return \Illuminate\Support\Collection<int, \AllDressed\PaymentMethod>
      */
