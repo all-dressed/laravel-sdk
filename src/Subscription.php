@@ -29,11 +29,12 @@ class Subscription extends Base
             Arr::set($attributes, 'shipping', new Address($shipping));
         }
 
-        if ($choices = Arr::get($attributes, 'choices')) {
+        if (Arr::has($attributes, 'choices')) {
             Arr::set(
                 $attributes,
                 'choices',
-                Collection::make($choices)->mapInto(Choice::class),
+                Collection::make(Arr::get($attributes, 'choices'))
+                    ->mapInto(Choice::class),
             );
         }
 
