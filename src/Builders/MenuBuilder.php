@@ -47,9 +47,13 @@ class MenuBuilder extends RequestBuilder
             MissingSubscriptionException::class
         );
 
-        try {
-            $endpoint = "subscriptions/{$subscription->id}/menus";
+        $endpoint = "subscriptions/{$subscription->id}/menus";
 
+        if ($id = $this->getOption('id')) {
+            $endpoint = "{$endpoint}/{$id}";
+        }
+
+        try {
             $response = resolve(Client::class)->get($endpoint);
         } catch (RequestException $exception) {
             $this->throw(
@@ -57,7 +61,13 @@ class MenuBuilder extends RequestBuilder
             );
         }
 
-        return collect($response->json('data'))->mapInto(Menu::class);
+        $data = $response->json('data');
+
+        if ($id) {
+            $data = [$data];
+        }
+
+        return collect($data)->mapInto(Menu::class);
     }
 
     /**

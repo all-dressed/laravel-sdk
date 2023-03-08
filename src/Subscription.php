@@ -94,11 +94,12 @@ class Subscription extends Base
     /**
      * Retrieve the initial menu of the subscription.
      *
+     * @param  \Illuminate\Support\Carbon  $date
      * @return \AllDressed\Menu
      */
-    public function getMenu(): Menu
+    public function getMenu(Carbon $date): Menu
     {
-        return Menu::query()->find($this->menu_id);
+        return Menu::query()->forSubscription($this)->find($this->menu_id);
     }
 
     /**
