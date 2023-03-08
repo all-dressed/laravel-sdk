@@ -3,6 +3,7 @@
 namespace AllDressed;
 
 use AllDressed\Builders\SubscriptionBuilder;
+use AllDressed\Constants\SubscriptionStatus;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -67,6 +68,16 @@ class Subscription extends Base
     }
 
     /**
+     * Check if the subscription is cancelled.
+     *
+     * @return bool
+     */
+    public function cancelled(): bool
+    {
+        return $this->status == SubscriptionStatus::CANCELLED;
+    }
+
+    /**
      * Retrieve the choices of the subscription for the given menu.
      *
      * @param  \AllDressed\Menu  $menu
@@ -98,6 +109,16 @@ class Subscription extends Base
     public function getMenus(): Collection
     {
         return Menu::query()->forSubscription($this)->get();
+    }
+
+    /**
+     * Check if the subscription has not been cancelled.
+     *
+     * @return bool
+     */
+    public function notCancelled(): bool
+    {
+        return ! $this->cancelled();
     }
 
     /**
