@@ -99,7 +99,10 @@ class Subscription extends Base
      */
     public function getMenu(Carbon $date): Menu
     {
-        return Menu::query()->forSubscription($this)->find($this->menu_id);
+        return Menu::query()
+            ->forSubscription($this)
+            ->for(Menu::for($date->format('Y-m-d')))
+            ->first();
     }
 
     /**
