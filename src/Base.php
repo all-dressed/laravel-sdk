@@ -24,6 +24,19 @@ abstract class Base extends Fluent
     }
 
     /**
+     * Create a new instance with the given id.
+     *
+     * @param  string  $id
+     * @return static
+     */
+    public static function for(string $id): static
+    {
+        return static::make([
+            'id' => $id,
+        ]);
+    }
+
+    /**
      * Check if the instance has the given attribute.
      *
      * @param  string  $name
