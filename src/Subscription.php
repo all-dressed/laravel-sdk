@@ -55,11 +55,12 @@ class Subscription extends Base
     /**
      * Cancel the subscription.
      *
+     * @param  array<int, string>|null  $reasons
      * @return static
      */
-    public function cancel(): static
+    public function cancel(array $reasons = null): static
     {
-        static::query()->for($this)->cancel();
+        static::query()->for($this)->cancel($reasons);
 
         return $this;
     }

@@ -37,9 +37,10 @@ class SubscriptionBuilder extends RequestBuilder
     /**
      * Cancel a subscription.
      *
+     * @param  array<int, string>|null  $reasons
      * @return bool
      */
-    public function cancel(): bool
+    public function cancel(array $reasons = null): bool
     {
         throw_unless(
             $subscription = $this->getOption('subscription'),
@@ -47,8 +48,12 @@ class SubscriptionBuilder extends RequestBuilder
         );
 
         try {
-            resolve(Client::class)
-                ->post("subscriptions/{$subscription->id}/cancel");
+            resolve(Client::class)->post(
+                "subscriptions/{$subscription->id}/cancel",
+                array_filter([
+                    'reasons' => $reasons,
+                ])
+            );
         } catch (RequestException $exception) {
             $this->throw(
                 exception: $exception,
