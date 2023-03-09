@@ -3,12 +3,12 @@
 namespace AllDressed\Builders;
 
 use AllDressed\Client;
+use AllDressed\Collections\PaginatedCollection;
 use AllDressed\Customer;
 use AllDressed\Exceptions\MissingCustomerException;
 use AllDressed\Invoice;
 use Exception;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Support\Collection;
 use Throwable;
 
 class InvoiceBuilder extends RequestBuilder
@@ -27,9 +27,9 @@ class InvoiceBuilder extends RequestBuilder
     /**
      * Retrieve the invoices.
      *
-     * @return \Illuminate\Support\Collection<int, \AllDressed\Invoice>
+     * @return \AllDressed\Collections\PaginatedCollection<int, \AllDressed\Invoice>
      */
-    public function get(): Collection
+    public function get(): PaginatedCollection
     {
         throw_unless(
             $customer ??= $this->getOption('customer'),
@@ -41,8 +41,7 @@ class InvoiceBuilder extends RequestBuilder
                 "customers/{$customer->id}/invoices"
             );
 
-            return collect($response->json('data'))
-                ->mapInto(Invoice::class);
+            return PaginatedCollection::fromResponse($response, Invoice::class);
         } catch (RequestException $exception) {
             $this->throw($exception);
         }
