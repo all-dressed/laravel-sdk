@@ -33,11 +33,12 @@ class Customer extends Base
     /**
      * Retrieve the invoices of the customer.
      *
+     * @param  int  $page
      * @return \Illuminate\Support\Collection<int, \AllDressed\Invoice>
      */
-    public function getInvoices(): Collection
+    public function getInvoices(int $page = 1): Collection
     {
-        return Invoice::query()->forCustomer($this)->get();
+        return Invoice::query()->forCustomer($this)->setPage($page)->get();
     }
 
     /**

@@ -38,13 +38,27 @@ class InvoiceBuilder extends RequestBuilder
 
         try {
             $response = resolve(Client::class)->get(
-                "customers/{$customer->id}/invoices"
+                "customers/{$customer->id}/invoices",
+                [
+                    'page' => $this->getOption('page') ?? 1,
+                ]
             );
 
             return PaginatedCollection::fromResponse($response, Invoice::class);
         } catch (RequestException $exception) {
             $this->throw($exception);
         }
+    }
+
+    /**
+     * Set the page of the request.
+     *
+     * @param  int  $page
+     * @return static
+     */
+    public function setPage(int $page): static
+    {
+        return $this->withOption('page', $page);
     }
 
     /**
