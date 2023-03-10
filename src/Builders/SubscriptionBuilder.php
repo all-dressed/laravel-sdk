@@ -6,6 +6,7 @@ use AllDressed\Address;
 use AllDressed\Choice;
 use AllDressed\Client;
 use AllDressed\Constants\AddressType;
+use AllDressed\Constants\DeliveryScheduleFrequency;
 use AllDressed\Currency;
 use AllDressed\Customer;
 use AllDressed\DeliverySchedule;
@@ -424,5 +425,30 @@ class SubscriptionBuilder extends RequestBuilder
     protected function throw(Throwable $exception): void
     {
         throw $exception;
+    }
+
+    /**
+     * Update the delivery frequency of the given subscription.
+     *
+     * @param  \App\Models\Subscription  $subscription
+     * @param  \AllDressed\Constants\DeliveryScheduleFrequency  $frequency
+     * @return bool
+     */
+    public function updateFrequency(Subscription $subscription, DeliveryScheduleFrequency $frequency): bool
+    {
+        try {
+            resolve(Client::class)->put(
+                "subscriptions/{$subscription->id}/frequency",
+                [
+                    'frequency' => $frequency->value,
+                ]
+            );
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+
+        return true;
     }
 }

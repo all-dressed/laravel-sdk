@@ -3,6 +3,7 @@
 namespace AllDressed;
 
 use AllDressed\Builders\SubscriptionBuilder;
+use AllDressed\Constants\DeliveryScheduleFrequency;
 use AllDressed\Constants\SubscriptionStatus;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
@@ -213,5 +214,18 @@ class Subscription extends Base
             ->forMenu($menu->id)
             ->ofSubscription($this)
             ->update($choices);
+    }
+
+    /**
+     * Update the frequency of the subscription.
+     *
+     * @param  \AllDressed\Constants\DeliveryScheduleFrequency  $frequency
+     * @return static
+     */
+    public function updateFrequency(DeliveryScheduleFrequency $frequency): static
+    {
+        static::query()->updateFrequency($this, $frequency);
+
+        return $this;
     }
 }
