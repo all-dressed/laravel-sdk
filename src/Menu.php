@@ -36,6 +36,18 @@ class Menu extends Base
     }
 
     /**
+     * Copy the current menu for the given start and end date.
+     *
+     * @param  \Illuminate\Support\Carbon  $from
+     * @param  \Illuminate\Support\Carbon  $to
+     * @return static
+     */
+    public function copy(Carbon $from, Carbon $to): static
+    {
+        return static::query()->copy($this, $from, $to);
+    }
+
+    /**
      * Create a instance of the menu for the given date.
      *
      * @param  \Illuminate\Support\Carbon|string  $date

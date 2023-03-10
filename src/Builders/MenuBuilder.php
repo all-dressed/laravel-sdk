@@ -8,11 +8,36 @@ use AllDressed\Exceptions\MissingSubscriptionException;
 use AllDressed\Menu;
 use AllDressed\Subscription;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Throwable;
 
 class MenuBuilder extends RequestBuilder
 {
+    /**
+     * Send the request to copy a menu.
+     *
+     * @param  \App\Models\Menu  $menu
+     * @param  \Illuminate\Support\Carbon  $from
+     * @param  \Illuminate\Support\Carbon  $to
+     * @return \AllDressed\Menu
+     */
+    public function copy(Menu $menu, Carbon $from, Carbon $to): Menu
+    {
+        try {
+            $response = resolve(Client::class)->post("menus/{$menu->id}/copy", [
+                'from' => $from,
+                'to' => $to,
+            ]);
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+
+        return Menu::make($response->json('data'));
+    }
+
     /**
      * Indicates the menu of the request.
      *
