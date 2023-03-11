@@ -3,11 +3,31 @@
 namespace AllDressed;
 
 use AllDressed\Builders\CustomerBuilder;
+use AllDressed\Constants\DiscountValueType;
 use AllDressed\Exceptions\MissingBillingAddressException;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 class Customer extends Base
 {
+    /**
+     * Create a new customer instance.
+     *
+     * @param  iterable<TKey, TValue>  $attributes
+     * @return void
+     */
+    public function __construct($attributes = [])
+    {
+        $discounts = Arr::get($attributes, 'discounts', []);
+
+        if (is_array($discounts)) {
+            $attributes['discounts'] = collect($discounts)
+                ->mapInto(Discount::class);
+        }
+
+        parent::__construct($attributes);
+    }
+
     /**
      * Add a payment method to the customer's profile.
      *
@@ -28,6 +48,24 @@ class Customer extends Base
             ->forCustomer($this)
             ->setBillingAddress($address)
             ->create($card);
+    }
+
+    /**
+     * Create a referral code.
+     *
+     * @param  string|null  $code
+     * @param  \Illuminate\Support\Collection<int, \AllDressed\DiscountValue>  $values
+     * @param  \AllDressed\Constants\DiscountValueType  $rewardType
+     * @param  int  $rewardValue
+     * @param  \AllDressed\Currency  $rewardCurrency
+     * @return \AllDressed\Discount
+     */
+    public function createReferralCode(?string $code, Collection $values, DiscountValueType $rewardType, int $rewardValue, Currency $rewardCurrency): Discount
+    {
+        return Discount::query()
+            ->forCustomer($this)
+            ->withReward($rewardType, $rewardValue, $rewardCurrency)
+            ->create($code, $values);
     }
 
     /**
