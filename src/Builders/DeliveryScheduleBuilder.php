@@ -50,13 +50,16 @@ class DeliveryScheduleBuilder extends RequestBuilder
         try {
             $client = resolve(Client::class);
 
+            $postcode = $this->getOption('postcode');
+
             if ($id = $this->getOption('id')) {
                 $endpoint = "schedules/{$id}";
+
+                if ($postcode) {
+                    $endpoint = "zones/{$postcode}/{$endpoint}";
+                }
             } elseif ($this->getOption('available')) {
-                throw_unless(
-                    $postcode = $this->getOption('postcode'),
-                    MissingPostalCodeException::class
-                );
+                throw_unless($postcode, MissingPostalCodeException::class);
 
                 $endpoint = "zones/{$postcode}/schedules/available";
             }
