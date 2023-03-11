@@ -228,4 +228,17 @@ class Subscription extends Base
 
         return $this;
     }
+
+    /**
+     * Update the payment method of the subscription.
+     *
+     * @param  \AllDressed\PaymentMethod  $method
+     * @return static
+     */
+    public function updatePaymentMethod(PaymentMethod $method): static
+    {
+        PaymentMethod::query()->for($method)->forSubscription($this)->update();
+
+        return $this;
+    }
 }

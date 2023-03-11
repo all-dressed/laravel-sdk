@@ -10,6 +10,7 @@ use AllDressed\Exceptions\MissingCustomerException;
 use AllDressed\Exceptions\MissingPaymentGatewayException;
 use AllDressed\PaymentGateway;
 use AllDressed\PaymentMethod;
+use AllDressed\Subscription;
 use Exception;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
@@ -17,6 +18,17 @@ use Throwable;
 
 class PaymentMethodBuilder extends RequestBuilder
 {
+    /**
+     * Indicates the payment method of the request.
+     *
+     * @param  \AllDressed\PaymentMethod  $method
+     * @return static
+     */
+    public function for(PaymentMethod $method): static
+    {
+        return $this->withOption('id', $method->id);
+    }
+
     /**
      * Indicates the customer of the payment method.
      *
@@ -37,6 +49,17 @@ class PaymentMethodBuilder extends RequestBuilder
     public function forGateway(PaymentGateway $gateway): static
     {
         return $this->withOption('gateway', $gateway);
+    }
+
+    /**
+     * Indicates the subscription of the request.
+     *
+     * @param  \AllDressed\Subscription  $subscription
+     * @return static
+     */
+    public function forSubscription(Subscription $subscription): static
+    {
+        return $this->withOption('subscription', $subscription);
     }
 
     /**
@@ -197,6 +220,32 @@ class PaymentMethodBuilder extends RequestBuilder
     public function setBillingState(string $state): static
     {
         return $this->withOption('billing_state', $state);
+    }
+
+    /**
+     * Send the request to update the payment method.
+     *
+     * @return bool
+     */
+    public function update(): bool
+    {
+        try {
+            $endpoint = '';
+
+            if ($subscription = $this->getOption('subscription')) {
+                $endpoint = "subscriptions/{$subscription->id}/payment-method";
+            }
+
+            resolve(Client::class)->put($endpoint, array_filter([
+                'payment_method' => $this->getOption('id'),
+            ]));
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+
+        return true;
     }
 
     /**
