@@ -241,4 +241,26 @@ class Subscription extends Base
 
         return $this;
     }
+
+    /**
+     * Update the shipping address of the subscription.
+     *
+     * @param  \AllDressed\Address  $address
+     * @param  string|null  $notes
+     * @param  \AllDressed\DeliverySchedule  $schedule
+     * @param  \AllDressed\Constants\DeliveryScheduleFrequency  $frequency
+     * @return static
+     */
+    public function updateShippingAddress(Address $address, ?string $notes, DeliverySchedule $schedule, DeliveryScheduleFrequency $frequency): static
+    {
+        static::query()->updateShippingAddress(
+            $this,
+            $address,
+            $notes,
+            $schedule,
+            $frequency
+        );
+
+        return $this;
+    }
 }

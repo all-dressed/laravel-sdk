@@ -451,4 +451,34 @@ class SubscriptionBuilder extends RequestBuilder
 
         return true;
     }
+
+    /**
+     * Update the shipping address of the given subscription.
+     *
+     * @param  \App\Models\Subscription  $subscription
+     * @param  \AllDressed\Address  $address
+     * @param  string|null  $notes
+     * @param  \AllDressed\DeliverySchedule  $schedule
+     * @param  \AllDressed\Constants\DeliveryScheduleFrequency  $frequency
+     * @return bool
+     */
+    public function updateShippingAddress(Subscription $subscription, Address $address, ?string $notes, DeliverySchedule $schedule, DeliveryScheduleFrequency $frequency): bool
+    {
+        try {
+            resolve(Client::class)->put(
+                "subscriptions/{$subscription->id}/address",
+                array_merge($address->toPayload(), [
+                    'delivery_schedule' => $schedule->id,
+                    'frequency' => $frequency->value,
+                    'notes' => $notes,
+                ])
+            );
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+
+        return true;
+    }
 }
