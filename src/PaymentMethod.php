@@ -31,4 +31,25 @@ class PaymentMethod extends Base
     {
         return PaymentMethodBuilder::make();
     }
+
+    /**
+     * Update the payment method.
+     *
+     * @param  int  $month
+     * @param  int  $year
+     * @param  \AllDressed\Address  $address
+     * @return static
+     */
+    public function update(int $month, int $year, Address $address): static
+    {
+        static::query()
+            ->for($this)
+            ->forCustomer($this->customer)
+            ->update(array_merge(array_filter($address->toPayload()), [
+                'month' => $month,
+                'year' => $year,
+            ]));
+
+        return $this;
+    }
 }

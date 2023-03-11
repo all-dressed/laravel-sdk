@@ -8,6 +8,7 @@ use AllDressed\Client;
 use AllDressed\Customer;
 use AllDressed\Exceptions\MissingCustomerException;
 use AllDressed\Exceptions\MissingPaymentGatewayException;
+use AllDressed\Exceptions\MissingPaymentMethodException;
 use AllDressed\PaymentGateway;
 use AllDressed\PaymentMethod;
 use AllDressed\Subscription;
@@ -225,20 +226,31 @@ class PaymentMethodBuilder extends RequestBuilder
     /**
      * Send the request to update the payment method.
      *
+     * @param  array<string, mixed>  $payload
      * @return bool
      */
-    public function update(): bool
+    public function update(array $payload = []): bool
     {
         try {
             $endpoint = '';
 
             if ($subscription = $this->getOption('subscription')) {
                 $endpoint = "subscriptions/{$subscription->id}/payment-method";
+            } elseif ($customer = $this->getOption('customer')) {
+                throw_unless(
+                    $id = $this->getOption('id'),
+                    MissingPaymentMethodException::class,
+                );
+
+                $endpoint = "customers/{$customer->id}/billing/methods/{$id}";
             }
 
-            resolve(Client::class)->put($endpoint, array_filter([
-                'payment_method' => $this->getOption('id'),
-            ]));
+            resolve(Client::class)->put($endpoint, array_filter(array_merge(
+                $payload,
+                [
+                    'payment_method' => $this->getOption('id'),
+                ]
+            )));
         } catch (RequestException $exception) {
             $this->throw(
                 exception: $exception,
