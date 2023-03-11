@@ -16,6 +16,9 @@ class Address extends Fluent
      * * @var array<int, string>
      */
     protected $fillable = [
+        'first_name',
+        'last_name',
+        'phone',
         'type',
         'line_1',
         'line_2',
@@ -50,11 +53,38 @@ class Address extends Fluent
     /**
      * Set the country of the address.
      *
+     * @param  string  $country
      * @return static
      */
     public function setCountry(string $country): static
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Set the first name of the address.
+     *
+     * @param  string  $name
+     * @return static
+     */
+    public function setFirstName(string $name): static
+    {
+        $this->first_name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Set the last name of the address.
+     *
+     * @param  string  $name
+     * @return static
+     */
+    public function setLastName(string $name): static
+    {
+        $this->last_name = $name;
 
         return $this;
     }
@@ -86,8 +116,22 @@ class Address extends Fluent
     }
 
     /**
+     * Set the phone of the address.
+     *
+     * @param  string  $phone
+     * @return static
+     */
+    public function setPhone(string $phone): static
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
      * Set the postcode of the address.
      *
+     * @param  string  $postcode
      * @return static
      */
     public function setPostcode(string $postcode): static
@@ -100,6 +144,7 @@ class Address extends Fluent
     /**
      * Set the state of the address.
      *
+     * @param  string  $state
      * @return static
      */
     public function setState(string $state): static
@@ -131,6 +176,9 @@ class Address extends Fluent
     public function toPayload(string $prefix = null): array
     {
         return [
+            "{$prefix}first_name" => $this->first_name,
+            "{$prefix}last_name" => $this->last_name,
+            "{$prefix}phone" => $this->phone,
             "{$prefix}address_type" => $this->type,
             "{$prefix}address_line_1" => $this->line_1,
             "{$prefix}address_line_2" => $this->line_2,
