@@ -58,14 +58,17 @@ class Customer extends Base
      * @param  \AllDressed\Constants\DiscountValueType  $rewardType
      * @param  int  $rewardValue
      * @param  \AllDressed\Currency  $rewardCurrency
+     * @param  int|null  $orders
+     * @param  bool  $newCustomers
+     * @param  bool  $newSubscriptions
      * @return \AllDressed\Discount
      */
-    public function createReferralCode(?string $code, Collection $values, DiscountValueType $rewardType, int $rewardValue, Currency $rewardCurrency): Discount
+    public function createReferralCode(?string $code, Collection $values, DiscountValueType $rewardType, int $rewardValue, Currency $rewardCurrency, int $orders = null, bool $newCustomers = true, bool $newSubscriptions = true): Discount
     {
         return Discount::query()
             ->forCustomer($this)
             ->withReward($rewardType, $rewardValue, $rewardCurrency)
-            ->create($code, $values);
+            ->create($code, $values, $orders, $newCustomers, $newSubscriptions);
     }
 
     /**

@@ -30,9 +30,12 @@ class DiscountBuilder extends RequestBuilder
      *
      * @param  string|null  $code
      * @param  \Illuminate\Support\Collection<int, \AllDressed\DiscountValue>  $values
+     * @param  int|null  $orders
+     * @param  bool  $newCustomers
+     * @param  bool  $newSubscriptions
      * @return \AllDressed\Discount
      */
-    public function create(?string $code, Collection $values): Discount
+    public function create(?string $code, Collection $values, ?int $orders, bool $newCustomers, bool $newSubscriptions): Discount
     {
         try {
             $endpoint = 'discounts';
@@ -43,6 +46,9 @@ class DiscountBuilder extends RequestBuilder
 
             $response = resolve(Client::class)->post($endpoint, array_filter([
                 'code' => $code,
+                'orders' => $orders,
+                'new_customers' => $newCustomers,
+                'new_subscriptions' => $newSubscriptions,
                 'values' => $values,
                 'reward' => array_filter($this->getOption('reward') ?? []),
             ]));
