@@ -10,6 +10,7 @@ use AllDressed\Constants\DeliveryScheduleFrequency;
 use AllDressed\Currency;
 use AllDressed\Customer;
 use AllDressed\DeliverySchedule;
+use AllDressed\Discount;
 use AllDressed\Exceptions\MissingCurrencyException;
 use AllDressed\Exceptions\MissingCustomerException;
 use AllDressed\Exceptions\MissingDeliveryScheduleException;
@@ -73,12 +74,13 @@ class SubscriptionBuilder extends RequestBuilder
      * @param  \AllDressed\Currency|null  $currency
      * @param  \AllDressed\PaymentMethod|null  $method
      * @param  \AllDressed\DeliverySchedule|null  $schedule
+     * @param  \AllDressed\Discount|null  $discount
      * @return \AllDressed\Subscription
      *
      * @throws \AllDressed\Exceptions\MissingCurrencyException
      * @throws \AllDressed\Exceptions\MissingCustomerException
      */
-    public function create(Carbon $date, int $frequency, Customer $customer = null, Currency $currency = null, PaymentMethod $method = null, DeliverySchedule $schedule = null): Subscription
+    public function create(Carbon $date, int $frequency, Customer $customer = null, Currency $currency = null, PaymentMethod $method = null, DeliverySchedule $schedule = null, Discount $discount = null): Subscription
     {
         $client = resolve(Client::class);
 
@@ -110,6 +112,7 @@ class SubscriptionBuilder extends RequestBuilder
                 'currency' => $currency->id,
                 'delivery_schedule' => $schedule->id,
                 'frequency' => $frequency,
+                'discount' => optional($discount)->code,
                 'menu' => $date,
                 'payment_method' => $method->id,
                 'shipping_address_type' => $this->getOption(
