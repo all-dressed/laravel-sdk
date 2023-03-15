@@ -7,6 +7,7 @@ use AllDressed\Constants\DiscountValueType;
 use AllDressed\Currency;
 use AllDressed\Customer;
 use AllDressed\Discount;
+use AllDressed\Exceptions\MissingDiscountCodeException;
 use Exception;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
@@ -14,6 +15,17 @@ use Throwable;
 
 class DiscountBuilder extends RequestBuilder
 {
+    /**
+     * Indicates the code of the discount.
+     *
+     * @param  string  $code
+     * @return static
+     */
+    public function forCode(string $code): static
+    {
+        return $this->withOption('code', $code);
+    }
+
     /**
      * Indicates the customer of the discount.
      *
@@ -68,7 +80,26 @@ class DiscountBuilder extends RequestBuilder
      */
     public function get(): Collection
     {
-        throw new Exception('Method not implemented yet.');
+        try {
+            throw_unless(
+                $code = $this->getOption('code'),
+                MissingDiscountCodeException::class
+            );
+
+            $endpoint = "discounts/{$code}";
+
+            $response = resolve(Client::class)->get($endpoint);
+
+            $data = $response->json('data');
+
+            if ($code) {
+                $data = [$data];
+            }
+
+            return collect($data)->mapInto(Discount::class);
+        } catch (RequestException $exception) {
+            $this->throw($exception);
+        }
     }
 
     /**
