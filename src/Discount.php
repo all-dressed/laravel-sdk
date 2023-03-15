@@ -26,6 +26,17 @@ class Discount extends Base
     }
 
     /**
+     * Retrieve the discount for the given code.
+     *
+     * @param  string  $code
+     * @return static
+     */
+    public static function findByCode(string $code): static
+    {
+        return static::query()->forCode($code)->first();
+    }
+
+    /**
      * Create a new query builder.
      *
      * @return \AllDressed\Builders\DiscountBuilder
