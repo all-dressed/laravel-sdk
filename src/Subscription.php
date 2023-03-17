@@ -60,6 +60,17 @@ class Subscription extends Base
     }
 
     /**
+     * Apply the given discount to the subscription
+     *
+     * @param  \AllDressed\Discount  $discount
+     * @return bool
+     */
+    public function applyDiscount(Discount $discount): bool
+    {
+        return static::query()->for($this)->apply($discount);
+    }
+
+    /**
      * Cancel the subscription.
      *
      * @param  array<int, string>|null  $reasons

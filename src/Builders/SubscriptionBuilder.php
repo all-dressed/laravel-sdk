@@ -15,6 +15,7 @@ use AllDressed\Exceptions\MissingCurrencyException;
 use AllDressed\Exceptions\MissingCustomerException;
 use AllDressed\Exceptions\MissingDeliveryScheduleException;
 use AllDressed\Exceptions\MissingPaymentMethodException;
+use AllDressed\Exceptions\MissingSubscriptionException;
 use AllDressed\Menu;
 use AllDressed\PaymentMethod;
 use AllDressed\Subscription;
@@ -26,6 +27,32 @@ use Throwable;
 
 class SubscriptionBuilder extends RequestBuilder
 {
+    /**
+     * Send the request to apply a discount to a subscription.
+     *
+     * @param  \AllDressed\Discount  $discount
+     * @return bool
+     */
+    public function apply(Discount $discount): bool
+    {
+        try {
+            throw_unless(
+                $subscription = $this->getOption('subscription'),
+                MissingSubscriptionException::class
+            );
+
+            $endpoint = "subscriptions/{$subscription->id}/discount";
+
+            resolve(Client::class)->put($endpoint, [
+                'code' => $discount->code,
+            ]);
+
+            return true;
+        } catch (RequestException $exception) {
+            $this->throw($exception);
+        }
+    }
+
     /**
      * Indicates that the subscription should be billed right away.
      *
@@ -433,7 +460,7 @@ class SubscriptionBuilder extends RequestBuilder
     /**
      * Update the delivery frequency of the given subscription.
      *
-     * @param  \App\Models\Subscription  $subscription
+     * @param  \AllDressed\Subscription  $subscription
      * @param  \AllDressed\Constants\DeliveryScheduleFrequency  $frequency
      * @return bool
      */
@@ -458,7 +485,7 @@ class SubscriptionBuilder extends RequestBuilder
     /**
      * Update the shipping address of the given subscription.
      *
-     * @param  \App\Models\Subscription  $subscription
+     * @param  \AllDressed\Subscription  $subscription
      * @param  \AllDressed\Address  $address
      * @param  string|null  $notes
      * @param  \AllDressed\DeliverySchedule  $schedule
