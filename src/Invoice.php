@@ -19,6 +19,10 @@ class Invoice extends Base
             $attributes['currency'] = Currency::make($attributes['currency']);
         }
 
+        if ($discount = Arr::get($attributes, 'discount')) {
+            $attributes['discount'] = Discount::make($discount);
+        }
+
         if (Arr::has($attributes, 'lines')) {
             $attributes['lines'] = collect($attributes['lines'])
                 ->mapInto(InvoiceLine::class);
