@@ -22,6 +22,13 @@ class Discount extends Base
                 ->mapInto(DiscountValue::class);
         }
 
+        $items = Arr::get($attributes, 'items');
+
+        if (is_array($items)) {
+            $attributes['items'] = collect($items)
+                ->mapInto(DiscountItem::class);
+        }
+
         parent::__construct($attributes);
     }
 
