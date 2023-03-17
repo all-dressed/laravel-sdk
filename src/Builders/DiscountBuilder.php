@@ -9,6 +9,7 @@ use AllDressed\Customer;
 use AllDressed\Discount;
 use AllDressed\Exceptions\MissingDiscountCodeException;
 use AllDressed\Exceptions\MissingSubscriptionException;
+use AllDressed\Subscription;
 use Exception;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
@@ -93,6 +94,17 @@ class DiscountBuilder extends RequestBuilder
     public function forCustomer(Customer $customer): static
     {
         return $this->withOption('customer', $customer);
+    }
+
+    /**
+     * Indicates the subscription of the discount.
+     *
+     * @param  \AllDressed\Subscription  $subscription
+     * @return static
+     */
+    public function forSubscription(Subscription $subscription): static
+    {
+        return $this->withOption('subscription', $subscription);
     }
 
     /**

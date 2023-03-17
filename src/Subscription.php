@@ -83,6 +83,16 @@ class Subscription extends Base
     }
 
     /**
+     * Remove the discount of the subscription.
+     *
+     * @return bool
+     */
+    public function removeDiscount(): bool
+    {
+        return Discount::query()->forSubscription($this)->delete();
+    }
+
+    /**
      * Retrieve the choices of the subscription for the given menu.
      *
      * @param  \AllDressed\Menu  $menu
