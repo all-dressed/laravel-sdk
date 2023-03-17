@@ -19,6 +19,7 @@ class DiscountValue extends Fluent
     protected $fillable = [
         'type',
         'value',
+        'order',
         'currency',
     ];
 
