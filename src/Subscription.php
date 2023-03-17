@@ -19,6 +19,10 @@ class Subscription extends Base
      */
     public function __construct($attributes = [])
     {
+        if ($discount = Arr::get($attributes, 'discount')) {
+            Arr::set($attributes, 'discount', new Discount($discount));
+        }
+
         if ($method = Arr::get($attributes, 'payment_method')) {
             Arr::set(
                 $attributes,
