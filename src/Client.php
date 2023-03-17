@@ -25,6 +25,18 @@ class Client
     }
 
     /**
+     * Send a DELETE request to the given API endpoint.
+     *
+     * @param  string  $endpoint
+     * @param  array  $payload
+     * @return \Illuminate\Http\Client\Response
+     */
+    public function delete(string $endpoint, array $payload = []): Response
+    {
+        return $this->send('delete', $endpoint, $payload);
+    }
+
+    /**
      * Fake the response of a given endpoint.
      *
      * @param  string  $path

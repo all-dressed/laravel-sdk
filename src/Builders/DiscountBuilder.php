@@ -8,6 +8,7 @@ use AllDressed\Currency;
 use AllDressed\Customer;
 use AllDressed\Discount;
 use AllDressed\Exceptions\MissingDiscountCodeException;
+use AllDressed\Exceptions\MissingSubscriptionException;
 use Exception;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
@@ -15,28 +16,6 @@ use Throwable;
 
 class DiscountBuilder extends RequestBuilder
 {
-    /**
-     * Indicates the code of the discount.
-     *
-     * @param  string  $code
-     * @return static
-     */
-    public function forCode(string $code): static
-    {
-        return $this->withOption('code', $code);
-    }
-
-    /**
-     * Indicates the customer of the discount.
-     *
-     * @param  \AllDressed\Customer  $customer
-     * @return static
-     */
-    public function forCustomer(Customer $customer): static
-    {
-        return $this->withOption('customer', $customer);
-    }
-
     /**
      * Send the request to create a discount.
      *
@@ -69,6 +48,51 @@ class DiscountBuilder extends RequestBuilder
         } catch (RequestException $exception) {
             $this->throw($exception);
         }
+    }
+
+    /**
+     * Send the request to delete a discount.
+     *
+     * @return bool
+     */
+    public function delete(): bool
+    {
+        try {
+            throw_unless(
+                $subscription = $this->getOption('subscription'),
+                MissingSubscriptionException::class
+            );
+
+            $endpoint = "subscriptions/{$subscription->id}/discount";
+
+            $response = resolve(Client::class)->delete($endpoint);
+
+            return true;
+        } catch (RequestException $exception) {
+            $this->throw($exception);
+        }
+    }
+
+    /**
+     * Indicates the code of the discount.
+     *
+     * @param  string  $code
+     * @return static
+     */
+    public function forCode(string $code): static
+    {
+        return $this->withOption('code', $code);
+    }
+
+    /**
+     * Indicates the customer of the discount.
+     *
+     * @param  \AllDressed\Customer  $customer
+     * @return static
+     */
+    public function forCustomer(Customer $customer): static
+    {
+        return $this->withOption('customer', $customer);
     }
 
     /**
