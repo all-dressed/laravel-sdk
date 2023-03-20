@@ -124,7 +124,14 @@ class DiscountBuilder extends RequestBuilder
 
             $endpoint = "discounts/{$code}";
 
-            $response = resolve(Client::class)->get($endpoint);
+            $customer = $this->getOption('customer');
+
+            $subscription = $this->getOption('subscription');
+
+            $response = resolve(Client::class)->get($endpoint, array_filter([
+                'customer' => optional($customer)->id,
+                'subscription' => optional($subscription)->id,
+            ]));
 
             $data = $response->json('data');
 
