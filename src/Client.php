@@ -4,11 +4,12 @@ namespace AllDressed;
 
 use AllDressed\Exceptions\CardException;
 use AllDressed\Exceptions\MissingAccountException;
-use AllDressed\Exceptions\ValidationException;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class Client
@@ -107,16 +108,13 @@ class Client
         Log::debug($exception->getMessage());
 
         if ($exception->getCode() === 422) {
-            $exception = new ValidationException($exception->response);
+            $errors = $exception->response->json('errors');
 
-            if ($exception->hasError('number')) {
-                throw new CardException(
-                    'number',
-                    $exception->getErrorMessage('number')
-                );
+            if ($message = Arr::get($errors, 'number')) {
+                throw new CardException('number', $message);
             }
 
-            throw $exception;
+            throw ValidationException::withMessages($errors);
         }
 
         throw $exception;
