@@ -17,19 +17,35 @@ class Menu extends Base
     public function __construct($attributes = [])
     {
         if ($from = Arr::get($attributes, 'from')) {
-            Arr::set($attributes, 'from', Carbon::parse($from, 'UTC'));
+            Arr::set(
+                $attributes,
+                'from',
+                Carbon::parse($from)->setTimezone('UTC')
+            );
         }
 
         if ($cutOff = Arr::get($attributes, 'cut_off')) {
-            Arr::set($attributes, 'cut_off', Carbon::parse($cutOff, 'UTC'));
+            Arr::set(
+                $attributes,
+                'cut_off',
+                Carbon::parse($cutOff)->setTimezone('UTC')
+            );
         }
 
         if ($delivery = Arr::get($attributes, 'delivery')) {
-            Arr::set($attributes, 'delivery', Carbon::parse($delivery, 'UTC'));
+            Arr::set(
+                $attributes,
+                'delivery',
+                Carbon::parse($delivery)->setTimezone('UTC')
+            );
         }
 
         if ($to = Arr::get($attributes, 'to')) {
-            Arr::set($attributes, 'to', Carbon::parse($to, 'UTC'));
+            Arr::set(
+                $attributes,
+                'to',
+                Carbon::parse($to)->setTimezone('UTC')
+            );
         }
 
         parent::__construct($attributes);
@@ -56,7 +72,7 @@ class Menu extends Base
     public static function for(Carbon|string $date): static
     {
         return static::make([
-            'id' => Carbon::parse($date, 'UTC')->format('Y-m-d'),
+            'id' => Carbon::parse($date)->setTimezone('UTC')->format('Y-m-d'),
         ]);
     }
 
