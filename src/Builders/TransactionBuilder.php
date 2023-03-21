@@ -20,7 +20,6 @@ class TransactionBuilder extends RequestBuilder
     /**
      * Send the request to create a customer.
      *
-     * @param  \Illuminate\Support\Carbon  $date
      * @param  \AllDressed\Subscription|null  $subscription
      * @param  \AllDressed\PaymentMethod|null  $method
      * @return \AllDressed\Transaction

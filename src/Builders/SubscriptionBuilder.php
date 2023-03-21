@@ -19,7 +19,6 @@ use AllDressed\Exceptions\MissingSubscriptionException;
 use AllDressed\Menu;
 use AllDressed\PaymentMethod;
 use AllDressed\Subscription;
-use Exception;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -140,7 +139,7 @@ class SubscriptionBuilder extends RequestBuilder
                 'delivery_schedule' => $schedule->id,
                 'frequency' => $frequency,
                 'discount' => optional($discount)->code,
-                'menu' => $date,
+                'menu' => $date->clone()->setTimezone('UTC'),
                 'payment_method' => $method->id,
                 'shipping_address_type' => $this->getOption(
                     'shipping_address_type'
@@ -269,7 +268,7 @@ class SubscriptionBuilder extends RequestBuilder
         try {
             resolve(Client::class)
                 ->post("subscriptions/{$subscription->id}/pause", [
-                    'until' => $until,
+                    'until' => $until->clone()->setTimezone('UTC'),
                 ]);
         } catch (RequestException $exception) {
             $this->throw(

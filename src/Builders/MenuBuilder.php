@@ -26,8 +26,8 @@ class MenuBuilder extends RequestBuilder
     {
         try {
             $response = resolve(Client::class)->post("menus/{$menu->id}/copy", [
-                'from' => $from,
-                'to' => $to,
+                'from' => $from->clone()->setTimezone('UTC'),
+                'to' => $to->clone()->setTimezone('UTC'),
             ]);
         } catch (RequestException $exception) {
             $this->throw(

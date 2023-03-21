@@ -127,7 +127,9 @@ class Subscription extends Base
     {
         return Menu::query()
             ->forSubscription($this)
-            ->for(Menu::for($date->format('Y-m-d')))
+            ->for(
+                Menu::for($date->clone()->setTimezone('UTC')->format('Y-m-d'))
+            )
             ->first();
     }
 
