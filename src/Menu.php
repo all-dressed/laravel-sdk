@@ -17,19 +17,19 @@ class Menu extends Base
     public function __construct($attributes = [])
     {
         if ($from = Arr::get($attributes, 'from')) {
-            Arr::set($attributes, 'from', Carbon::parse($from));
+            Arr::set($attributes, 'from', Carbon::parse($from, 'UTC'));
         }
 
         if ($cutOff = Arr::get($attributes, 'cut_off')) {
-            Arr::set($attributes, 'cut_off', Carbon::parse($cutOff));
+            Arr::set($attributes, 'cut_off', Carbon::parse($cutOff, 'UTC'));
         }
 
         if ($delivery = Arr::get($attributes, 'delivery')) {
-            Arr::set($attributes, 'delivery', Carbon::parse($delivery));
+            Arr::set($attributes, 'delivery', Carbon::parse($delivery, 'UTC'));
         }
 
         if ($to = Arr::get($attributes, 'to')) {
-            Arr::set($attributes, 'to', Carbon::parse($to));
+            Arr::set($attributes, 'to', Carbon::parse($to, 'UTC'));
         }
 
         parent::__construct($attributes);
@@ -56,7 +56,7 @@ class Menu extends Base
     public static function for(Carbon|string $date): static
     {
         return static::make([
-            'id' => Carbon::parse($date)->format('Y-m-d'),
+            'id' => Carbon::parse($date, 'UTC')->format('Y-m-d'),
         ]);
     }
 
