@@ -90,7 +90,7 @@ class Subscription extends Base
      */
     public function cancelled(): bool
     {
-        return $this->status == SubscriptionStatus::CANCELLED;
+        return $this->status == SubscriptionStatus::CANCELLED->value;
     }
 
     /**
