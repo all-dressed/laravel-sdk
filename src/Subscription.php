@@ -94,16 +94,6 @@ class Subscription extends Base
     }
 
     /**
-     * Remove the discount of the subscription.
-     *
-     * @return bool
-     */
-    public function removeDiscount(): bool
-    {
-        return Discount::query()->forSubscription($this)->delete();
-    }
-
-    /**
      * Retrieve the choices of the subscription for the given menu.
      *
      * @param  \AllDressed\Menu  $menu
@@ -191,6 +181,16 @@ class Subscription extends Base
     }
 
     /**
+     * Remove the discount of the subscription.
+     *
+     * @return bool
+     */
+    public function removeDiscount(): bool
+    {
+        return Discount::query()->forSubscription($this)->delete();
+    }
+
+    /**
      * Resume the subscription.
      *
      * @return static
@@ -198,6 +198,20 @@ class Subscription extends Base
     public function resume(): static
     {
         static::query()->for($this)->resume();
+
+        return $this;
+    }
+
+    /**
+     * Select the given choices for the subscription's discount.
+     *
+     * @param  \Illuminate\Support\Collection<int, \AllDressed\DiscountItemChoices>  $choices
+     * @param  \AllDressed\Menu|null  $menu
+     * @return static
+     */
+    public function selectFreeItems(Collection $choices, Menu $menu = null): static
+    {
+        static::query()->updateFreeItems($this, $choices, $menu);
 
         return $this;
     }

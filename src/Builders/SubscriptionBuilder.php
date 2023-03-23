@@ -457,6 +457,33 @@ class SubscriptionBuilder extends RequestBuilder
     }
 
     /**
+     * Update the subscription's discount free items selection.
+     *
+     * @param  \AllDressed\Subscription  $subscription
+     * @param  \Illuminate\Support\Collection  $collection
+     * @param  \AllDressed\Menu|null  $menu
+     * @return bool
+     */
+    public function updateFreeItems(Subscription $subscription, Collection $choices, Menu $menu = null): bool
+    {
+        try {
+            resolve(Client::class)->put(
+                "subscriptions/{$subscription->id}/discount/choices",
+                array_filter([
+                    'choices' => $choices->map->toPayload(),
+                    'menu' => optional($menu)->id,
+                ])
+            );
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+
+        return true;
+    }
+
+    /**
      * Update the delivery frequency of the given subscription.
      *
      * @param  \AllDressed\Subscription  $subscription
