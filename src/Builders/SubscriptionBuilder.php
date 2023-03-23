@@ -139,6 +139,7 @@ class SubscriptionBuilder extends RequestBuilder
                 'delivery_schedule' => $schedule->id,
                 'frequency' => $frequency,
                 'discount' => optional($discount)->code,
+                'discount_choices' => optional($discount)->choices,
                 'menu' => $date->clone()->setTimezone('UTC'),
                 'payment_method' => $method->id,
                 'shipping_address_type' => $this->getOption(
