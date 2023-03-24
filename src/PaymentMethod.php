@@ -23,6 +23,18 @@ class PaymentMethod extends Base
     }
 
     /**
+     * Delete the payment method.
+     *
+     * @return static
+     */
+    public function delete(): static
+    {
+        static::query()->for($this)->forCustomer($this->customer)->delete();
+
+        return $this;
+    }
+
+    /**
      * Create a new query builder.
      *
      * @return \AllDressed\Builders\PaymentMethodBuilder

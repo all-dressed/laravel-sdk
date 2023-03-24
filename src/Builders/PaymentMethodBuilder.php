@@ -115,6 +115,35 @@ class PaymentMethodBuilder extends RequestBuilder
     }
 
     /**
+     * Send the request to delete a payment method.
+     *
+     * @return bool
+     */
+    public function delete(): bool
+    {
+        try {
+            $endpoint = '';
+
+            if ($customer = $this->getOption('customer')) {
+                throw_unless(
+                    $id = $this->getOption('id'),
+                    MissingPaymentMethodException::class,
+                );
+
+                $endpoint = "customers/{$customer->id}/billing/methods/{$id}";
+            }
+
+            resolve(Client::class)->delete($endpoint);
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+
+        return true;
+    }
+
+    /**
      * Retrieve the payment methods.
      *
      * @return \Illuminate\Support\Collection<int, \AllDressed\PaymentMethod>
