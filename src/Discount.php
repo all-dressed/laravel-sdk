@@ -52,4 +52,14 @@ class Discount extends Base
     {
         return DiscountBuilder::make();
     }
+
+    /**
+     * Check if the discount requires choices.
+     *
+     * @return bool
+     */
+    public function requiresChoices(): bool
+    {
+        return $this->choose_items > 0;
+    }
 }
