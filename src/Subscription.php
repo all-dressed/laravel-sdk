@@ -63,11 +63,13 @@ class Subscription extends Base
      * Apply the given discount to the subscription
      *
      * @param  \AllDressed\Discount  $discount
+     * @param  \Illuminate\Support\Collection<int, \AllDressed\DiscountItemChoices>|null  $choices
+     * @param  \AllDressed\Menu|null  $menu
      * @return bool
      */
-    public function applyDiscount(Discount $discount): bool
+    public function applyDiscount(Discount $discount, Collection $choices = null, Menu $menu = null): bool
     {
-        return static::query()->for($this)->apply($discount);
+        return static::query()->for($this)->apply($discount, $choices, $menu);
     }
 
     /**

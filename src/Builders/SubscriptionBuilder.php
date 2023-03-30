@@ -30,9 +30,11 @@ class SubscriptionBuilder extends RequestBuilder
      * Send the request to apply a discount to a subscription.
      *
      * @param  \AllDressed\Discount  $discount
+     * @param  \Illuminate\Support\Collection<int, \AllDressed\DiscountItemChoices>|null  $choices
+     * @param  \App\Models\Menu|null  $menu
      * @return bool
      */
-    public function apply(Discount $discount): bool
+    public function apply(Discount $discount, Collection $choices = null, Menu $menu = null): bool
     {
         try {
             throw_unless(
@@ -42,9 +44,11 @@ class SubscriptionBuilder extends RequestBuilder
 
             $endpoint = "subscriptions/{$subscription->id}/discount";
 
-            resolve(Client::class)->put($endpoint, [
+            resolve(Client::class)->put($endpoint, array_filter([
                 'code' => $discount->code,
-            ]);
+                'choices' => $choices->map->toPayload(),
+                'menu' => optional($menu)->id,
+            ]));
 
             return true;
         } catch (RequestException $exception) {
