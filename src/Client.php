@@ -110,8 +110,8 @@ class Client
         if ($exception->getCode() === 422) {
             $errors = $exception->response->json('errors');
 
-            if ($message = Arr::get($errors, 'number')) {
-                throw new CardException('number', $message);
+            if ($messages = Arr::get($errors, 'number')) {
+                throw new CardException('number', head($messages));
             }
 
             throw ValidationException::withMessages($errors);
