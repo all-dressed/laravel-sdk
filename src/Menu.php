@@ -72,7 +72,7 @@ class Menu extends Base
     public static function for(Carbon|string $date): static
     {
         return static::make([
-            'id' => Carbon::parse($date)->setTimezone('UTC')->format('Y-m-d'),
+            'id' => Carbon::parse($date)->format('Y-m-d'),
         ]);
     }
 
