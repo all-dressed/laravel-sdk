@@ -46,7 +46,8 @@ class SubscriptionBuilder extends RequestBuilder
 
             resolve(Client::class)->put($endpoint, array_filter([
                 'code' => $discount->code,
-                'choices' => $choices->map->toPayload(),
+                'choices' => optional($choices)
+                    ->map(fn ($choice) => $choice->toPayload()),
                 'menu' => optional($menu)->id,
             ]));
 
