@@ -30,6 +30,16 @@ class Address extends Fluent
     ];
 
     /**
+     * Check if the address has a company name.
+     *
+     * @return bool
+     */
+    public function hasCompany(): bool
+    {
+        return $this->company !== null;
+    }
+
+    /**
      * Check if the address has a line 2.
      *
      * @return bool
@@ -60,6 +70,8 @@ class Address extends Fluent
      */
     public function setCompany(string $company): static
     {
+        $this->type = AddressType::BUSINESS;
+
         $this->company = $company;
 
         return $this;

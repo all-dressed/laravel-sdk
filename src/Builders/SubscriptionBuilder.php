@@ -173,6 +173,7 @@ class SubscriptionBuilder extends RequestBuilder
                 'shipping_address_line_2' => $this->getOption(
                     'shipping_address_line_2'
                 ),
+                'shipping_company' => $this->getOption('shipping_company'),
                 'shipping_city' => $this->getOption('shipping_city'),
                 'shipping_state' => $this->getOption('shipping_state'),
                 'shipping_postcode' => $this->getOption('shipping_postcode'),
@@ -382,6 +383,10 @@ class SubscriptionBuilder extends RequestBuilder
             $this->setShippingAddressLine2($address->line_2);
         }
 
+        if ($address->hasCompany()) {
+            $this->setShippingCompany($address->company);
+        }
+
         return $this
             ->setShippingAddressType($address->type)
             ->setShippingAddressLine1($address->line_1)
@@ -433,6 +438,17 @@ class SubscriptionBuilder extends RequestBuilder
     public function setShippingCity(string $city): static
     {
         return $this->withOption('shipping_city', $city);
+    }
+
+    /**
+     * Set the shipping company of the request.
+     *
+     * @param  string  $company
+     * @return static
+     */
+    public function setShippingCompany(string $company): static
+    {
+        return $this->withOption('shipping_company', $company);
     }
 
     /**
