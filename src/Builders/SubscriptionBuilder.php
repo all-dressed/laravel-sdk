@@ -149,7 +149,7 @@ class SubscriptionBuilder extends RequestBuilder
                 return null;
             }
 
-            return $choices->map->toPayload();
+            return $choices;
         });
 
         try {
