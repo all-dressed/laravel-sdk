@@ -22,6 +22,7 @@ class Address extends Fluent
         'type',
         'line_1',
         'line_2',
+        'company',
         'city',
         'state',
         'postcode',
@@ -41,11 +42,25 @@ class Address extends Fluent
     /**
      * Set the city of the address.
      *
+     * @param  string  $city
      * @return static
      */
     public function setCity(string $city): static
     {
         $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Set the company name of the address.
+     *
+     * @param  string  $company
+     * @return static
+     */
+    public function setCompany(string $company): static
+    {
+        $this->company = $company;
 
         return $this;
     }
@@ -182,6 +197,7 @@ class Address extends Fluent
             "{$prefix}address_type" => $this->type,
             "{$prefix}address_line_1" => $this->line_1,
             "{$prefix}address_line_2" => $this->line_2,
+            "{$prefix}company" => $this->company,
             "{$prefix}city" => $this->city,
             "{$prefix}state" => $this->state,
             "{$prefix}postcode" => $this->postcode,
