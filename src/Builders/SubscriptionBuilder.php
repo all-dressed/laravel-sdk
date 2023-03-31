@@ -143,7 +143,7 @@ class SubscriptionBuilder extends RequestBuilder
         );
 
         $choices = optional($discount, static function ($discount) {
-            $choices = $discount->choices ?? collect();
+            $choices = collect($discount->choices);
 
             if ($choices->isEmpty()) {
                 return null;
