@@ -44,10 +44,17 @@ class SubscriptionBuilder extends RequestBuilder
 
             $endpoint = "subscriptions/{$subscription->id}/discount";
 
+            $choices = optional($choices, static function ($choices) {
+                if ($choices->isEmpty()) {
+                    return null;
+                }
+
+                return $choices->map->toPayload();
+            });
+
             resolve(Client::class)->put($endpoint, array_filter([
                 'code' => $discount->code,
-                'choices' => optional($choices)
-                    ->map(fn ($choice) => $choice->toPayload()),
+                'choices' => $choices,
                 'menu' => optional($menu)->id,
             ]));
 
@@ -135,6 +142,16 @@ class SubscriptionBuilder extends RequestBuilder
             MissingDeliveryScheduleException::class
         );
 
+        $choices = optional($discount, static function ($discount) {
+            $choices = $discount->choices ?? collect();
+
+            if ($choices->isEmpty()) {
+                return null;
+            }
+
+            return $choices->map->toPayload();
+        });
+
         try {
             $response = $client->post('subscriptions', array_filter([
                 'bill' => $this->getOption('bill'),
@@ -144,7 +161,7 @@ class SubscriptionBuilder extends RequestBuilder
                 'delivery_schedule' => $schedule->id,
                 'frequency' => $frequency,
                 'discount' => optional($discount)->code,
-                'discount_choices' => optional($discount)->choices,
+                'discount_choices' => $choices,
                 'menu' => $date->clone()->setTimezone('UTC'),
                 'payment_method' => $method->id,
                 'shipping_address_type' => $this->getOption(
