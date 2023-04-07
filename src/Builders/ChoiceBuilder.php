@@ -27,7 +27,7 @@ class ChoiceBuilder extends RequestBuilder
         try {
             $endpoint = "subscriptions/{$subscription->id}/{$from->id}/choices/copy";
 
-            resolve(Client::class)->put($endpoint, [
+            resolve(Client::class)->post($endpoint, [
                 'target' => $to->id,
             ]);
         } catch (RequestException $exception) {
