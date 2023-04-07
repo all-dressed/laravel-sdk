@@ -96,6 +96,20 @@ class Subscription extends Base
     }
 
     /**
+     * Copy the choices of the given menu to another menu.
+     *
+     * @param  \AllDressed\Menu  $from
+     * @param  \AllDressed\Menu  $to
+     * @return static
+     */
+    public function copyChoices(Menu $from, Menu $to): static
+    {
+        Choice::query()->copy($this, $from, $to);
+
+        return $this;
+    }
+
+    /**
      * Retrieve the choices of the subscription for the given menu.
      *
      * @param  \AllDressed\Menu  $menu

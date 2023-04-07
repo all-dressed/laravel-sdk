@@ -5,6 +5,7 @@ namespace AllDressed\Builders;
 use AllDressed\Choice;
 use AllDressed\Client;
 use AllDressed\Exceptions\MissingSubscriptionException;
+use AllDressed\Menu;
 use AllDressed\Subscription;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
@@ -13,6 +14,31 @@ use Throwable;
 
 class ChoiceBuilder extends RequestBuilder
 {
+    /**
+     * Retrieve the choices.
+     *
+     * @param  \AllDressed\Subscription  $subscription
+     * @param  \AllDressed\Menu  $from
+     * @param  \AllDressed\Menu  $to
+     * @return bool
+     */
+    public function copy(Subscription $subscription, Menu $from, Menu $to): bool
+    {
+        try {
+            $endpoint = "subscriptions/{$subscription->id}/{$from->id}/choices/copy";
+
+            resolve(Client::class)->put($endpoint, [
+                'target' => $to->id,
+            ]);
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+
+        return true;
+    }
+
     /**
      * Set the menu of the query.
      *
