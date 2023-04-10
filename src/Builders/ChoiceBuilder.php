@@ -8,6 +8,7 @@ use AllDressed\Exceptions\MissingSubscriptionException;
 use AllDressed\Menu;
 use AllDressed\Subscription;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Throwable;
@@ -25,10 +26,16 @@ class ChoiceBuilder extends RequestBuilder
     public function copy(Subscription $subscription, Menu $from, Menu $to): bool
     {
         try {
-            $endpoint = "subscriptions/{$subscription->id}/{$from->id}/choices/copy";
+            $menu = $from->id ?? $from->from;
+
+            if ($menu instanceof Carbon) {
+                $menu = $menu->format('Y-m-d');
+            }
+
+            $endpoint = "subscriptions/{$subscription->id}/{$menu}/choices/copy";
 
             resolve(Client::class)->post($endpoint, [
-                'target' => $to->id,
+                'target' => $to->id ?? $to->from,
             ]);
         } catch (RequestException $exception) {
             $this->throw(
