@@ -24,6 +24,21 @@ abstract class Base extends Fluent
     }
 
     /**
+     * Update the given attributes.
+     *
+     * @param  array<string, mixed>  $attributes
+     * @return static
+     */
+    public function fill(array $attributes): static
+    {
+        foreach ($attributes as $attribute => $value) {
+            $this->{$attribute} = $value;
+        }
+
+        return $this;
+    }
+
+    /**
      * Create a new instance with the given id.
      *
      * @param  string  $id
