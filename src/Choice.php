@@ -29,6 +29,17 @@ class Choice extends Base
     }
 
     /**
+     * Check if the choice is for a package.
+     *
+     * @return bool
+     */
+    public function forPackage(): bool
+    {
+        return $this->package !== null
+            || $this->choosable->sellable->type === 'package';
+    }
+
+    /**
      * Create a new query builder.
      *
      * @return \AllDressed\Builders\ChoiceBuilder
