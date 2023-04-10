@@ -268,7 +268,7 @@ class Subscription extends Base
     public function updateChoices(Menu $menu, Collection $choices): Collection
     {
         return Choice::query()
-            ->forMenu($menu->id)
+            ->forMenu($menu->id ?? $menu->from->format('Y-m-d'))
             ->ofSubscription($this)
             ->update($choices);
     }
