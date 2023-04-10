@@ -562,7 +562,7 @@ class SubscriptionBuilder extends RequestBuilder
         try {
             resolve(Client::class)->put(
                 "subscriptions/{$subscription->id}/address",
-                array_merge($address->toPayload(), [
+                array_merge(array_filter($address->toPayload()), [
                     'delivery_schedule' => $schedule->id,
                     'frequency' => $frequency->value,
                     'notes' => $notes,
