@@ -21,6 +21,10 @@ class Choice extends Base
             $attributes['choosable'] = new Choosable($choosable);
         }
 
+        if ($package = Arr::get($attributes, 'package', [])) {
+            $attributes['package'] = new Package($package);
+        }
+
         parent::__construct($attributes);
     }
 
