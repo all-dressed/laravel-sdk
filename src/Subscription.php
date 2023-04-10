@@ -119,7 +119,7 @@ class Subscription extends Base
     {
         return Choice::query()
             ->ofSubscription($this)
-            ->forMenu($menu->id)
+            ->forMenu($menu->id ?? $menu->from->format('Y-m-d'))
             ->get();
     }
 
