@@ -245,9 +245,10 @@ class SubscriptionBuilder extends RequestBuilder
     /**
      * Retrieve the subscriptions.
      *
+     * @param  bool  $menus
      * @return \Illuminate\Support\Collection<int, \AllDressed\Subscription>
      */
-    public function get(): Collection
+    public function get(bool $menus = false): Collection
     {
         try {
             $endpoint = 'subscriptions';
@@ -262,6 +263,7 @@ class SubscriptionBuilder extends RequestBuilder
 
             $response = resolve(Client::class)->get($endpoint, array_filter([
                 'choices' => optional($this->getOption('menu'))->id,
+                'menus' => $menus,
             ]));
         } catch (RequestException $exception) {
             $this->throw($exception);
