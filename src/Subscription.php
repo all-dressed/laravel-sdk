@@ -56,6 +56,14 @@ class Subscription extends Base
             );
         }
 
+        if ($menus = Arr::get($attributes, 'menus')) {
+            Arr::set(
+                $attributes,
+                'menus',
+                Collection::make($menus)->mapInto(Menu::class)
+            );
+        }
+
         parent::__construct($attributes);
     }
 
