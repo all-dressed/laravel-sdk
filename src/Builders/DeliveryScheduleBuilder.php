@@ -16,11 +16,13 @@ class DeliveryScheduleBuilder extends RequestBuilder
     /**
      * Retrieve the available delivery schedules.
      *
+     * @param  bool  $backoff
      * @return static
      */
-    public function available(): static
+    public function available(bool $backoff = false): static
     {
-        return $this->withOption('available', true);
+        return $this->withOption('available', true)
+            ->withOption('backoff', $backoff);
     }
 
     /**
@@ -52,6 +54,8 @@ class DeliveryScheduleBuilder extends RequestBuilder
 
             $postcode = $this->getOption('postcode');
 
+            $payload = [];
+
             if ($id = $this->getOption('id')) {
                 $endpoint = "schedules/{$id}";
 
@@ -62,9 +66,13 @@ class DeliveryScheduleBuilder extends RequestBuilder
                 throw_unless($postcode, MissingPostalCodeException::class);
 
                 $endpoint = "zones/{$postcode}/schedules/available";
+
+                $payload = [
+                    'backoff' => $this->getOption('backoff'),
+                ];
             }
 
-            $response = $client->get($endpoint);
+            $response = $client->get($endpoint, $payload);
         } catch (RequestException $exception) {
             $this->throw(
                 exception: $exception,

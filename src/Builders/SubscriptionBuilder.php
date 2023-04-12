@@ -65,6 +65,16 @@ class SubscriptionBuilder extends RequestBuilder
     }
 
     /**
+     * Indicates that the cut off should include the backoff.
+     *
+     * @return static
+     */
+    public function backoff(): static
+    {
+        return $this->withOption('backoff', true);
+    }
+
+    /**
      * Indicates that the subscription should be billed right away.
      *
      * @return static
@@ -154,6 +164,7 @@ class SubscriptionBuilder extends RequestBuilder
 
         try {
             $response = $client->post('subscriptions', array_filter([
+                'backoff' => $this->getOption('backoff'),
                 'bill' => $this->getOption('bill'),
                 'choices' => $this->getOption('choices'),
                 'customer' => $customer->id,
