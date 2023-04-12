@@ -134,9 +134,12 @@ class Customer extends Base
      */
     public function update(): static
     {
-        $attributes = $this->getAttributes();
-
-        static::query()->update(Arr::pull($attributes, 'id'), $attributes);
+        static::query()->update($this->id, Arr::only($this->getAttributes(), [
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
+        ]));
 
         return $this;
     }
