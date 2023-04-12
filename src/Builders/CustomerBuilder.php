@@ -71,4 +71,26 @@ class CustomerBuilder extends RequestBuilder
     {
         throw $exception;
     }
+
+    /**
+     * Update the information of a customer.
+     *
+     * @param  string  $id
+     * @param  array  $payload
+     * @return bool
+     */
+    public function update(string $id, array $payload): bool
+    {
+        $client = resolve(Client::class);
+
+        try {
+            $response = $client->put("customers/{$id}", $payload);
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+
+        return true;
+    }
 }

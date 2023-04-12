@@ -126,4 +126,18 @@ class Customer extends Base
 
         return $this->update();
     }
+
+    /**
+     * Send the request to update the customer.
+     *
+     * @return static
+     */
+    public function update(): static
+    {
+        $attributes = $this->getAttributes();
+
+        static::query()->update(Arr::pull($attributes, 'id'), $attributes);
+
+        return $this;
+    }
 }
