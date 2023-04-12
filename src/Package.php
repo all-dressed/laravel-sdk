@@ -22,6 +22,9 @@ class Package extends Base
         $attributes['prices'] = collect(Arr::get($attributes, 'prices', []))
             ->mapInto(Price::class);
 
+        $attributes['products'] = collect(Arr::get($attributes, 'products'))
+            ->mapInto(Product::class);
+
         parent::__construct($attributes);
     }
 
