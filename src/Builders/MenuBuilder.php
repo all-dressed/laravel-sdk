@@ -74,7 +74,13 @@ class MenuBuilder extends RequestBuilder
 
         $endpoint = "subscriptions/{$subscription->id}/menus";
 
-        if ($id = $this->getOption('id')) {
+        if ($menu = $this->getOption('menu')) {
+            $id = $menu->id ?? $menu->from;
+
+            if ($id instanceof Carbon) {
+                $id = $id->format('Y-m-d');
+            }
+
             $endpoint = "{$endpoint}/{$id}";
         }
 
