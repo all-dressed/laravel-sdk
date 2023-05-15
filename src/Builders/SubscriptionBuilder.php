@@ -190,6 +190,7 @@ class SubscriptionBuilder extends RequestBuilder
                 'shipping_postcode' => $this->getOption('shipping_postcode'),
                 'shipping_country' => $this->getOption('shipping_country'),
                 'delivery_notes' => $this->getOption('delivery_notes'),
+                'name' => $this->getOption('name'),
             ], static fn ($value) => $value !== null));
 
             return Subscription::make($response->json('data'));
@@ -287,6 +288,17 @@ class SubscriptionBuilder extends RequestBuilder
         }
 
         return collect($data)->mapInto(Subscription::class);
+    }
+
+    /**
+     * Set the name of the subscription.
+     *
+     * @param  string|null  $name
+     * @return static
+     */
+    public function name(?string $name): static
+    {
+        return $this->withOption('name', $name);
     }
 
     /**
