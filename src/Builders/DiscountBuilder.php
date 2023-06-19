@@ -52,6 +52,17 @@ class DiscountBuilder extends RequestBuilder
     }
 
     /**
+     * Throw a new friendly exception based on the existing exception.
+     *
+     * @param  \Throwable  $exception
+     * @return void
+     */
+    protected function throw(Throwable $exception): void
+    {
+        throw $exception;
+    }
+
+    /**
      * Send the request to delete a discount.
      *
      * @return bool
@@ -141,19 +152,10 @@ class DiscountBuilder extends RequestBuilder
 
             return collect($data)->mapInto(Discount::class);
         } catch (RequestException $exception) {
+            abort_unless($exception->getCode() != 404, 404);
+
             $this->throw($exception);
         }
-    }
-
-    /**
-     * Throw a new friendly exception based on the existing exception.
-     *
-     * @param  \Throwable  $exception
-     * @return void
-     */
-    protected function throw(Throwable $exception): void
-    {
-        throw $exception;
     }
 
     /**
