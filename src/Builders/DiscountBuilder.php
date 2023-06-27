@@ -7,6 +7,7 @@ use AllDressed\Constants\DiscountValueType;
 use AllDressed\Currency;
 use AllDressed\Customer;
 use AllDressed\Discount;
+use AllDressed\Exceptions\DiscountNotFoundException;
 use AllDressed\Exceptions\MissingDiscountCodeException;
 use AllDressed\Exceptions\MissingSubscriptionException;
 use AllDressed\Subscription;
@@ -49,17 +50,6 @@ class DiscountBuilder extends RequestBuilder
         } catch (RequestException $exception) {
             $this->throw($exception);
         }
-    }
-
-    /**
-     * Throw a new friendly exception based on the existing exception.
-     *
-     * @param  \Throwable  $exception
-     * @return void
-     */
-    protected function throw(Throwable $exception): void
-    {
-        throw $exception;
     }
 
     /**
@@ -152,11 +142,26 @@ class DiscountBuilder extends RequestBuilder
 
             return collect($data)->mapInto(Discount::class);
         } catch (RequestException $exception) {
-            abort_unless($exception->getCode() != 404, 404);
-
-            $this->throw($exception);
+            $this->throw($exception, $code);
         }
     }
+
+    /**
+     * Throw a new friendly exception based on the existing exception.
+     *
+     * @param  string|null $code
+     * @param  \Throwable  $exception
+     * @return void
+     */
+    protected function throw(Throwable $exception, string $code = null): void
+    {
+        if ($exception->getCode() == 404 && $code) {
+            throw new DiscountNotFoundException($code, $exception);
+        }
+
+        throw $exception;
+    }
+
 
     /**
      * Set the reward of the referral code in the request.
