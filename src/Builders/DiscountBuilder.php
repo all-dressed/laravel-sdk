@@ -113,7 +113,10 @@ class DiscountBuilder extends RequestBuilder
      *
      * @return \Illuminate\Support\Collection<int, \AllDressed\Discount>
      *
-     * @throws \Exception
+     * @throws \AllDressed\Exceptions\DiscountNotFoundException
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Throwable
      */
     public function get(): Collection
     {
@@ -149,9 +152,12 @@ class DiscountBuilder extends RequestBuilder
     /**
      * Throw a new friendly exception based on the existing exception.
      *
+     * @param  \Throwable $exception
      * @param  string|null $code
-     * @param  \Throwable  $exception
      * @return void
+     *
+     * @throws \AllDressed\Exceptions\DiscountNotFoundException
+     * @throws \Throwable
      */
     protected function throw(Throwable $exception, string $code = null): void
     {
@@ -166,9 +172,9 @@ class DiscountBuilder extends RequestBuilder
     /**
      * Set the reward of the referral code in the request.
      *
-     * @param  \AllDressed\Constants\DiscountValueType  $rewardType
-     * @param  int  $rewardValue
-     * @param  \AllDressed\Currency  $rewardCurrency
+     * @param  \AllDressed\Constants\DiscountValueType $type
+     * @param  int $value
+     * @param  \AllDressed\Currency $currency
      * @return static
      */
     public function withReward(DiscountValueType $type, int $value, Currency $currency): static
