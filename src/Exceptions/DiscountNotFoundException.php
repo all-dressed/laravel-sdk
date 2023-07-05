@@ -13,7 +13,7 @@ class DiscountNotFoundException extends Exception
      * @param  string  $code
      * @param  \Throwable  $throwable
      */
-    public function __construct(string $code, Throwable $throwable)
+    public function __construct(Throwable $throwable, string $code)
     {
         parent::__construct(
             __('Discount with code :code not found.', [

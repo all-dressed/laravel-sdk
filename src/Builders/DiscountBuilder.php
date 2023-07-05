@@ -152,8 +152,8 @@ class DiscountBuilder extends RequestBuilder
     /**
      * Throw a new friendly exception based on the existing exception.
      *
-     * @param  \Throwable $exception
-     * @param  string|null $code
+     * @param  \Throwable  $exception
+     * @param  string|null  $code
      * @return void
      *
      * @throws \AllDressed\Exceptions\DiscountNotFoundException
