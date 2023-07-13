@@ -172,9 +172,9 @@ class DiscountBuilder extends RequestBuilder
     /**
      * Set the reward of the referral code in the request.
      *
-     * @param  \AllDressed\Constants\DiscountValueType $type
-     * @param  int $value
-     * @param  \AllDressed\Currency $currency
+     * @param  \AllDressed\Constants\DiscountValueType  $type
+     * @param  int  $value
+     * @param  \AllDressed\Currency  $currency
      * @return static
      */
     public function withReward(DiscountValueType $type, int $value, Currency $currency): static
