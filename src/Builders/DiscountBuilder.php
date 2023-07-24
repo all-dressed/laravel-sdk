@@ -7,6 +7,7 @@ use AllDressed\Constants\DiscountValueType;
 use AllDressed\Currency;
 use AllDressed\Customer;
 use AllDressed\Discount;
+use AllDressed\Exceptions\DiscountNotFoundException;
 use AllDressed\Exceptions\MissingDiscountCodeException;
 use AllDressed\Exceptions\MissingSubscriptionException;
 use AllDressed\Subscription;
@@ -112,7 +113,10 @@ class DiscountBuilder extends RequestBuilder
      *
      * @return \Illuminate\Support\Collection<int, \AllDressed\Discount>
      *
-     * @throws \Exception
+     * @throws \AllDressed\Exceptions\DiscountNotFoundException
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Throwable
      */
     public function get(): Collection
     {
@@ -141,7 +145,7 @@ class DiscountBuilder extends RequestBuilder
 
             return collect($data)->mapInto(Discount::class);
         } catch (RequestException $exception) {
-            $this->throw($exception);
+            $this->throw($exception, $code);
         }
     }
 
@@ -149,19 +153,28 @@ class DiscountBuilder extends RequestBuilder
      * Throw a new friendly exception based on the existing exception.
      *
      * @param  \Throwable  $exception
+     * @param  string|null  $code
      * @return void
+     *
+     * @throws \AllDressed\Exceptions\DiscountNotFoundException
+     * @throws \Throwable
      */
-    protected function throw(Throwable $exception): void
+    protected function throw(Throwable $exception, string $code = null): void
     {
+        if ($exception->getCode() == 404 && $code) {
+            throw new DiscountNotFoundException($code, $exception);
+        }
+
         throw $exception;
     }
+
 
     /**
      * Set the reward of the referral code in the request.
      *
-     * @param  \AllDressed\Constants\DiscountValueType  $rewardType
-     * @param  int  $rewardValue
-     * @param  \AllDressed\Currency  $rewardCurrency
+     * @param  \AllDressed\Constants\DiscountValueType  $type
+     * @param  int  $value
+     * @param  \AllDressed\Currency  $currency
      * @return static
      */
     public function withReward(DiscountValueType $type, int $value, Currency $currency): static
