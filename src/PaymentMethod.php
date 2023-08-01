@@ -45,6 +45,24 @@ class PaymentMethod extends Base
     }
 
     /**
+     * Set the default payment method and/or the subscription payment methods.
+     *
+     * @param  bool  $update
+     * @return static
+     */
+    public function setAsDefault($update = true): static
+    {
+            static::query()
+                ->for($this)
+                ->forCustomer($this->customer)
+                ->setAsDefault([
+                    'subscriptions' => $update,
+                ]);
+
+        return $this;
+    }
+
+    /**
      * Update the payment method.
      *
      * @param  int  $month

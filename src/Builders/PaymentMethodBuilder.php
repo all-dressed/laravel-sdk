@@ -168,6 +168,36 @@ class PaymentMethodBuilder extends RequestBuilder
     }
 
     /**
+     * Set as default payment and/or of current subscriptions.
+     *
+     * @param  array<string, bool>  $payload
+     * @return bool
+     */
+    public function setAsDefault(array $payload = []): bool
+    {
+        try {
+            $endpoint = '';
+
+            if ($customer = $this->getOption('customer')) {
+                throw_unless(
+                    $paymentId = $this->getOption('id'),
+                    MissingPaymentMethodException::class,
+                );
+
+                $endpoint = "customers/{$customer->id}/billing/methods/{$paymentId}/primary";
+            }
+
+            resolve(Client::class)->patch($endpoint, $payload);
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+
+        return true;
+    }
+
+    /**
      * Set the billing address of the request.
      *
      * @param  \AllDressed\Address  $address
