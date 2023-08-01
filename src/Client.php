@@ -121,6 +121,18 @@ class Client
     }
 
     /**
+     * Send a PATCH request to the given API endpoint.
+     *
+     * @param  string  $endpoint
+     * @param  array  $payload
+     * @return \Illuminate\Http\Client\Response
+     */
+    public function patch(string $endpoint, array $payload = []): Response
+    {
+        return $this->send('patch', $endpoint, $payload);
+    }
+
+    /**
      * Send a POST request to the given API endpoint.
      *
      * @param  string  $endpoint
