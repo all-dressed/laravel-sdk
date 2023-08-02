@@ -52,12 +52,12 @@ class PaymentMethod extends Base
      */
     public function setAsDefault($update = true): static
     {
-            static::query()
-                ->for($this)
-                ->forCustomer($this->customer)
-                ->setAsDefault([
-                    'subscriptions' => $update,
-                ]);
+        static::query()
+            ->for($this)
+            ->forCustomer($this->customer)
+            ->setAsDefault([
+                'subscriptions' => $update,
+            ]);
 
         return $this;
     }
