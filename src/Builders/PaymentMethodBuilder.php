@@ -170,10 +170,10 @@ class PaymentMethodBuilder extends RequestBuilder
     /**
      * Set as default payment and/or of current subscriptions.
      *
-     * @param  array<string, bool>  $payload
+     * @param  bool  $subscriptions
      * @return bool
      */
-    public function setAsDefault(array $payload = []): bool
+    public function setAsDefault(bool $subscriptions): bool
     {
         try {
             $endpoint = '';
@@ -186,6 +186,8 @@ class PaymentMethodBuilder extends RequestBuilder
 
                 $endpoint = "customers/{$customer->id}/billing/methods/{$methodId}/primary";
             }
+
+            $payload = compact('subscriptions');
 
             resolve(Client::class)->patch($endpoint, $payload);
         } catch (RequestException $exception) {

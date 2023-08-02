@@ -55,9 +55,7 @@ class PaymentMethod extends Base
         static::query()
             ->for($this)
             ->forCustomer($this->customer)
-            ->setAsDefault([
-                'subscriptions' => $update,
-            ]);
+            ->setAsDefault($update);
 
         return $this;
     }
