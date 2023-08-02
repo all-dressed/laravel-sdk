@@ -180,11 +180,11 @@ class PaymentMethodBuilder extends RequestBuilder
 
             if ($customer = $this->getOption('customer')) {
                 throw_unless(
-                    $paymentId = $this->getOption('id'),
+                    $methodId = $this->getOption('id'),
                     MissingPaymentMethodException::class,
                 );
 
-                $endpoint = "customers/{$customer->id}/billing/methods/{$paymentId}/primary";
+                $endpoint = "customers/{$customer->id}/billing/methods/{$methodId}/primary";
             }
 
             resolve(Client::class)->patch($endpoint, $payload);
