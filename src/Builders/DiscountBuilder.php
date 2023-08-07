@@ -162,7 +162,7 @@ class DiscountBuilder extends RequestBuilder
     protected function throw(Throwable $exception, string $code = null): void
     {
         if ($exception->getCode() == 404 && $code) {
-            throw new DiscountNotFoundException($code, $exception);
+            throw new DiscountNotFoundException($exception, $code);
         }
 
         throw $exception;
