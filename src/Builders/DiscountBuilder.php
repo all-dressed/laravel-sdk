@@ -11,7 +11,6 @@ use AllDressed\Exceptions\DiscountNotFoundException;
 use AllDressed\Exceptions\MissingDiscountCodeException;
 use AllDressed\Exceptions\MissingSubscriptionException;
 use AllDressed\Subscription;
-use Exception;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
 use Throwable;
@@ -162,12 +161,11 @@ class DiscountBuilder extends RequestBuilder
     protected function throw(Throwable $exception, string $code = null): void
     {
         if ($exception->getCode() == 404 && $code) {
-            throw new DiscountNotFoundException($exception, $code);
+            throw new DiscountNotFoundException($code, $exception);
         }
 
         throw $exception;
     }
-
 
     /**
      * Set the reward of the referral code in the request.
