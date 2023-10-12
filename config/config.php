@@ -16,4 +16,8 @@ return [
     'request' => [
         'verify' => env('ALLDRESSED_REQUEST_VERIFY_SSL', true),
     ],
+
+    'webhook' => [
+        'signature' => env('ALLDRESSED_WEBHOOK_SIGNATURE'),
+    ],
 ];
