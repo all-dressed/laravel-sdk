@@ -46,12 +46,12 @@ class ValidateWebhookRequestIntegrity
             return;
         }
 
-        $valid = hash_equals($hmac, base64_encode(
+        $valid = hash_equals($hmac, base64_encode(hash_hmac(
             'sha256',
             $request->getContent(),
             config('all-dressed.webhook.signature'),
             true
-        ));
+        )));
 
         if (! $valid) {
             $this->invalidHmac();
