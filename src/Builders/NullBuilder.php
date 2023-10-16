@@ -16,6 +16,6 @@ class NullBuilder extends RequestBuilder
      */
     public function get(): Collection
     {
-        throw new Exception('Builder yet not supported.');
+        throw new Exception('Builder not yet supported.');
     }
 }
