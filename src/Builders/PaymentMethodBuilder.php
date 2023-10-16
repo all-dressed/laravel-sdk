@@ -94,6 +94,13 @@ class PaymentMethodBuilder extends RequestBuilder
                     'year' => $card->getYear(),
                     'cvc' => $card->getVerificationCode(),
                     'primary' => (bool) $this->getOption('primary'),
+                    'billing_first_name' => $this->getOption(
+                        'billing_first_name'
+                    ),
+                    'billing_last_name' => $this->getOption(
+                        'billing_last_name'
+                    ),
+                    'billing_phone' => $this->getOption('billing_phone'),
                     'billing_address_line_1' => $this->getOption(
                         'billing_address_line_1'
                     ),
