@@ -33,10 +33,13 @@ class Customer extends Base
      *
      * @param  \AllDressed\PaymentGateway  $gateway
      * @param  \AllDressed\Card  $card
+     * @param  string|null  $firstName
+     * @param  string|null  $lastName
+     * @param  string|null  $phone
      * @param  \AllDressed\Address|null  $address
      * @return \AllDressed\PaymentMethod
      */
-    public function addPaymentMethod(PaymentGateway $gateway, Card $card, Address $address = null): PaymentMethod
+    public function addPaymentMethod(PaymentGateway $gateway, Card $card, string $firstName = null, string $lastName = null, string $phone = null, Address $address = null): PaymentMethod
     {
         throw_unless(
             $address ??= $card->address,
@@ -46,7 +49,12 @@ class Customer extends Base
         return PaymentMethod::query()
             ->forGateway($gateway)
             ->forCustomer($this)
-            ->setBillingAddress($address)
+            ->setBillingAddress(
+                firstName: $firstName ?? $this->first_name,
+                lastName: $lastName ?? $this->last_name,
+                phone: $phone ?? $this->phone,
+                address: $address,
+            )
             ->create($card);
     }
 

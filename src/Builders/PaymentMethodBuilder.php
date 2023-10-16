@@ -12,7 +12,6 @@ use AllDressed\Exceptions\MissingPaymentMethodException;
 use AllDressed\PaymentGateway;
 use AllDressed\PaymentMethod;
 use AllDressed\Subscription;
-use Exception;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
 use Throwable;
@@ -202,16 +201,23 @@ class PaymentMethodBuilder extends RequestBuilder
     /**
      * Set the billing address of the request.
      *
+     * @param  string  $firstName
+     * @param  string  $lastName
+     * @param  string  $phone
      * @param  \AllDressed\Address  $address
      * @return static
      */
-    public function setBillingAddress(Address $address): static
+    public function setBillingAddress(string $firstName, string $lastName, string $phone, Address $address): static
     {
         if ($address->hasLine2()) {
             $this->setBillingAddressLine2($address->line_2);
         }
 
-        return $this->setBillingAddressLine1($address->line_1)
+        return $this
+            ->setBillingFirstName($firstName)
+            ->setBillingLastName($lastName)
+            ->setBillingPhone($phone)
+            ->setBillingAddressLine1($address->line_1)
             ->setBillingCity($address->city)
             ->setBillingState($address->state)
             ->setBillingPostcode($address->postcode)
@@ -260,6 +266,39 @@ class PaymentMethodBuilder extends RequestBuilder
     public function setBillingCountry(string $country): static
     {
         return $this->withOption('billing_country', $country);
+    }
+
+    /**
+     * Set the billing first name of the request.
+     *
+     * @param  string  $name
+     * @return static
+     */
+    public function setBillingFirstName(string $name): static
+    {
+        return $this->withOption('billing_first_name', $name);
+    }
+
+    /**
+     * Set the billing last name of the request.
+     *
+     * @param  string  $name
+     * @return static
+     */
+    public function setBillingLastName(string $name): static
+    {
+        return $this->withOption('billing_last_name', $name);
+    }
+
+    /**
+     * Set the billing phone number of the request.
+     *
+     * @param  string  $number
+     * @return static
+     */
+    public function setBillingPhone(string $number): static
+    {
+        return $this->withOption('billing_phone', $number);
     }
 
     /**
