@@ -20,6 +20,31 @@ use Throwable;
 class GiftCardBuilder extends RequestBuilder
 {
     /**
+     * Activate the gift card for the given customer.
+     */
+    public function activate(string $code, Customer $customer = null): int
+    {
+        throw_unless(
+            $customer ??= $this->getOption('customer'),
+            MissingCustomerException::class,
+        );
+
+        try {
+            $client = resolve(Client::class);
+
+            $response = $client->post("gift-cards/{$code}/activate", [
+                'customer' => $customer->id,
+            ]);
+
+            return $response->json('balance');
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception
+            );
+        }
+    }
+
+    /**
      * Indicates the code of the gift card.
      */
     public function forCode(string $code): static
