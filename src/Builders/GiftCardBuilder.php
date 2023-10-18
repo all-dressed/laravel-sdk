@@ -5,12 +5,13 @@ namespace AllDressed\Builders;
 use AllDressed\Client;
 use AllDressed\Currency;
 use AllDressed\Customer;
+use AllDressed\Exceptions\GiftCardNotFoundException;
 use AllDressed\Exceptions\MissingCustomerException;
 use AllDressed\Exceptions\MissingPaymentMethodException;
 use AllDressed\GiftCard;
 use AllDressed\PaymentMethod;
-use Exception;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -18,6 +19,14 @@ use Throwable;
 
 class GiftCardBuilder extends RequestBuilder
 {
+    /**
+     * Indicates the code of the gift card.
+     */
+    public function forCode(string $code): static
+    {
+        return $this->withOption('code', $code);
+    }
+
     /**
      * Indicates the customer of the subscription.
      */
@@ -31,7 +40,32 @@ class GiftCardBuilder extends RequestBuilder
      */
     public function get(): Collection
     {
-        throw new Exception('Method get not yet supported.');
+        $client = resolve(Client::class);
+
+        $endpoint = 'gift-cards';
+
+        if ($code = $this->getOption('code')) {
+            $endpoint = "{$endpoint}/{$code}";
+        } elseif ($id = $this->getOption('id')) {
+            $endpoint = "{$endpoint}/{$id}";
+        }
+
+        try {
+            $response = $client->get($endpoint);
+
+            $data = $response->json('data');
+
+            if ($id) {
+                $data = [$data];
+            }
+
+            return collect($data)->mapInto(GiftCard::class);
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+                code: $code,
+            );
+        }
     }
 
     /**
@@ -108,8 +142,12 @@ class GiftCardBuilder extends RequestBuilder
     /**
      * Throw a new friendly exception based on the existing exception.
      */
-    protected function throw(Throwable $exception): void
+    protected function throw(Throwable $exception, string $code = null): void
     {
+        if ($exception->getCode() === Response::HTTP_NOT_FOUND && $code) {
+            throw new GiftCardNotFoundException($code, $exception);
+        }
+
         throw $exception;
     }
 }
