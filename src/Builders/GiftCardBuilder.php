@@ -55,7 +55,7 @@ class GiftCardBuilder extends RequestBuilder
 
             $data = $response->json('data');
 
-            if ($id) {
+            if (isset($id)) {
                 $data = [$data];
             }
 
