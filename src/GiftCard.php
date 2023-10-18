@@ -22,6 +22,17 @@ class GiftCard extends Base
     }
 
     /**
+     * Activate the gift card.
+     */
+    public function activate(Customer $customer): int
+    {
+        return static::query()->activate(
+            code: $this->code,
+            customer: $customer
+        );
+    }
+
+    /**
      * Create a new query builder.
      */
     public static function query(): GiftCardBuilder
