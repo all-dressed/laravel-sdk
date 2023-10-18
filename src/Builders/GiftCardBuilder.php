@@ -10,6 +10,7 @@ use AllDressed\Exceptions\MissingCustomerException;
 use AllDressed\Exceptions\MissingPaymentMethodException;
 use AllDressed\GiftCard;
 use AllDressed\PaymentMethod;
+use AllDressed\Settings;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
@@ -121,6 +122,24 @@ class GiftCardBuilder extends RequestBuilder
             ]);
 
             return $response->collect('cards')->mapInto(GiftCard::class);
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+    }
+
+    /**
+     * Retrieve the settings for gift cards.
+     */
+    public function settings(): Settings
+    {
+        $client = resolve(Client::class);
+
+        try {
+            $response = $client->get('gift-cards/settings');
+
+            return Settings::make($response->json());
         } catch (RequestException $exception) {
             $this->throw(
                 exception: $exception,
