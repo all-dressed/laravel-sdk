@@ -37,7 +37,7 @@ class GiftCardBuilder extends RequestBuilder
     /**
      * Purchase a gift card.
      */
-    public function purchase(int $value, Currency $currency, Carbon $delivery, Customer $customer = null, PaymentMethod $method = null): Collection
+    public function purchase(int $value, Currency $currency, Customer $customer = null, PaymentMethod $method = null): Collection
     {
         throw_unless(
             $customer ??= $this->getOption('customer'),
@@ -56,7 +56,6 @@ class GiftCardBuilder extends RequestBuilder
                 'value' => $value,
                 'sender' => $this->getOption('sender'),
                 'receiver' => $this->getOption('receiver'),
-                'delivery_date' => $delivery,
                 'currency' => $currency->id,
                 'customer' => $customer->id,
                 'payment_method' => $method->id,
@@ -73,7 +72,7 @@ class GiftCardBuilder extends RequestBuilder
     /**
      * Set the primary receiver of the gift card.
      */
-    public function setPrimaryReceiver(string $name, string $email, string $message = null): static
+    public function setPrimaryReceiver(string $name, string $email, Carbon $delivery, string $message = null): static
     {
         $receiver = $this->getOption('receiver') ?? [];
 
@@ -81,6 +80,7 @@ class GiftCardBuilder extends RequestBuilder
             'name' => $name,
             'email' => $email,
             'message' => $message,
+            'delivery_date' => $delivery->utc(),
         ]));
 
         return $this->withOption('receiver', $receiver);
