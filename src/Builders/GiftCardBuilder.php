@@ -148,6 +148,23 @@ class GiftCardBuilder extends RequestBuilder
     }
 
     /**
+     * Set the bonus receiver of the gift card.
+     */
+    public function setBonusReceiver(string $name, string $email, Carbon $delivery, string $message = null): static
+    {
+        $receiver = $this->getOption('receiver') ?? [];
+
+        Arr::set($receiver, 'bonus', array_filter([
+            'name' => $name,
+            'email' => $email,
+            'message' => $message,
+            'delivery_date' => $delivery->utc(),
+        ]));
+
+        return $this->withOption('receiver', $receiver);
+    }
+
+    /**
      * Set the primary receiver of the gift card.
      */
     public function setPrimaryReceiver(string $name, string $email, Carbon $delivery, string $message = null): static
