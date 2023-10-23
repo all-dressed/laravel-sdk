@@ -23,6 +23,8 @@ class InvoiceLine extends Base
             $cast = Product::class;
         } elseif ($type == 'package') {
             $cast = Package::class;
+        } elseif ($type == 'gift_card') {
+            $cast = GiftCard::class;
         }
 
         if ($cast !== null) {
