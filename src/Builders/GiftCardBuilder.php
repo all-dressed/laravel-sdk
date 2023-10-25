@@ -23,7 +23,7 @@ class GiftCardBuilder extends RequestBuilder
     /**
      * Activate the gift card for the given customer.
      */
-    public function activate(string $code, Customer $customer = null): int
+    public function activate(string $code, Customer $customer = null): void
     {
         throw_unless(
             $customer ??= $this->getOption('customer'),
@@ -33,11 +33,9 @@ class GiftCardBuilder extends RequestBuilder
         try {
             $client = resolve(Client::class);
 
-            $response = $client->post("gift-cards/{$code}/activate", [
+            $client->post("gift-cards/{$code}/activate", [
                 'customer' => $customer->id,
             ]);
-
-            return $response->json('balance');
         } catch (RequestException $exception) {
             $this->throw(
                 exception: $exception

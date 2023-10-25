@@ -24,12 +24,14 @@ class GiftCard extends Base
     /**
      * Activate the gift card.
      */
-    public function activate(Customer $customer): int
+    public function activate(Customer $customer): static
     {
-        return static::query()->activate(
+        static::query()->activate(
             code: $this->code,
             customer: $customer
         );
+
+        return $this;
     }
 
     /**
