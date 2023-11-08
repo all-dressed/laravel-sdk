@@ -70,6 +70,18 @@ class PaymentMethod extends Base
      */
     public function update(int $month, int $year, Address $address): static
     {
+        if ($this->customer->first_name) {
+            $address->setFirstName($this->customer->first_name);
+        }
+
+        if ($this->customer->last_name) {
+            $address->setLastName($this->customer->last_name);
+        }
+
+        if ($this->customer->phone) {
+            $address->setPhone($this->customer->phone);
+        }
+
         static::query()
             ->for($this)
             ->forCustomer($this->customer)
