@@ -122,6 +122,19 @@ class Customer extends Base
     }
 
     /**
+     * Send the request to refresh the customer.
+     *
+     * @return static
+     */
+    public function refresh(): static
+    {
+        static::query()->refresh($this->id);
+
+        return $this;
+    }
+
+
+    /**
      * Send the request to create or update the customer.
      *
      * @return static
