@@ -5,6 +5,7 @@ namespace AllDressed;
 use AllDressed\Builders\CustomerBuilder;
 use AllDressed\Constants\DiscountValueType;
 use AllDressed\Exceptions\MissingBillingAddressException;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
@@ -124,13 +125,19 @@ class Customer extends Base
     /**
      * Send the request to refresh the customer.
      *
-     * @return static
+     * @return array
      */
-    public function refresh(): static
+    public function refresh(): array
     {
-        static::query()->refresh($this->id);
+        $client = resolve(Client::class);
 
-        return $this;
+        try {
+            $response = $client->get("customers/{$this->id}");
+        } catch (RequestException $exception) {
+            $this->throw($exception);
+        }
+
+        return [$response->json('data')];
     }
 
     /**

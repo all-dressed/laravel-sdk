@@ -62,29 +62,6 @@ class CustomerBuilder extends RequestBuilder
     }
 
     /**
-     * Refresh the information of a customer
-     *
-     * @param  string  $id
-     * @return array
-     */
-    public function refresh($id): array
-    {
-        $client = resolve(Client::class);
-
-        try {
-            $response = $client->get("customers/{$id}");
-        } catch (RequestException $exception) {
-            $this->throw(
-                exception: $exception,
-            );
-        }
-
-        $data = [$response->json('data')];
-
-        return $data;
-    }
-
-    /**
      * Throw a new friendly exception based on the existing exception.
      *
      * @param  \Throwable  $exception
