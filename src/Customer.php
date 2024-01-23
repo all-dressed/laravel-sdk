@@ -5,6 +5,8 @@ namespace AllDressed;
 use AllDressed\Builders\CustomerBuilder;
 use AllDressed\Constants\DiscountValueType;
 use AllDressed\Exceptions\MissingBillingAddressException;
+use AllDressed\Exceptions\MissingIdException;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
@@ -119,6 +121,18 @@ class Customer extends Base
     public static function query(): CustomerBuilder
     {
         return CustomerBuilder::make();
+    }
+
+    /**
+     * Send the request to refresh the customer.
+     *
+     * @return \AllDressed\Customer
+     */
+    public function refresh(): Customer
+    {
+        throw_unless($this->id, MissingIdException::class);
+
+        return static::find($this->id);
     }
 
     /**
