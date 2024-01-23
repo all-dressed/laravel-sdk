@@ -133,7 +133,6 @@ class Customer extends Base
         return $this;
     }
 
-
     /**
      * Send the request to create or update the customer.
      *
