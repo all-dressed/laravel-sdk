@@ -23,7 +23,7 @@ class GiftCardBuilder extends RequestBuilder
     /**
      * Activate the gift card for the given customer.
      */
-    public function activate(string $code, Customer $customer = null, $sync = false): void
+    public function activate(string $code, Customer $customer = null, bool $sync = false): void
     {
         throw_unless(
             $customer ??= $this->getOption('customer'),
