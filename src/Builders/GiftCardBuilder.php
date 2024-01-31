@@ -33,10 +33,14 @@ class GiftCardBuilder extends RequestBuilder
         try {
             $client = resolve(Client::class);
 
-            $client->post("gift-cards/{$code}/activate", [
+            $response = $client->post("gift-cards/{$code}/activate", [
                 'customer' => $customer->id,
                 'sync' => $sync
             ]);
+
+            if ($sync) {
+                $customer->credits = $response['data']['credits'];
+            }
         } catch (RequestException $exception) {
             $this->throw(
                 exception: $exception
