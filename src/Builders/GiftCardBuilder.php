@@ -39,6 +39,7 @@ class GiftCardBuilder extends RequestBuilder
             ]);
 
             if ($sync) {
+                $customer->previous_credits = $customer->credits;
                 $customer->credits = $response['data']['credits'];
             }
         } catch (RequestException $exception) {
