@@ -295,6 +295,20 @@ class Subscription extends Base
     }
 
     /**
+     * Update the next delivery date of the subscription.
+     *
+     * @param  \AllDressed\Menu  $menu
+     * @param  \AllDressed\DeliverySchedule  $schedule
+     * @return static
+     */
+    public function updateNextDeliveryDate(Menu $menu, DeliverySchedule $schedule): static
+    {
+        static::query()->updateNextDeliveryDate($this, $menu, $schedule);
+
+        return $this;
+    }
+
+    /**
      * Update the payment method of the subscription.
      *
      * @param  \AllDressed\PaymentMethod  $method
