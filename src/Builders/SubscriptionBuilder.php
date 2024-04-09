@@ -524,7 +524,7 @@ class SubscriptionBuilder extends RequestBuilder
      * Update the subscription's discount free items selection.
      *
      * @param  \AllDressed\Subscription  $subscription
-     * @param  \Illuminate\Support\Collection  $collection
+     * @param  \Illuminate\Support\Collection  $choices
      * @param  \AllDressed\Menu|null  $menu
      * @return bool
      */
@@ -561,6 +561,33 @@ class SubscriptionBuilder extends RequestBuilder
                 "subscriptions/{$subscription->id}/frequency",
                 [
                     'frequency' => $frequency->value,
+                ]
+            );
+        } catch (RequestException $exception) {
+            $this->throw(
+                exception: $exception,
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * Update the next delivery date of the given subscription.
+     *
+     * @param  \AllDressed\Subscription  $subscription
+     * @param  \AllDressed\Menu  $menu
+     * @param  \AllDressed\DeliverySchedule  $schedule
+     * @return bool
+     */
+    public function updateNextDeliveryDate(Subscription $subscription, Menu $menu, DeliverySchedule $schedule): bool
+    {
+        try {
+            resolve(Client::class)->patch(
+                "subscriptions/{$subscription->id}/next-delivery-date",
+                [
+                    'menu' => $menu->id,
+                    'schedule' => $schedule->id,
                 ]
             );
         } catch (RequestException $exception) {
