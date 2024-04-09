@@ -524,8 +524,8 @@ class SubscriptionBuilder extends RequestBuilder
      * Update the subscription's discount free items selection.
      *
      * @param  \AllDressed\Subscription  $subscription
+     * @param  \Illuminate\Support\Collection  $choices
      * @param  \AllDressed\Menu|null  $menu
-     * @param  \Illuminate\Support\Collection  $collection
      * @return bool
      */
     public function updateFreeItems(Subscription $subscription, Collection $choices, Menu $menu = null): bool
