@@ -158,6 +158,16 @@ class Subscription extends Base
     }
 
     /**
+     * Retrieve the orders of the subscription.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getOrders(): Collection
+    {
+        return Order::query()->forSubscription($this)->get();
+    }
+
+    /**
      * Check if the subscription has not been cancelled.
      *
      * @return bool
