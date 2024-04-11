@@ -3,16 +3,17 @@
 namespace AllDressed;
 
 use AllDressed\Builders\NullBuilder;
+use AllDressed\Builders\OrderBuilder;
 
 class Order extends Base
 {
     /**
      * Create a new query builder.
      *
-     * @return \AllDressed\Builders\NullBuilder
+     * @return \AllDressed\Builders\OrderBuilder
      */
-    public static function query(): NullBuilder
+    public static function query(): OrderBuilder
     {
-        return NullBuilder::make();
+        return OrderBuilder::make();
     }
 }
