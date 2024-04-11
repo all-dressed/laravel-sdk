@@ -3,15 +3,11 @@
 namespace AllDressed\Builders;
 
 use AllDressed\Client;
-use AllDressed\Exceptions\MissingMenuException;
 use AllDressed\Exceptions\MissingSubscriptionException;
-use AllDressed\Menu;
 use AllDressed\Order;
 use AllDressed\Subscription;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Throwable;
 
 class OrderBuilder extends RequestBuilder
 {

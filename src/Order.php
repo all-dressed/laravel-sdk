@@ -2,7 +2,6 @@
 
 namespace AllDressed;
 
-use AllDressed\Builders\NullBuilder;
 use AllDressed\Builders\OrderBuilder;
 
 class Order extends Base
