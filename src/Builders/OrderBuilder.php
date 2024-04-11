@@ -29,7 +29,7 @@ class OrderBuilder extends RequestBuilder
     /**
      * Retrieve the items.
      *
-     * @return \Illuminate\Support\Collection<int, \AllDressed\Menu>
+     * @return \Illuminate\Support\Collection<int, \AllDressed\Order>
      */
     public function get(): Collection
     {
