@@ -4,6 +4,7 @@ namespace AllDressed\Builders;
 
 use AllDressed\Builders\Concerns\HasShippingAddress;
 use AllDressed\Client;
+use AllDressed\Collections\ProductCollection;
 use AllDressed\Currency;
 use AllDressed\Customer;
 use AllDressed\DeliverySchedule;
@@ -15,6 +16,7 @@ use AllDressed\Exceptions\MissingPaymentMethodException;
 use AllDressed\Exceptions\MissingSubscriptionException;
 use AllDressed\Menu;
 use AllDressed\Order;
+use AllDressed\Package;
 use AllDressed\PaymentMethod;
 use AllDressed\Subscription;
 use Illuminate\Http\Client\RequestException;
@@ -39,7 +41,7 @@ class OrderBuilder extends RequestBuilder
     /**
      * Create a new order.
      */
-    public function create(Menu $menu = null, Customer $customer = null, Currency $currency = null, PaymentMethod $method = null, DeliverySchedule $schedule = null, Collection $products = null, Collection $packages, Discount $discount = null): Order
+    public function create(?Menu $menu, ?Customer $customer, ?Currency $currency, ?PaymentMethod $method, ?DeliverySchedule $schedule, ?Discount $discount, ?ProductCollection $products, ?array $packages): Order
     {
         $client = resolve(Client::class);
 
@@ -64,6 +66,8 @@ class OrderBuilder extends RequestBuilder
         );
 
         $schedule ??= $this->getOption('delivery_schedule');
+        $products ??= $this->getOption('products');
+        $packages ??= $this->getOption('packages');
 
         try {
             $response = $client->post('orders/transactional', array_filter([
@@ -87,8 +91,9 @@ class OrderBuilder extends RequestBuilder
                 'delivery_schedule' => $schedule?->id,
                 'delivery_notes' => $this->getOption('delivery_notes'),
                 'menu' => $menu->id,
-                'products' => $products?->toArray(),
-                'packages' => $packages?->toArray(),
+                'products' => $products->toPayload(),
+                // TODO: Add support for multiple packages
+                'packages' => [$packages],
                 'discount' => optional($discount)->code,
             ], static fn ($value) => $value !== null));
 
@@ -127,6 +132,23 @@ class OrderBuilder extends RequestBuilder
         }
 
         return collect($data)->mapInto(Order::class);
+    }
+
+    /**
+     * Add a package to the request.
+     */
+    public function addPackage(Package $package, ?ProductCollection $products): static
+    {
+        return $this->withOption('packages.id', $package->id)
+            ->withOption('packages.products', $products->toPayload());
+    }
+
+    /**
+     * Add products to the request.
+     */
+    public function addProducts(ProductCollection $products): static
+    {
+        return $this->withOption('products', $products);
     }
 
     /**
