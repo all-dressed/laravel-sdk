@@ -65,6 +65,7 @@ class OrderBuilder extends RequestBuilder
             MissingPaymentMethodException::class
         );
 
+        $discount ??= $this->getOption('discount');
         $schedule ??= $this->getOption('delivery_schedule');
         $products ??= $this->getOption('products');
         $packages ??= $this->getOption('packages');
@@ -134,18 +135,12 @@ class OrderBuilder extends RequestBuilder
         return collect($data)->mapInto(Order::class);
     }
 
-    /**
-     * Add a package to the request.
-     */
     public function addPackage(Package $package, ?ProductCollection $products): static
     {
         return $this->withOption('packages.id', $package->id)
             ->withOption('packages.products', $products->toPayload());
     }
 
-    /**
-     * Add products to the request.
-     */
     public function addProducts(ProductCollection $products): static
     {
         return $this->withOption('products', $products);
@@ -173,6 +168,14 @@ class OrderBuilder extends RequestBuilder
     public function setDeliveryNotes(string $notes): static
     {
         return $this->withOption('delivery_notes', $notes);
+    }
+
+    /**
+     * Set the discount of the request.
+     */
+    public function setDiscount(Discount $discount): static
+    {
+        return $this->withOption('discount', $discount);
     }
 
     /**
