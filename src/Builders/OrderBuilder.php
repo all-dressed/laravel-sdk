@@ -2,6 +2,7 @@
 
 namespace AllDressed\Builders;
 
+use AllDressed\Builders\Concerns\HasShippingAddress;
 use AllDressed\Client;
 use AllDressed\Currency;
 use AllDressed\Customer;
@@ -9,7 +10,6 @@ use AllDressed\DeliverySchedule;
 use AllDressed\Discount;
 use AllDressed\Exceptions\MissingCurrencyException;
 use AllDressed\Exceptions\MissingCustomerException;
-use AllDressed\Exceptions\MissingDeliveryScheduleException;
 use AllDressed\Exceptions\MissingMenuException;
 use AllDressed\Exceptions\MissingPaymentMethodException;
 use AllDressed\Exceptions\MissingSubscriptionException;
@@ -23,6 +23,8 @@ use Throwable;
 
 class OrderBuilder extends RequestBuilder
 {
+    use HasShippingAddress;
+
     /**
      * Indicates the subscription of the request.
      *
@@ -61,10 +63,7 @@ class OrderBuilder extends RequestBuilder
             MissingPaymentMethodException::class
         );
 
-        throw_unless(
-            $schedule ??= $this->getOption('schedule'),
-            MissingDeliveryScheduleException::class
-        );
+        $schedule ??= $this->getOption('delivery_schedule');
 
         try {
             $response = $client->post('orders/transactional', array_filter([
@@ -85,11 +84,11 @@ class OrderBuilder extends RequestBuilder
                 'shipping_state' => $this->getOption('shipping_state'),
                 'shipping_postcode' => $this->getOption('shipping_postcode'),
                 'shipping_country' => $this->getOption('shipping_country'),
-                'delivery_schedule' => $schedule->id,
+                'delivery_schedule' => $schedule?->id,
                 'delivery_notes' => $this->getOption('delivery_notes'),
                 'menu' => $menu->id,
-                'products' => optional($products),
-                'packages' => optional($packages),
+                'products' => $products?->toArray(),
+                'packages' => $packages?->toArray(),
                 'discount' => optional($discount)->code,
             ], static fn ($value) => $value !== null));
 
@@ -128,6 +127,46 @@ class OrderBuilder extends RequestBuilder
         }
 
         return collect($data)->mapInto(Order::class);
+    }
+
+    /**
+     * Set the currency of the request.
+     */
+    public function setCurrency(Currency $currency): static
+    {
+        return $this->withOption('currency', $currency);
+    }
+
+    /**
+     * Set the customer of the request.
+     */
+    public function setCustomer(Customer $customer): static
+    {
+        return $this->withOption('customer', $customer);
+    }
+
+    /**
+     * Set the delivery notes of the request.
+     */
+    public function setDeliveryNotes(string $notes): static
+    {
+        return $this->withOption('delivery_notes', $notes);
+    }
+
+    /**
+     * Set the menu of the request.
+     */
+    public function setMenu(Menu $menu): static
+    {
+        return $this->withOption('menu', $menu);
+    }
+
+    /**
+     * Set the payment method of the request.
+     */
+    public function setPaymentMethod(PaymentMethod $method): static
+    {
+        return $this->withOption('payment_method', $method);
     }
 
     /**
