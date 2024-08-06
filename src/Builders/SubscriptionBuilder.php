@@ -3,9 +3,9 @@
 namespace AllDressed\Builders;
 
 use AllDressed\Address;
+use AllDressed\Builders\Concerns\HasShippingAddress;
 use AllDressed\Choice;
 use AllDressed\Client;
-use AllDressed\Constants\AddressType;
 use AllDressed\Constants\DeliveryScheduleFrequency;
 use AllDressed\Currency;
 use AllDressed\Customer;
@@ -26,6 +26,8 @@ use Throwable;
 
 class SubscriptionBuilder extends RequestBuilder
 {
+    use HasShippingAddress;
+
     /**
      * Send the request to apply a discount to a subscription.
      *
@@ -394,119 +396,6 @@ class SubscriptionBuilder extends RequestBuilder
     public function setPaymentMethod(PaymentMethod $method): static
     {
         return $this->withOption('payment_method', $method);
-    }
-
-    /**
-     * Set the shipping address of the request.
-     *
-     * @param  \AllDressed\Address  $address
-     * @return static
-     */
-    public function setShippingAddress(Address $address): static
-    {
-        if ($address->hasLine2()) {
-            $this->setShippingAddressLine2($address->line_2);
-        }
-
-        if ($address->hasCompany()) {
-            $this->setShippingCompany($address->company);
-        }
-
-        return $this
-            ->setShippingAddressType($address->type)
-            ->setShippingAddressLine1($address->line_1)
-            ->setShippingCity($address->city)
-            ->setShippingState($address->state)
-            ->setShippingPostcode($address->postcode)
-            ->setShippingCountry($address->country);
-    }
-
-    /**
-     * Set the shipping address line 1 of the request.
-     *
-     * @param  string  $address
-     * @return static
-     */
-    public function setShippingAddressLine1(string $address): static
-    {
-        return $this->withOption('shipping_address_line_1', $address);
-    }
-
-    /**
-     * Set the shipping address line 2 of the request.
-     *
-     * @param  string  $suite
-     * @return static
-     */
-    public function setShippingAddressLine2(string $suite): static
-    {
-        return $this->withOption('shipping_address_line_2', $suite);
-    }
-
-    /**
-     * Set the shipping address type of the request.
-     *
-     * @param  \AllDressed\Constants\AddressType  $type
-     * @return static
-     */
-    public function setShippingAddressType(AddressType $type): static
-    {
-        return $this->withOption('shipping_address_type', $type);
-    }
-
-    /**
-     * Set the shipping city of the request.
-     *
-     * @param  string  $city
-     * @return static
-     */
-    public function setShippingCity(string $city): static
-    {
-        return $this->withOption('shipping_city', $city);
-    }
-
-    /**
-     * Set the shipping company of the request.
-     *
-     * @param  string  $company
-     * @return static
-     */
-    public function setShippingCompany(string $company): static
-    {
-        return $this->withOption('shipping_company', $company);
-    }
-
-    /**
-     * Set the shipping country of the request.
-     *
-     * @param  string  $country
-     * @return static
-     */
-    public function setShippingCountry(string $country): static
-    {
-        return $this->withOption('shipping_country', $country);
-    }
-
-    /**
-     * Set the shipping postcode of the request.
-     *
-     * @param  string  $postcode
-     * @return static
-     */
-    public function setShippingPostcode(string $postcode): static
-    {
-        return $this->withOption('shipping_postcode', $postcode);
-    }
-
-    /**
-     * Set the shipping state of the request.
-     *
-     * @param  string  $state
-     * @return static
-     */
-    public function setShippingState(string $state): static
-    {
-        return $this->withOption('shipping_state', $state);
     }
 
     /**
