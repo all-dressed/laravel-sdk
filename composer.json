@@ -18,7 +18,7 @@
     "require": {
         "all-dressed/constants": "dev-main",
         "php": "^8.0",
-        "illuminate/support": "^9.0"
+        "illuminate/support": "^9.0|^10.0|^11.0"
     },
     "require-dev": {
         "orchestra/testbench": "^7.0",
