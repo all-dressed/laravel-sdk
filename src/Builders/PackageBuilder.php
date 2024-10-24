@@ -43,6 +43,7 @@ class PackageBuilder extends RequestBuilder
 
         try {
             $response = $client->get($endpoint, [
+                'transactional' => $this->getOption('transactional'),
                 'root' => $this->getOption('root'),
             ]);
         } catch (RequestException $exception) {
