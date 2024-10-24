@@ -33,11 +33,11 @@ class Package extends Base
      */
     public static function asDropdownOptions(bool $transactional = true): Collection
     {
-        return collect(
-            static::query()
-                ->withOption('transactional', $transactional)
-                ->get()
-        )->map(static fn ($option) => [
+        $result = collect(
+            static::query()->withOption('transactional', $transactional)->get()
+        );
+
+        return $result->map(static fn ($option) => [
             'label' => __(ucfirst(strtolower($option->name))),
             'value' => $option->id,
         ]);
