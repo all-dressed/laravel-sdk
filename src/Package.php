@@ -29,6 +29,21 @@ class Package extends Base
     }
 
     /**
+     * Retrieve the options for a select field.
+     */
+    public static function asDropdownOptions(bool $transactional = true): Collection
+    {
+        return collect(
+            static::query()
+                ->withOption('transactional', $transactional)
+                ->get()
+        )->map(static fn ($option) => [
+            'label' => __(ucfirst(strtolower($option->name))),
+            'value' => $option->id,
+        ]);
+    }
+
+    /**
      * Retrieve the products of the package.
      *
      * @return \Illuminate\Support\Collection<int, \AllDressed\Product>
