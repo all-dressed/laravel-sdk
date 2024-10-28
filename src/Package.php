@@ -38,7 +38,7 @@ class Package extends Base
         );
 
         return $result->map(static fn ($option) => [
-            'label' => __(ucfirst(strtolower($option->name))),
+            'label' => __($option->full_name),
             'value' => $option->id,
         ]);
     }
