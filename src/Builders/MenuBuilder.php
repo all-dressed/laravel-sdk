@@ -50,6 +50,17 @@ class MenuBuilder extends RequestBuilder
     }
 
     /**
+     * Indicates the menu of the request.
+     *
+     * @param  \AllDressed\Menu  $menu
+     * @return static
+     */
+    public function forDate(Carbon $date): static
+    {
+        return $this->withOption('date', $date);
+    }
+
+    /**
      * Indicates the subscription of the request.
      *
      * @param  \AllDressed\Subscription  $subscription
@@ -76,6 +87,10 @@ class MenuBuilder extends RequestBuilder
             if ($id instanceof Carbon) {
                 $id = $id->format('Y-m-d');
             }
+        }
+
+        if ($date = $this->getOption('date')) {
+            $id = $date->format('Y-m-d');
         }
 
         if (! $subscription) {
