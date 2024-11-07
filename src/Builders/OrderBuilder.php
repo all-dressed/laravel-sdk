@@ -92,7 +92,7 @@ class OrderBuilder extends RequestBuilder
                 'delivery_schedule' => $schedule?->id,
                 'delivery_notes' => $this->getOption('delivery_notes'),
                 'menu' => $menu->id,
-                'products' => $products->toPayload(),
+                'products' => optional($products)->toPayload(),
                 // TODO: Add support for multiple packages
                 'packages' => [$packages],
                 'discount' => optional($discount)->code,
