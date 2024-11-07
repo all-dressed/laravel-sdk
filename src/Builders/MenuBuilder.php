@@ -68,24 +68,32 @@ class MenuBuilder extends RequestBuilder
     public function get(): Collection
     {
         $subscription = $this->getOption('subscription');
+        $id = null;
+
+        if ($menu = $this->getOption('menu')) {
+            $id = $menu->id ?? $menu->from;
+
+            if ($id instanceof Carbon) {
+                $id = $id->format('Y-m-d');
+            }
+        }
 
         if (! $subscription) {
             throw_unless(
-                $menu = $this->getOption('menu'),
+                $id,
                 MissingMenuException::class
             );
 
-            $endpoint = "menus/{$menu}";
+            $endpoint = "menus/{$id}";
         } else {
+            throw_unless(
+                $subscription,
+                MissingSubscriptionException::class
+            );
+
             $endpoint = "subscriptions/{$subscription->id}/menus";
 
-            if ($menu = $this->getOption('menu')) {
-                $id = $menu->id ?? $menu->from;
-
-                if ($id instanceof Carbon) {
-                    $id = $id->format('Y-m-d');
-                }
-
+            if ($id) {
                 $endpoint = "{$endpoint}/{$id}";
             }
         }
