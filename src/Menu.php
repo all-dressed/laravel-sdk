@@ -95,14 +95,4 @@ class Menu extends Base
     {
         return MenuBuilder::make();
     }
-    
-    /**
-     * Create a instance of the menu for the given UUID.
-     */
-    public static function uuid(string $uuid): static
-    {
-        return static::make([
-            'id' => $uuid,
-        ]);
-    }
 }

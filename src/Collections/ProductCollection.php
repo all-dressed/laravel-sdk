@@ -9,11 +9,13 @@ class ProductCollection extends Collection
      */
     public function toPayload(): array
     {
-        return $this->map(static function ($product) {
-            return [
-                'id' => $product->id,
-                'quantity' => $product->quantity ?? 1,
-            ];
-        })->all();
+        return $this
+            ->map(static function ($product) {
+                return [
+                    'id' => $product->id,
+                    'quantity' => $product->quantity ?? 1,
+                ];
+            })
+            ->toArray();
     }
 }

@@ -50,14 +50,14 @@ class MenuBuilder extends RequestBuilder
     }
 
     /**
-     * Indicates the menu of the request.
+     * Indicates the date of the request.
      *
-     * @param  \AllDressed\Menu  $menu
+     * @param  \Illuminate\Support\Carbon  $date
      * @return static
      */
     public function forDate(Carbon $date): static
     {
-        return $this->withOption('date', $date);
+        return $this->for(Menu::make(['from' => $date]));
     }
 
     /**
@@ -78,8 +78,8 @@ class MenuBuilder extends RequestBuilder
      */
     public function get(): Collection
     {
-        $subscription = $this->getOption('subscription');
         $id = null;
+        $subscription = $this->getOption('subscription');
 
         if ($menu = $this->getOption('menu')) {
             $id = $menu->id ?? $menu->from;
@@ -89,28 +89,19 @@ class MenuBuilder extends RequestBuilder
             }
         }
 
-        if ($date = $this->getOption('date')) {
-            $id = $date->format('Y-m-d');
-        }
+        if ($subscription) {
+            $endpoint = "subscriptions/{$subscription->id}/menus";
 
-        if (! $subscription) {
+            if ($id) {
+                $endpoint = "{$endpoint}/{$id}";
+            }
+        } else {
             throw_unless(
                 $id,
                 MissingMenuException::class
             );
 
             $endpoint = "menus/{$id}";
-        } else {
-            throw_unless(
-                $subscription,
-                MissingSubscriptionException::class
-            );
-
-            $endpoint = "subscriptions/{$subscription->id}/menus";
-
-            if ($id) {
-                $endpoint = "{$endpoint}/{$id}";
-            }
         }
 
         try {

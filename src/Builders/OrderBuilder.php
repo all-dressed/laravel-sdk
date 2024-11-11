@@ -12,7 +12,6 @@ use AllDressed\Discount;
 use AllDressed\Exceptions\MissingCurrencyException;
 use AllDressed\Exceptions\MissingCustomerException;
 use AllDressed\Exceptions\MissingMenuException;
-use AllDressed\Exceptions\MissingPaymentMethodException;
 use AllDressed\Exceptions\MissingSubscriptionException;
 use AllDressed\Menu;
 use AllDressed\Order;
@@ -28,20 +27,26 @@ class OrderBuilder extends RequestBuilder
     use HasShippingAddress;
 
     /**
-     * Indicates the subscription of the request.
-     *
-     * @param  Subscription  $subscription
-     * @return static
+     * Adds a package and products to the order.
      */
-    public function forSubscription(Subscription $subscription): static
+    public function addPackage(Package $package, ?ProductCollection $products): static
     {
-        return $this->withOption('subscription', $subscription);
+        return $this->withOption('packages.id', $package->id)
+            ->withOption('packages.products', $products->toPayload());
+    }
+
+    /**
+     * Adds products to the order.
+     */
+    public function addProducts(ProductCollection $products): static
+    {
+        return $this->withOption('products', $products);
     }
 
     /**
      * Create a new order.
      */
-    public function create(?Menu $menu, ?Customer $customer, ?Currency $currency, ?PaymentMethod $method, ?DeliverySchedule $schedule, ?Discount $discount, ?ProductCollection $products, ?array $packages): Order
+    public function create(Menu $menu = null, Customer $customer = null, Currency $currency = null, PaymentMethod $method = null, DeliverySchedule $schedule = null, Discount $discount = null, ProductCollection $products = null, array $packages = null): Order
     {
         $client = resolve(Client::class);
 
@@ -60,11 +65,7 @@ class OrderBuilder extends RequestBuilder
             MissingCurrencyException::class
         );
 
-        throw_unless(
-            $method ??= $this->getOption('payment_method'),
-            MissingPaymentMethodException::class
-        );
-
+        $method ??= $this->getOption('method');
         $discount ??= $this->getOption('discount');
         $schedule ??= $this->getOption('delivery_schedule');
         $products ??= $this->getOption('products');
@@ -135,15 +136,15 @@ class OrderBuilder extends RequestBuilder
         return collect($data)->mapInto(Order::class);
     }
 
-    public function addPackage(Package $package, ?ProductCollection $products): static
+    /**
+     * Indicates the subscription of the request.
+     *
+     * @param  Subscription  $subscription
+     * @return static
+     */
+    public function forSubscription(Subscription $subscription): static
     {
-        return $this->withOption('packages.id', $package->id)
-            ->withOption('packages.products', $products->toPayload());
-    }
-
-    public function addProducts(ProductCollection $products): static
-    {
-        return $this->withOption('products', $products);
+        return $this->withOption('subscription', $subscription);
     }
 
     /**
