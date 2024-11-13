@@ -29,10 +29,16 @@ class OrderBuilder extends RequestBuilder
     /**
      * Adds a package and products to the order.
      */
-    public function addPackage(Package $package, ?ProductCollection $products): static
+    public function addPackage(Package $package, ProductCollection $products = null): static
     {
-        return $this->withOption('packages.id', $package->id)
-            ->withOption('packages.products', $products->toPayload());
+        $packages = $this->getOption('packages') ?? [];
+
+        array_push($packages, [
+            'id' => $package->id,
+            'products' => optional($products)->toPayload(),
+        ]);
+
+        return $this->withOption('packages', $packages);
     }
 
     /**
@@ -75,7 +81,7 @@ class OrderBuilder extends RequestBuilder
             $response = $client->post('orders/transactional', array_filter([
                 'currency' => $currency->id,
                 'customer' => $customer->id,
-                'payment_method' => $method->id,
+                'payment_method' => optional($method)->id,
                 'shipping_address_type' => $this->getOption(
                     'shipping_address_type'
                 ),
@@ -95,7 +101,7 @@ class OrderBuilder extends RequestBuilder
                 'menu' => $menu->id,
                 'products' => optional($products)->toPayload(),
                 // TODO: Add support for multiple packages
-                'packages' => [$packages],
+                'packages' => $packages,
                 'discount' => optional($discount)->code,
             ], static fn ($value) => $value !== null));
 

@@ -16,6 +16,6 @@ class ProductCollection extends Collection
                     'quantity' => $product->quantity ?? 1,
                 ];
             })
-            ->toArray();
+            ->all();
     }
 }
