@@ -29,6 +29,16 @@ class Product extends Base
     }
 
     /**
+     * Set the quantity of the product.
+     */
+    public function setQuantity(int $quantity): static
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
      * Create a new query builder.
      *
      * @return \AllDressed\Builders\ProductBuilder
