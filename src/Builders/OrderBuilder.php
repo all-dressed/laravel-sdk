@@ -52,7 +52,7 @@ class OrderBuilder extends RequestBuilder
     /**
      * Create a new order.
      */
-    public function create(Menu $menu = null, Customer $customer = null, Currency $currency = null, PaymentMethod $method = null, DeliverySchedule $schedule = null, Discount $discount = null, ProductCollection $products = null, array $packages = null): Order
+    public function create(Menu $menu = null, Customer $customer = null, Currency $currency = null, PaymentMethod $method = null, DeliverySchedule $schedule = null, Discount $discount = null, ProductCollection $products = null, array $packages = null, string $tag = null): Order
     {
         $client = resolve(Client::class);
 
@@ -76,6 +76,7 @@ class OrderBuilder extends RequestBuilder
         $schedule ??= $this->getOption('delivery_schedule');
         $products ??= $this->getOption('products');
         $packages ??= $this->getOption('packages');
+        $tag ??= $this->getOption('tag');
 
         try {
             $response = $client->post('orders/transactional', array_filter([
@@ -103,6 +104,7 @@ class OrderBuilder extends RequestBuilder
                 // TODO: Add support for multiple packages
                 'packages' => $packages,
                 'discount' => optional($discount)->code,
+                'tag' => $tag,
             ], static fn ($value) => $value !== null));
 
             return Order::make($response->json('data'));
