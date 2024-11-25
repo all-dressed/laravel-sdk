@@ -52,7 +52,7 @@ class OrderBuilder extends RequestBuilder
     /**
      * Create a new order.
      */
-    public function create(Menu $menu = null, Customer $customer = null, Currency $currency = null, PaymentMethod $method = null, DeliverySchedule $schedule = null, Discount $discount = null, ProductCollection $products = null, array $packages = null, array $tags = null): Order
+    public function create(Menu $menu = null, Customer $customer = null, Currency $currency = null, PaymentMethod $method = null, DeliverySchedule $schedule = null, Discount $discount = null, ProductCollection $products = null, array $packages = null, array $tags = null, string $giftCard = null): Order
     {
         $client = resolve(Client::class);
 
@@ -77,11 +77,13 @@ class OrderBuilder extends RequestBuilder
         $products ??= $this->getOption('products');
         $packages ??= $this->getOption('packages');
         $tags ??= $this->getOption('tags');
+        $giftCard ??= $this->getOption('giftCard');
 
         try {
             $response = $client->post('orders/transactional', array_filter([
                 'currency' => $currency->id,
                 'customer' => $customer->id,
+                'giftCard' => $giftCard,
                 'payment_method' => optional($method)->id,
                 'shipping_address_type' => $this->getOption(
                     'shipping_address_type'
@@ -188,6 +190,14 @@ class OrderBuilder extends RequestBuilder
     }
 
     /**
+     * Set the gift card of the request.
+     */
+    public function setGiftCard(string $giftCard): static
+    {
+        return $this->withOption('giftCard', $giftCard);
+    }
+
+    /**
      * Set the menu of the request.
      */
     public function setMenu(Menu $menu): static
@@ -201,6 +211,14 @@ class OrderBuilder extends RequestBuilder
     public function setPaymentMethod(PaymentMethod $method): static
     {
         return $this->withOption('payment_method', $method);
+    }
+
+    /**
+     * Set the tags of the request.
+     */
+    public function setTags(array $tags): static
+    {
+        return $this->withOption('tags', $tags);
     }
 
     /**
