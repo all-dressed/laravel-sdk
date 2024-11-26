@@ -13,6 +13,7 @@ use AllDressed\Exceptions\MissingCurrencyException;
 use AllDressed\Exceptions\MissingCustomerException;
 use AllDressed\Exceptions\MissingMenuException;
 use AllDressed\Exceptions\MissingSubscriptionException;
+use AllDressed\GiftCard;
 use AllDressed\Menu;
 use AllDressed\Order;
 use AllDressed\Package;
@@ -52,7 +53,7 @@ class OrderBuilder extends RequestBuilder
     /**
      * Create a new order.
      */
-    public function create(Menu $menu = null, Customer $customer = null, Currency $currency = null, PaymentMethod $method = null, DeliverySchedule $schedule = null, Discount $discount = null, ProductCollection $products = null, array $packages = null, array $tags = null, string $giftCard = null): Order
+    public function create(Menu $menu = null, Customer $customer = null, Currency $currency = null, PaymentMethod $method = null, DeliverySchedule $schedule = null, Discount $discount = null, ProductCollection $products = null, array $packages = null, array $tags = null, GiftCard $giftCard = null): Order
     {
         $client = resolve(Client::class);
 
@@ -83,7 +84,7 @@ class OrderBuilder extends RequestBuilder
             $response = $client->post('orders/transactional', array_filter([
                 'currency' => $currency->id,
                 'customer' => $customer->id,
-                'giftCard' => $giftCard,
+                'giftCard' => $giftCard->id,
                 'payment_method' => optional($method)->id,
                 'shipping_address_type' => $this->getOption(
                     'shipping_address_type'
@@ -192,7 +193,7 @@ class OrderBuilder extends RequestBuilder
     /**
      * Set the gift card of the request.
      */
-    public function setGiftCard(string $giftCard): static
+    public function setGiftCard(GiftCard $giftCard): static
     {
         return $this->withOption('giftCard', $giftCard);
     }
