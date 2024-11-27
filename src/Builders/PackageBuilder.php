@@ -95,4 +95,14 @@ class PackageBuilder extends RequestBuilder
 
         throw $exception;
     }
+
+    /**
+     * Indicates that the packages should include their products in theirresponse.
+     *
+     * @return static
+     */
+    public function withProducts(): static
+    {
+        return $this->withOption('with_products', true);
+    }
 }
