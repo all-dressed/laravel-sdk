@@ -73,6 +73,14 @@ class PackageBuilder extends RequestBuilder
     }
 
     /**
+     * Filter the packages that available for a transactional order.
+     */
+    public function transactional(): static
+    {
+        return $this->withOption('transactional', true);
+    }
+
+    /**
      * Throw a new friendly exception based on the existing exception.
      *
      * @param  \Throwable  $exception
