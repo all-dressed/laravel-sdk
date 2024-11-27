@@ -20,9 +20,11 @@ class Tag extends Base
      */
     public static function asDropdownOptions(): Collection
     {
-        return collect(static::query()->get())->map(static fn ($option) => [
-            'label' => __(ucfirst(strtolower($option->name))),
-            'value' => $option->id,
-        ]);
+        return collect(static::query()->get())
+            ->map(static fn ($option) => [
+                'label' => __(ucfirst(strtolower($option->name))),
+                'value' => $option->id,
+            ])
+            ->sortBy('label');
     }
 }
