@@ -84,7 +84,7 @@ class OrderBuilder extends RequestBuilder
             $response = $client->post('orders/transactional', array_filter([
                 'currency' => $currency->id,
                 'customer' => $customer->id,
-                'giftCard' => $giftCard->id,
+                'gift_card' => $giftCard->id,
                 'payment_method' => optional($method)->id,
                 'shipping_address_type' => $this->getOption(
                     'shipping_address_type'
