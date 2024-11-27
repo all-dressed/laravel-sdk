@@ -78,7 +78,7 @@ class MenuBuilder extends RequestBuilder
      */
     public function get(): Collection
     {
-        $id = null;
+        $id = $this->getOption('id');
         $subscription = $this->getOption('subscription');
 
         if ($menu = $this->getOption('menu')) {
