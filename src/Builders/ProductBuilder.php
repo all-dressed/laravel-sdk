@@ -58,7 +58,15 @@ class ProductBuilder extends RequestBuilder
         }
 
         try {
-            $response = $client->get($endpoint);
+            $response = $client->get(
+                $endpoint,
+                array_filter(
+                    [
+                        'subscribable' => $this->getOption('subscribable'),
+                    ],
+                    static fn ($value) => $value !== null
+                )
+            );
 
             Log::debug($response->body());
         } catch (RequestException $exception) {
@@ -75,6 +83,14 @@ class ProductBuilder extends RequestBuilder
         }
 
         return collect($data)->mapInto(Product::class);
+    }
+
+    /**
+     * Filter the products that available for a subscription.
+     */
+    public function subscribable(): static
+    {
+        return $this->withOption('subscribable', true);
     }
 
     /**

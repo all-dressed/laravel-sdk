@@ -42,11 +42,18 @@ class PackageBuilder extends RequestBuilder
         }
 
         try {
-            $response = $client->get($endpoint, [
-                'transactional' => $this->getOption('transactional'),
-                'root' => $this->getOption('root'),
-                'with_products' => $this->getOption('with_products'),
-            ]);
+            $response = $client->get(
+                $endpoint,
+                array_filter(
+                    [
+                        'subscribable' => $this->getOption('subscribable'),
+                        'transactional' => $this->getOption('transactional'),
+                        'root' => $this->getOption('root'),
+                        'with_products' => $this->getOption('with_products'),
+                    ],
+                    static fn ($value) => $value !== null
+                )
+            );
         } catch (RequestException $exception) {
             $this->throw(
                 exception: $exception,
@@ -71,6 +78,14 @@ class PackageBuilder extends RequestBuilder
     public function root(): static
     {
         return $this->withOption('root', true);
+    }
+
+    /**
+     * Filter the packages that available for a subscription.
+     */
+    public function subscribable(): static
+    {
+        return $this->withOption('subscribable', true);
     }
 
     /**

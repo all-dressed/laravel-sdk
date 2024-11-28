@@ -50,12 +50,16 @@ class ItemBuilder extends RequestBuilder
         $endpoint = "menus/{$menu}/items";
 
         try {
-            $response = $client->get($endpoint, array_filter([
-                'types' => implode(
-                    ',',
-                    array_keys(Arr::wrap($this->getOption('types')))
-                ),
-            ]));
+            $response = $client->get($endpoint, array_filter(
+                [
+                    'subscribable' => $this->getOption('subscribable'),
+                    'types' => implode(
+                        ',',
+                        array_keys(Arr::wrap($this->getOption('types')))
+                    ),
+                ],
+                static fn ($value) => $value !== null
+            ));
 
             Log::debug($response->body());
         } catch (RequestException $exception) {
@@ -97,6 +101,14 @@ class ItemBuilder extends RequestBuilder
                 'product' => true,
             ]
         ));
+    }
+
+    /**
+     * Filter the items that available for a subscription.
+     */
+    public function subscribable(): static
+    {
+        return $this->withOption('subscribable', true);
     }
 
     /**
