@@ -123,9 +123,12 @@ class OrderBuilder extends RequestBuilder
      */
     public function get(): Collection
     {
-        $customer = $this->getOption('customer');
+        if ($this->getOption('transactional')) {
+            throw_unless(
+                $customer = $this->getOption('customer'),
+                MissingCustomerException::class
+            );
 
-        if ($this->getOption('transactional') && $customer) {
             $endpoint = "customers/{$customer->id}/orders";
         } else {
             throw_unless(
