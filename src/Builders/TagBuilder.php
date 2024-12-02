@@ -19,9 +19,17 @@ class TagBuilder extends RequestBuilder
 
         $endpoint = 'tags';
 
+        if ($id = $this->getOption('id')) {
+            $endpoint = "{$endpoint}/{$id}";
+        }
+
         $response = $client->get($endpoint);
 
         $data = $response->json('data');
+
+        if ($id) {
+            $data = [$data];
+        }
 
         return collect($data)->mapInto(Tag::class);
     }
