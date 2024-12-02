@@ -123,12 +123,18 @@ class OrderBuilder extends RequestBuilder
      */
     public function get(): Collection
     {
-        throw_unless(
-            $subscription = $this->getOption('subscription'),
-            MissingSubscriptionException::class
-        );
+        $customer = $this->getOption('customer');
 
-        $endpoint = "subscriptions/{$subscription->id}/orders";
+        if ($this->getOption('transactional') && $customer) {
+            $endpoint = "customers/{$customer->id}/orders";
+        } else {
+            throw_unless(
+                $subscription = $this->getOption('subscription'),
+                MissingSubscriptionException::class
+            );
+
+            $endpoint = "subscriptions/{$subscription->id}/orders";
+        }
 
         try {
             $response = resolve(Client::class)->get($endpoint);
