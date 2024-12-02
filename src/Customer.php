@@ -114,6 +114,16 @@ class Customer extends Base
     }
 
     /**
+     * Retrieve the transactional orders of the customer.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getTransactionalOrders(): Collection
+    {
+        return Order::query()->forCustomer($this)->transactional()->get();
+    }
+
+    /**
      * Create a new query builder.
      *
      * @return \AllDressed\Builders\CustomerBuilder

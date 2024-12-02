@@ -148,6 +148,17 @@ class OrderBuilder extends RequestBuilder
     }
 
     /**
+     * Indicates the customer of the request.
+     *
+     * @param  Customer  $customer
+     * @return static
+     */
+    public function forCustomer(Customer $customer): static
+    {
+        return $this->withOption('customer', $customer);
+    }
+
+    /**
      * Indicates the subscription of the request.
      *
      * @param  Subscription  $subscription
@@ -228,5 +239,13 @@ class OrderBuilder extends RequestBuilder
     protected function throw(Throwable $exception): void
     {
         throw $exception;
+    }
+
+    /**
+     * Filter orders that are transactional.
+     */
+    public function transactional(): static
+    {
+        return $this->withOption('transactional', true);
     }
 }
