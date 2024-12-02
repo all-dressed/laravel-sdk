@@ -123,12 +123,21 @@ class OrderBuilder extends RequestBuilder
      */
     public function get(): Collection
     {
-        throw_unless(
-            $subscription = $this->getOption('subscription'),
-            MissingSubscriptionException::class
-        );
+        if ($this->getOption('transactional')) {
+            throw_unless(
+                $customer = $this->getOption('customer'),
+                MissingCustomerException::class
+            );
 
-        $endpoint = "subscriptions/{$subscription->id}/orders";
+            $endpoint = "customers/{$customer->id}/orders";
+        } else {
+            throw_unless(
+                $subscription = $this->getOption('subscription'),
+                MissingSubscriptionException::class
+            );
+
+            $endpoint = "subscriptions/{$subscription->id}/orders";
+        }
 
         try {
             $response = resolve(Client::class)->get($endpoint);
@@ -145,6 +154,17 @@ class OrderBuilder extends RequestBuilder
         }
 
         return collect($data)->mapInto(Order::class);
+    }
+
+    /**
+     * Indicates the customer of the request.
+     *
+     * @param  Customer  $customer
+     * @return static
+     */
+    public function forCustomer(Customer $customer): static
+    {
+        return $this->withOption('customer', $customer);
     }
 
     /**
@@ -228,5 +248,13 @@ class OrderBuilder extends RequestBuilder
     protected function throw(Throwable $exception): void
     {
         throw $exception;
+    }
+
+    /**
+     * Filter orders that are transactional.
+     */
+    public function transactional(): static
+    {
+        return $this->withOption('transactional', true);
     }
 }
