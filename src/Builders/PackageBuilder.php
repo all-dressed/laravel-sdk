@@ -5,6 +5,7 @@ namespace AllDressed\Builders;
 use AllDressed\Client;
 use AllDressed\Exceptions\PackageNotFoundException;
 use AllDressed\Package;
+use AllDressed\Subscription;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
 use Throwable;
@@ -13,13 +14,18 @@ class PackageBuilder extends RequestBuilder
 {
     /**
      * Filter out the packages that belongs to the given menu.
-     *
-     * @param  string  $menu
-     * @return static
      */
     public function forMenu(string $menu): static
     {
         return $this->withOption('menu', $menu);
+    }
+
+    /**
+     * Indicates that the packages are for the given subscription.
+     */
+    public function forSubscription(Subscription $subscription): static
+    {
+        return $this->withOption('subscription', $subscription);
     }
 
     /**
@@ -47,6 +53,7 @@ class PackageBuilder extends RequestBuilder
                 array_filter(
                     [
                         'subscribable' => $this->getOption('subscribable'),
+                        'subscription' => $this->getOption('subscription')?->id,
                         'transactional' => $this->getOption('transactional'),
                         'root' => $this->getOption('root'),
                         'with_products' => $this->getOption('with_products'),
