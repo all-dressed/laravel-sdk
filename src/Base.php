@@ -14,16 +14,6 @@ abstract class Base extends Fluent
     use ForwardsToBuilder, Makeable;
 
     /**
-     * Retrieve all the instances.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public static function all(): Collection
-    {
-        return static::query()->get();
-    }
-
-    /**
      * Update the given attributes.
      *
      * @param  array<string, mixed>  $attributes
