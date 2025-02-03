@@ -10,7 +10,6 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Fluent;
 use JsonSerializable;
 
 abstract class Base implements Arrayable, ArrayAccess, Jsonable, JsonSerializable
@@ -18,12 +17,12 @@ abstract class Base implements Arrayable, ArrayAccess, Jsonable, JsonSerializabl
     use ForwardsToBuilder, Makeable;
 
     /**
-     * All of the attributes set on the fluent instance.
+     * All of the attributes set on the instance.
      */
     protected $attributes = [];
 
     /**
-     * Create a new fluent instance.
+     * Create a new instance.
      */
     public function __construct($attributes = [])
     {
@@ -33,7 +32,7 @@ abstract class Base implements Arrayable, ArrayAccess, Jsonable, JsonSerializabl
     }
 
     /**
-     * Handle dynamic calls to the fluent instance to set attributes.
+     * Handle dynamic calls to the instance to set attributes.
      */
     public function __call($method, $parameters)
     {
@@ -105,7 +104,7 @@ abstract class Base implements Arrayable, ArrayAccess, Jsonable, JsonSerializabl
     }
 
     /**
-     * Get an attribute from the fluent instance.
+     * Get an attribute from the instance.
      */
     public function get($key, $default = null)
     {
@@ -117,7 +116,7 @@ abstract class Base implements Arrayable, ArrayAccess, Jsonable, JsonSerializabl
     }
 
     /**
-     * Get the attributes from the fluent instance.
+     * Get the attributes from the instance.
      */
     public function getAttributes()
     {
@@ -186,7 +185,15 @@ abstract class Base implements Arrayable, ArrayAccess, Jsonable, JsonSerializabl
     abstract public static function query(): RequestBuilder;
 
     /**
-     * Convert the fluent instance to JSON.
+     * Convert the instance to an array.
+     */
+    public function toArray()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * Convert the instance to JSON.
      */
     public function toJson($options = 0)
     {
