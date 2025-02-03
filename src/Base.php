@@ -5,18 +5,77 @@ namespace AllDressed;
 use AllDressed\Builders\RequestBuilder;
 use AllDressed\Concerns\ForwardsToBuilder;
 use AllDressed\Concerns\Makeable;
+use ArrayAccess;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Fluent;
+use JsonSerializable;
 
-abstract class Base extends Fluent
+abstract class Base implements Arrayable, ArrayAccess, Jsonable, JsonSerializable
 {
     use ForwardsToBuilder, Makeable;
 
     /**
+     * All of the attributes set on the fluent instance.
+     */
+    protected $attributes = [];
+
+    /**
+     * Create a new fluent instance.
+     */
+    public function __construct($attributes = [])
+    {
+        foreach ($attributes as $key => $value) {
+            $this->attributes[$key] = $value;
+        }
+    }
+
+    /**
+     * Handle dynamic calls to the fluent instance to set attributes.
+     */
+    public function __call($method, $parameters)
+    {
+        $this->attributes[$method] = count($parameters) > 0 ? reset($parameters) : true;
+
+        return $this;
+    }
+
+    /**
+     * Dynamically retrieve the value of an attribute.
+     */
+    public function __get($key)
+    {
+        return $this->get($key);
+    }
+
+    /**
+     * Dynamically check if an attribute is set.
+     */
+    public function __isset($key)
+    {
+        return $this->offsetExists($key);
+    }
+
+    /**
+     * Dynamically set the value of an attribute.
+     */
+    public function __set($key, $value)
+    {
+        $this->offsetSet($key, $value);
+    }
+
+    /**
+     * Dynamically unset an attribute.
+     */
+    public function __unset($key)
+    {
+        $this->offsetUnset($key);
+    }
+
+    /**
      * Retrieve all the instances.
-     *
-     * @return \Illuminate\Support\Collection
      */
     public static function all(): Collection
     {
@@ -25,9 +84,6 @@ abstract class Base extends Fluent
 
     /**
      * Update the given attributes.
-     *
-     * @param  array<string, mixed>  $attributes
-     * @return static
      */
     public function fill(array $attributes): static
     {
@@ -40,9 +96,6 @@ abstract class Base extends Fluent
 
     /**
      * Create a new instance with the given id.
-     *
-     * @param  string  $id
-     * @return static
      */
     public static function for(string $id): static
     {
@@ -52,10 +105,27 @@ abstract class Base extends Fluent
     }
 
     /**
+     * Get an attribute from the fluent instance.
+     */
+    public function get($key, $default = null)
+    {
+        if (array_key_exists($key, $this->attributes)) {
+            return $this->attributes[$key];
+        }
+
+        return value($default);
+    }
+
+    /**
+     * Get the attributes from the fluent instance.
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
      * Check if the instance has the given attribute.
-     *
-     * @param  string  $name
-     * @return bool
      */
     public function hasAttribute(string $name): bool
     {
@@ -63,10 +133,15 @@ abstract class Base extends Fluent
     }
 
     /**
+     * Convert the object into something JSON serializable.
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * Check if the instance is missing the given attribute.
-     *
-     * @param  string  $name
-     * @return bool
      */
     public function missingAttribute(string $name): bool
     {
@@ -74,9 +149,47 @@ abstract class Base extends Fluent
     }
 
     /**
+     * Determine if the given offset exists.
+     */
+    public function offsetExists($offset): bool
+    {
+        return isset($this->attributes[$offset]);
+    }
+
+    /**
+     * Get the value for a given offset.
+     */
+    public function offsetGet($offset): mixed
+    {
+        return $this->get($offset);
+    }
+
+    /**
+     * Set the value at the given offset.
+     */
+    public function offsetSet($offset, $value): void
+    {
+        $this->attributes[$offset] = $value;
+    }
+
+    /**
+     * Unset the value at the given offset.
+     */
+    public function offsetUnset($offset): void
+    {
+        unset($this->attributes[$offset]);
+    }
+
+    /**
      * Retrieve the builder for the instance.
-     *
-     * @return \AllDressed\Builders\Builder
      */
     abstract public static function query(): RequestBuilder;
+
+    /**
+     * Convert the fluent instance to JSON.
+     */
+    public function toJson($options = 0)
+    {
+        return json_encode($this->jsonSerialize(), $options);
+    }
 }
