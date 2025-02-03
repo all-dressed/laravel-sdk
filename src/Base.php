@@ -186,6 +186,14 @@ abstract class Base implements Arrayable, ArrayAccess, Jsonable, JsonSerializabl
     abstract public static function query(): RequestBuilder;
 
     /**
+     * Convert the fluent instance to an array.
+     */
+    public function toArray()
+    {
+        return $this->attributes;
+    }
+
+    /**
      * Convert the fluent instance to JSON.
      */
     public function toJson($options = 0)
