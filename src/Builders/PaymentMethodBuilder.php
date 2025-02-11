@@ -5,6 +5,7 @@ namespace AllDressed\Builders;
 use AllDressed\Address;
 use AllDressed\Card;
 use AllDressed\Client;
+use AllDressed\Constants\AddressType;
 use AllDressed\Customer;
 use AllDressed\Exceptions\MissingCustomerException;
 use AllDressed\Exceptions\MissingPaymentGatewayException;
@@ -101,11 +102,17 @@ class PaymentMethodBuilder extends RequestBuilder
                         'billing_last_name'
                     ),
                     'billing_phone' => $this->getOption('billing_phone'),
+                    'billing_address_type' => $this->getOption(
+                        'billing_address_type'
+                    ),
                     'billing_address_line_1' => $this->getOption(
                         'billing_address_line_1'
                     ),
                     'billing_address_line_2' => $this->getOption(
                         'billing_address_line_2'
+                    ),
+                    'billing_company' => $this->getOption(
+                        'billing_company'
                     ),
                     'billing_city' => $this->getOption('billing_city'),
                     'billing_state' => $this->getOption('billing_state'),
@@ -220,10 +227,15 @@ class PaymentMethodBuilder extends RequestBuilder
             $this->setBillingAddressLine2($address->line_2);
         }
 
+        if ($address->hasCompany()) {
+            $this->setBillingCompany($address->company);
+        }
+
         return $this
             ->setBillingFirstName($firstName)
             ->setBillingLastName($lastName)
             ->setBillingPhone($phone)
+            ->setBillingAddressType($address->type)
             ->setBillingAddressLine1($address->line_1)
             ->setBillingCity($address->city)
             ->setBillingState($address->state)
@@ -254,6 +266,17 @@ class PaymentMethodBuilder extends RequestBuilder
     }
 
     /**
+     * Set the billing address line 1 of the request.
+     *
+     * @param  string  $address
+     * @return static
+     */
+    public function setBillingAddressType(AddressType $type): static
+    {
+        return $this->withOption('billing_address_type', $type);
+    }
+
+    /**
      * Set the billing city of the request.
      *
      * @param  string  $city
@@ -262,6 +285,17 @@ class PaymentMethodBuilder extends RequestBuilder
     public function setBillingCity(string $city): static
     {
         return $this->withOption('billing_city', $city);
+    }
+
+    /**
+     * Set the billing address line 1 of the request.
+     *
+     * @param  string  $address
+     * @return static
+     */
+    public function setBillingCompany(string $company): static
+    {
+        return $this->withOption('billing_company', $company);
     }
 
     /**
