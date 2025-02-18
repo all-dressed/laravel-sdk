@@ -6,7 +6,6 @@ use AllDressed\Builders\CustomerBuilder;
 use AllDressed\Constants\DiscountValueType;
 use AllDressed\Exceptions\MissingBillingAddressException;
 use AllDressed\Exceptions\MissingIdException;
-use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
@@ -100,6 +99,14 @@ class Customer extends Base
     public function getPaymentMethods(): Collection
     {
         return PaymentMethod::query()->forCustomer($this)->get();
+    }
+
+    /**
+     * Retrieve the pending order of the customer.
+     */
+    public function getPendingOrder(Order $order)
+    {
+        return Order::query()->forCustomer($this)->pending()->find($order->id);
     }
 
     /**

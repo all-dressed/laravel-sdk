@@ -11,6 +11,7 @@ use AllDressed\DeliverySchedule;
 use AllDressed\Discount;
 use AllDressed\Exceptions\MissingCurrencyException;
 use AllDressed\Exceptions\MissingCustomerException;
+use AllDressed\Exceptions\MissingIdException;
 use AllDressed\Exceptions\MissingMenuException;
 use AllDressed\Exceptions\MissingSubscriptionException;
 use AllDressed\GiftCard;
@@ -130,6 +131,18 @@ class OrderBuilder extends RequestBuilder
             );
 
             $endpoint = "customers/{$customer->id}/orders";
+        } elseif ($this->getOption('pending')) {
+            throw_unless(
+                $customer = $this->getOption('customer'),
+                MissingCustomerException::class,
+            );
+
+            throw_unless(
+                $id = $this->getOption('id'),
+                MissingIdException::class,
+            );
+
+            $endpoint = "customers/{$customer->id}/orders/{$id}/pending";
         } else {
             throw_unless(
                 $subscription = $this->getOption('subscription'),
@@ -176,6 +189,47 @@ class OrderBuilder extends RequestBuilder
     public function forSubscription(Subscription $subscription): static
     {
         return $this->withOption('subscription', $subscription);
+    }
+
+    /**
+     * Pay a pending order.
+     */
+    public function pay(Order $order, Customer $customer = null, Currency $currency = null, PaymentMethod $method = null): Order
+    {
+        $client = resolve(Client::class);
+
+        throw_unless(
+            $customer ??= $this->getOption('customer'),
+            MissingCustomerException::class
+        );
+
+        throw_unless(
+            $currency ??= $this->getOption('currency'),
+            MissingCurrencyException::class
+        );
+
+        $method ??= $this->getOption('method');
+
+        try {
+            $response = $client->post("customers/{$customer->id}/orders/{$order->id}/pay", array_filter([
+                'customer' => $customer->id,
+                'order' => $order->id,
+                'currency' => $currency->id,
+                'payment_method' => optional($method)->id,
+            ], static fn ($value) => $value !== null));
+
+            return Order::make($response->json('data'));
+        } catch (RequestException $exception) {
+            $this->throw($exception);
+        }
+    }
+
+    /**
+     * Filter order that are pending.
+     */
+    public function pending(): static
+    {
+        return $this->withOption('pending', true);
     }
 
     /**
