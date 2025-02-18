@@ -111,9 +111,7 @@ class PaymentMethodBuilder extends RequestBuilder
                     'billing_address_line_2' => $this->getOption(
                         'billing_address_line_2'
                     ),
-                    'billing_company' => $this->getOption(
-                        'billing_company'
-                    ),
+                    'billing_company' => $this->getOption('billing_company'),
                     'billing_city' => $this->getOption('billing_city'),
                     'billing_state' => $this->getOption('billing_state'),
                     'billing_postcode' => $this->getOption('billing_postcode'),
