@@ -211,7 +211,7 @@ class OrderBuilder extends RequestBuilder
         $method ??= $this->getOption('method');
 
         try {
-            $response = $client->post("customers/{$customer->id}/orders/{$order->id}/bill", array_filter([
+            $response = $client->post("customers/{$customer->id}/orders/{$order->id}/pay", array_filter([
                 'customer' => $customer->id,
                 'order' => $order->id,
                 'currency' => $currency->id,
