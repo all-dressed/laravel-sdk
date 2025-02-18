@@ -12,6 +12,7 @@ use AllDressed\Discount;
 use AllDressed\Exceptions\MissingCurrencyException;
 use AllDressed\Exceptions\MissingCustomerException;
 use AllDressed\Exceptions\MissingMenuException;
+use AllDressed\Exceptions\MissingOrderException;
 use AllDressed\Exceptions\MissingSubscriptionException;
 use AllDressed\GiftCard;
 use AllDressed\Menu;
@@ -133,8 +134,12 @@ class OrderBuilder extends RequestBuilder
         } elseif ($this->getOption('pending')) {
             throw_unless(
                 $customer = $this->getOption('customer'),
+                MissingCustomerException::class,
+            );
+
+            throw_unless(
                 $order = $this->getOption('order'),
-                MissingCustomerException::class
+                MissingOrderException::class,
             );
 
             $endpoint = "customers/{$customer->id}/orders/{$order}/pending";
