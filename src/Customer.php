@@ -103,6 +103,14 @@ class Customer extends Base
     }
 
     /**
+     * Retrieve the pending order of the customer.
+     */
+    public function getPendingOrder(string $order)
+    {
+        return Order::query()->forCustomer($this)->pending()->setOrder($order)->get();
+    }
+
+    /**
      * Retrieve the subscriptions of the customer.
      *
      * @param  bool  $menus
