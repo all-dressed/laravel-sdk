@@ -11,6 +11,6 @@ class MissingIdException extends Exception
      */
     public function __construct()
     {
-        parent::__construct(__('You must provide a customer id.'));
+        parent::__construct(__('You must provide an id.'));
     }
 }

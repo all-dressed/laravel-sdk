@@ -11,8 +11,8 @@ use AllDressed\DeliverySchedule;
 use AllDressed\Discount;
 use AllDressed\Exceptions\MissingCurrencyException;
 use AllDressed\Exceptions\MissingCustomerException;
+use AllDressed\Exceptions\MissingIdException;
 use AllDressed\Exceptions\MissingMenuException;
-use AllDressed\Exceptions\MissingOrderException;
 use AllDressed\Exceptions\MissingSubscriptionException;
 use AllDressed\GiftCard;
 use AllDressed\Menu;
@@ -138,11 +138,11 @@ class OrderBuilder extends RequestBuilder
             );
 
             throw_unless(
-                $order = $this->getOption('order'),
-                MissingOrderException::class,
+                $id = $this->getOption('id'),
+                MissingIdException::class,
             );
 
-            $endpoint = "customers/{$customer->id}/orders/{$order}/pending";
+            $endpoint = "customers/{$customer->id}/orders/{$id}/pending";
         } else {
             throw_unless(
                 $subscription = $this->getOption('subscription'),
@@ -286,14 +286,6 @@ class OrderBuilder extends RequestBuilder
     public function setPaymentMethod(PaymentMethod $method): static
     {
         return $this->withOption('payment_method', $method);
-    }
-
-    /**
-     * Set the order of the request.
-     */
-    public function setOrder(string $order): static
-    {
-        return $this->withOption('order', $order);
     }
 
     /**
