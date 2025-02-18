@@ -105,9 +105,13 @@ class Customer extends Base
     /**
      * Retrieve the pending order of the customer.
      */
-    public function getPendingOrder(string $order)
+    public function getPendingOrder(Order $order)
     {
-        return Order::query()->forCustomer($this)->pending()->setOrder($order)->get();
+        return Order::query()
+            ->forCustomer($this)
+            ->pending()
+            ->setOrder($order->id)
+            ->get();
     }
 
     /**
