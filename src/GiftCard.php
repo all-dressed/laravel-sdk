@@ -18,6 +18,13 @@ class GiftCard extends Base
             $attributes['currency'] = Currency::make($currency);
         }
 
+        $tags = Arr::get($attributes, 'tags', []);
+
+        if ($tags) {
+            $attributes['tags'] = collect($tags)
+                ->map(static fn ($tag) => Tag::make($tag));
+        }
+
         parent::__construct($attributes);
     }
 
