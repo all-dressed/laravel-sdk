@@ -13,6 +13,7 @@ use AllDressed\Exceptions\MissingCurrencyException;
 use AllDressed\Exceptions\MissingCustomerException;
 use AllDressed\Exceptions\MissingIdException;
 use AllDressed\Exceptions\MissingMenuException;
+use AllDressed\Exceptions\MissingPaymentMethodException;
 use AllDressed\Exceptions\MissingSubscriptionException;
 use AllDressed\GiftCard;
 use AllDressed\Menu;
@@ -208,15 +209,19 @@ class OrderBuilder extends RequestBuilder
             MissingCurrencyException::class
         );
 
-        $method ??= $this->getOption('method');
+        throw_unless(
+            $method ??= $this->getOption('method'),
+            MissingPaymentMethodException::class
+        );
 
         try {
-            $response = $client->post("customers/{$customer->id}/orders/{$order->id}/pay", array_filter([
-                'customer' => $customer->id,
-                'order' => $order->id,
-                'currency' => $currency->id,
-                'payment_method' => optional($method)->id,
-            ], static fn ($value) => $value !== null));
+            $response = $client->post(
+                "customers/{$customer->id}/orders/{$order->id}/pay",
+                [
+                    'currency' => $currency->id,
+                    'payment_method' => $method->id,
+                ]
+            );
 
             return Order::make($response->json('data'));
         } catch (RequestException $exception) {
