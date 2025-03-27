@@ -31,7 +31,7 @@ class OrderBuilder extends RequestBuilder
     /**
      * Adds a package and products to the order.
      */
-    public function addPackage(Package $package, ProductCollection $products = null): static
+    public function addPackage(Package $package, ?ProductCollection $products = null): static
     {
         $packages = $this->getOption('packages') ?? [];
 
@@ -54,7 +54,7 @@ class OrderBuilder extends RequestBuilder
     /**
      * Create a new order.
      */
-    public function create(Menu $menu = null, Customer $customer = null, Currency $currency = null, PaymentMethod $method = null, DeliverySchedule $schedule = null, Discount $discount = null, ProductCollection $products = null, array $packages = null, array $tags = null, GiftCard $giftCard = null): Order
+    public function create(?Menu $menu = null, ?Customer $customer = null, ?Currency $currency = null, ?PaymentMethod $method = null, ?DeliverySchedule $schedule = null, ?Discount $discount = null, ?ProductCollection $products = null, ?array $packages = null, ?array $tags = null, ?GiftCard $giftCard = null): Order
     {
         $client = resolve(Client::class);
 
@@ -162,7 +162,7 @@ class OrderBuilder extends RequestBuilder
 
         $data = $response->json('data');
 
-        if (isset($id)) {
+        if ($data && isset($id)) {
             $data = [$data];
         }
 
@@ -194,7 +194,7 @@ class OrderBuilder extends RequestBuilder
     /**
      * Pay a pending order.
      */
-    public function pay(Order $order, Customer $customer = null, Currency $currency = null, PaymentMethod $method = null): Order
+    public function pay(Order $order, ?Customer $customer = null, ?Currency $currency = null, ?PaymentMethod $method = null): Order
     {
         $client = resolve(Client::class);
 
