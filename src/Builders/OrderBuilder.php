@@ -63,7 +63,7 @@ class OrderBuilder extends RequestBuilder
         $isTransactionalOnly = $this->getOption('transactional');
 
         if ($isTransactionalOnly) {
-            $endpoint .= '/products/transactional';
+            $endpoint .= 'transactional/products';
         } else  {
             $endpoint .= '/transactional';
             throw_unless(
