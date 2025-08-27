@@ -45,6 +45,10 @@ class ProductBuilder extends RequestBuilder
 
         $endpoint = 'products';
 
+        if ($this->getOption('transactional')) {
+            $endpoint = 'products/transactional';
+        }
+
         if ($package = $this->getOption('package')) {
             $endpoint = "packages/{$package}/{$endpoint}";
         }
@@ -91,6 +95,14 @@ class ProductBuilder extends RequestBuilder
     public function subscribable(): static
     {
         return $this->withOption('subscribable', true);
+    }
+
+    /**
+     * Filter the products that available that are transactional.
+     */
+    public function transactional(): static
+    {
+        return $this->withOption('transactional', true);
     }
 
     /**
