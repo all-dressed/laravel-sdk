@@ -67,6 +67,7 @@ class ProductBuilder extends RequestBuilder
                 array_filter(
                     [
                         'subscribable' => $this->getOption('subscribable'),
+                        'inStock' => $this->getOption('inStock'),
                     ],
                     static fn ($value) => $value !== null
                 )
@@ -87,6 +88,14 @@ class ProductBuilder extends RequestBuilder
         }
 
         return collect($data)->mapInto(Product::class);
+    }
+
+    /**
+     * Filter the products that available that are transactional.
+     */
+    public function inStock(): static
+    {
+        return $this->withOption('inStock', true);
     }
 
     /**

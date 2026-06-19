@@ -58,11 +58,19 @@ class OrderBuilder extends RequestBuilder
     public function create(?Menu $menu = null, ?Customer $customer = null, ?Currency $currency = null, ?PaymentMethod $method = null, ?DeliverySchedule $schedule = null, ?Discount $discount = null, ?ProductCollection $products = null, ?array $packages = null, ?array $tags = null, ?GiftCard $giftCard = null): Order
     {
         $client = resolve(Client::class);
+        $endpoint = 'orders';
+        $menu ??= $this->getOption('menu');
+        $isTransactionalOnly = $this->getOption('transactional');
 
-        throw_unless(
-            $menu ??= $this->getOption('menu'),
-            MissingMenuException::class
-        );
+        if ($isTransactionalOnly) {
+            $endpoint .= '/transactional/products';
+        } else  {
+            $endpoint .= '/transactional';
+            throw_unless(
+                $menu,
+                MissingMenuException::class
+            );
+        }
 
         throw_unless(
             $customer ??= $this->getOption('customer'),
@@ -83,7 +91,7 @@ class OrderBuilder extends RequestBuilder
         $giftCard ??= $this->getOption('giftCard');
 
         try {
-            $response = $client->post('orders/transactional', array_filter([
+            $response = $client->post($endpoint, array_filter([
                 'currency' => $currency->id,
                 'customer' => $customer->id,
                 'gift_card' => optional($giftCard)->code,
@@ -104,7 +112,7 @@ class OrderBuilder extends RequestBuilder
                 'shipping_country' => $this->getOption('shipping_country'),
                 'delivery_schedule' => $schedule?->id,
                 'delivery_notes' => $this->getOption('delivery_notes'),
-                'menu' => $menu->id,
+                'menu' => $isTransactionalOnly ? optional($menu)->id : $menu->id,
                 'products' => optional($products)->toPayload(),
                 // TODO: Add support for multiple packages
                 'packages' => $packages,
